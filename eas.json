@@ -1,0 +1,41 @@
+{
+  "cli": {
+    "version": ">= 2.5.1"
+  },
+  "build": {
+    "development": {
+      "developmentClient": false,
+      "distribution": "internal",
+      "env": {
+        "APP_VARIANT": "development"
+      },
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "simulator": true
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "channel": "preview",
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://api.withpace.io",
+        "EXPO_PUBLIC_WEB_URL": "https://withpace.io",
+        "EXPO_PUBLIC_NUMBER_FREE_ACTIVITIES": "10"
+      }
+    },
+    "production": {
+      "channel": "production",
+      "env": {
+        "APP_VARIANT": "production",
+        "EXPO_PUBLIC_API_URL": "https://api.withpace.io",
+        "EXPO_PUBLIC_WEB_URL": "https://withpace.io",
+        "EXPO_PUBLIC_NUMBER_FREE_ACTIVITIES": "10"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

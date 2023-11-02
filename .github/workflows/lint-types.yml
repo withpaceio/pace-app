@@ -1,0 +1,36 @@
+name: Lint and Type Check
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+concurrency:
+  group: '${{ github.workflow }}-${{ github.head_ref || github.ref }}'
+  cancel-in-progress: true
+
+jobs:
+  linting:
+    name: Run linters
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+      - name: Yarn install
+        run: yarn --frozen-lockfile
+      - name: Lint check
+        run: yarn lint
+  types:
+    name: Run type check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install node 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+      - name: Yarn install
+        run: yarn --frozen-lockfile
+      - name: Type check
+        run: yarn types:check

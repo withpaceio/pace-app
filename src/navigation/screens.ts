@@ -1,0 +1,27 @@
+enum Screens {
+  ACCOUNT = 'Account',
+  ACTIVITY_DETAILS = 'ActivityDetails',
+  ACTIVITY_DETAILS_ZOOMABLE_MAP = 'ActivityDetailsZoomableMap',
+  EDIT_ACTIVITY = 'EditActivity',
+  AUTH_NAVIGATOR = 'AuthNavigator',
+  CHANGE_DEFAULT_ACTIVTY_TYPE = 'ChangeDefaultActivityType',
+  CHANGE_DISPLAY_PREFERENCES = 'ChangeDisplayPreferences',
+  CHANGE_PASSWORD = 'ChangePassword',
+  CHOOSE_PROFILE_PICTURE = 'ChooseProfilePicture',
+  CONFIGURE_HEALTH_INFORMATION = 'ConfigureHealthInformation',
+  CONFIGURE_RECOVERY_EMAIL = 'ConfigureRecoveryEmail',
+  HOME = 'Home',
+  HOME_NAVIGATOR = 'HomeNavigator',
+  HOME_TABS_NAVIGATOR = 'HomeTabsNavigator',
+  ONBOARDING = 'Onboarding',
+  PAYWALL = 'Paywall',
+  RECORD = 'Record',
+  SAVE = 'Save',
+  SETTINGS = 'Settings',
+  SIGN_IN = 'SignIn',
+  SIGN_UP = 'SignUp',
+  WEEKLY_SUMMARY = 'WeeklySummary',
+  MONTHLY_SUMMARY = 'MonthlySummary',
+}
+
+export default Screens;

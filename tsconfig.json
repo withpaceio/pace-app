@@ -1,0 +1,26 @@
+{
+  "extends": "@tsconfig/react-native/tsconfig.json" /* Recommended React Native TSConfig base */,
+  "compilerOptions": {
+    /* Visit https://aka.ms/tsconfig.json to read more about this file */
+
+    /* Completeness */
+    "skipLibCheck": true /* Skip type checking all .d.ts files. */,
+    "types": ["styled-components-react-native"],
+    "baseUrl": "./src",
+    "paths": {
+      "@activity": ["activity"],
+      "@api/*": ["api/*"],
+      "@auth": ["auth"],
+      "@components/*": ["components/*"],
+      "@crypto": ["crypto"],
+      "@models/*": ["models/*"],
+      "@navigation/*": ["navigation/*"],
+      "@subscription/*": ["subscription/*"],
+      "@screens/*": ["screens/*"],
+      "@tasks/*": ["tasks/*"],
+      "@theme": ["theme"],
+      "@translations/*": ["translations/*"],
+      "@utils/*": ["utils/*"]
+    }
+  }
+}

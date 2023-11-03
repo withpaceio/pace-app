@@ -8,8 +8,8 @@
     "ios": "APP_VARIANT=development expo run:ios",
     "start": "APP_VARIANT=development expo start --dev-client",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "types:check": "tsc --noEmit"
+    "check:types": "tsc --noEmit",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "4.5.0",

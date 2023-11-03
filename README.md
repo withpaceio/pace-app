@@ -1,6 +1,5 @@
 ![banner](https://github.com/remyd/pace-app/assets/574977/0ff2fbb9-9eff-49d5-8a89-a35f21c02aa0)
 
-
 # PACE - Private Fitness App
 
 PACE is an end-to-end encrypted fitness app that allows to record, track and analyse your trainings without compromising your privacy.
@@ -40,10 +39,10 @@ PACE is built with [Expo](https://expo.io/), written in TypeScript.
 1. Setup Expo following the official [documentation](https://docs.expo.io/get-started/installation/)
 2. Clone this repository `git clone git@github.com:withpaceio/pace-app.git`
 3. Copy the `.env.example` file to `.env` and fill in the required values
-4. Install dependencies using `yarn install`
+4. Install dependencies using `npm install`
 5. Start the app (add `--device` to start on a physical device):
-   - Android: `yarn android`
-   - iOS: `yarn ios`
+   - Android: `npm android`
+   - iOS: `npm ios`
 
 ## Community
 

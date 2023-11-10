@@ -1,3 +1,4 @@
+import buildSummary from './buildSummary';
 import convertPaceInMilesPerHour from './convertPaceInMilesPerHour';
 import convertPaceInMinutesPerKmToKmPerHour from './convertPaceInMinutesPerKmToKmPerHour';
 import convertPaceInMinutesPerMiles from './convertPaceInMinutesPerMiles';
@@ -47,10 +48,12 @@ import {
 } from './histogram/helpers';
 import type { Histogram as HistogramImported } from './histogram/types';
 import { Split as SplitActivity } from './types';
+import updateSummary from './updateSummary';
 import uploadActivity from './upload';
 import { convertKilogramsToPounds, convertPoundsToKilograms } from './utils';
 
 export {
+  buildSummary,
   computeDistanceBetweenPointsInMeters,
   convertKilogramsToPounds,
   convertPaceInMilesPerHour,
@@ -95,6 +98,7 @@ export {
   prepareDataHistogram,
   searchDistance,
   smoothHistogram,
+  updateSummary,
   uploadActivity,
 };
 

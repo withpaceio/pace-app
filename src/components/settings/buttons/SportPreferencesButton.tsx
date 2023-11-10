@@ -1,6 +1,6 @@
 import React, { type FC, useCallback } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 
 import { useTheme } from '@theme';
 
@@ -10,8 +10,6 @@ import { FlagIcon } from '@components/icons';
 import { ActivityIndicator } from '@components/ui';
 
 import { ActivityType } from '@models/Activity';
-import Screens from '@navigation/screens';
-import type { SettingsScreenProps } from '@navigation/types';
 import i18n from '@translations/i18n';
 
 import {
@@ -25,13 +23,13 @@ import {
 
 const SportPreferencesButton: FC = () => {
   const theme = useTheme();
-  const navigation = useNavigation<SettingsScreenProps['navigation']>();
+  const router = useRouter();
 
   const { data: preferencesData, isFetching } = usePreferences();
 
   const onChangeDefaultActivityType = useCallback((): void => {
-    navigation.navigate(Screens.CHANGE_DEFAULT_ACTIVTY_TYPE);
-  }, [navigation]);
+    router.push('/settings/default-activity-type');
+  }, [router]);
 
   return (
     <EntryWrapper onPress={onChangeDefaultActivityType}>

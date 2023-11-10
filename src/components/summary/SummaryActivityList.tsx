@@ -1,8 +1,8 @@
 import React, { type FC, useCallback, useEffect, useMemo, useRef } from 'react';
 import { LayoutChangeEvent, ScrollView } from 'react-native';
 
-import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
 import styled from 'styled-components/native';
 
 import { useTheme } from '@theme';
@@ -12,8 +12,6 @@ import { ActivityIndicator, Text } from '@components/ui';
 
 import type { Activity, ActivitySummary } from '@models/Activity';
 import type { DistanceMeasurementSystem } from '@models/UnitSystem';
-import Screens from '@navigation/screens';
-import type { ActivityDetailsScreenProps } from '@navigation/types';
 import i18n from '@translations/i18n';
 
 const Wrapper = styled(LinearGradient)`
@@ -83,9 +81,8 @@ const SummaryActivityList: FC<Props> = ({
   const scrollViewRef = useRef<ScrollView>(null);
   const activityTileSummaryYs = useRef<Map<string, number>>(new Map()).current;
 
-  const navigation = useNavigation<ActivityDetailsScreenProps['navigation']>();
-
   const theme = useTheme();
+  const router = useRouter();
 
   const sortedActivities = useMemo(() => {
     if (!activities) {
@@ -128,9 +125,9 @@ const SummaryActivityList: FC<Props> = ({
 
   const goToActivityDetails = useCallback(
     (activityId: string): void => {
-      navigation.navigate(Screens.ACTIVITY_DETAILS, { activityId });
+      router.push(`/activity/${activityId}`);
     },
-    [navigation],
+    [router],
   );
 
   useEffect(() => {

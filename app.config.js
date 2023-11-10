@@ -5,6 +5,7 @@ export default {
     name: IS_DEV ? 'PACE (Dev)' : 'PACE',
     description: 'Private Fitness App',
     slug: 'pace',
+    scheme: IS_DEV ? 'io.withpace.pace.dev' : 'io.withpace.pace',
     splash: {
       image: './assets/images/splash.png',
       backgroundColor: '#000000',

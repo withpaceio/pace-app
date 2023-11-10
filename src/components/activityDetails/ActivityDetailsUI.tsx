@@ -1,7 +1,7 @@
 import React, { type FC, useCallback, useRef } from 'react';
 
 import type GorohmBottomSheet from '@gorhom/bottom-sheet';
-import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 import styled from 'styled-components/native';
 
 import { useTheme } from '@theme';
@@ -14,8 +14,6 @@ import { ActivityIndicator, Text } from '@components/ui';
 
 import type { Activity, ActivitySummary } from '@models/Activity';
 import type { DistanceMeasurementSystem } from '@models/UnitSystem';
-import Screens from '@navigation/screens';
-import type { ActivityDetailsScreenProps } from '@navigation/types';
 import i18n from '@translations/i18n';
 
 import EditActivityBottomSheet from './EditActivityBottomSheet';
@@ -42,7 +40,7 @@ const ActivityDetailsUI: FC<Props> = ({
 }) => {
   const editActivityBottomSheetRef = useRef<GorohmBottomSheet>(null);
 
-  const navigation = useNavigation<ActivityDetailsScreenProps['navigation']>();
+  const router = useRouter();
   const theme = useTheme();
 
   const {
@@ -69,8 +67,8 @@ const ActivityDetailsUI: FC<Props> = ({
       return;
     }
 
-    navigation.navigate(Screens.ACTIVITY_DETAILS_ZOOMABLE_MAP, { activityId: activity.id });
-  }, [activity, navigation]);
+    router.push(`/activity/${activity.id}/map`);
+  }, [activity, router]);
 
   const goToEditActivity = useCallback((): void => {
     editActivityBottomSheetRef.current?.close();
@@ -79,8 +77,8 @@ const ActivityDetailsUI: FC<Props> = ({
       return;
     }
 
-    navigation.navigate(Screens.EDIT_ACTIVITY, { activityId: activity.id });
-  }, [activity, navigation]);
+    router.push(`/activity/${activity.id}/edit`);
+  }, [activity, router]);
 
   const deleteActivity = useCallback((): void => {
     editActivityBottomSheetRef.current?.close();
@@ -93,8 +91,8 @@ const ActivityDetailsUI: FC<Props> = ({
   }, [activity, onDeleteActivity]);
 
   const goBack = useCallback((): void => {
-    navigation.goBack();
-  }, [navigation]);
+    router.back();
+  }, [router]);
 
   if (!activity) {
     return (

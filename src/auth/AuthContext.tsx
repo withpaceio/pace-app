@@ -116,23 +116,6 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     profileData: null,
   });
 
-  const loadProfile = useCallback(async (): Promise<void> => {
-    const profile = await storageLoadProfile();
-    if (!profile) {
-      dispatch({ type: 'AUTH_SIGN_OUT' });
-      return;
-    }
-
-    await Purchases.logIn(profile.userId);
-    accessTokenRef.current = '';
-    refreshTokenRef.current = profile.refreshToken;
-
-    dispatch({
-      type: 'AUTH_RESTORE_PROFILE',
-      payload: { profile },
-    });
-  }, []);
-
   const onSignOut = useCallback(async () => {
     await signOut();
     queryClient.clear();
@@ -144,6 +127,23 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
     dispatch({ type: 'AUTH_SIGN_OUT' });
   }, []);
+
+  const loadProfile = useCallback(async (): Promise<void> => {
+    const profile = await storageLoadProfile();
+    if (!profile) {
+      onSignOut();
+      return;
+    }
+
+    await Purchases.logIn(profile.userId);
+    accessTokenRef.current = '';
+    refreshTokenRef.current = profile.refreshToken;
+
+    dispatch({
+      type: 'AUTH_RESTORE_PROFILE',
+      payload: { profile },
+    });
+  }, [onSignOut]);
 
   const getProfileData = useCallback(
     (): ProfileData | null => state.profileData,
@@ -192,10 +192,6 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   useEffect(() => {
     loadProfile();
   }, [loadProfile]);
-
-  if (state.loading) {
-    return null;
-  }
 
   return (
     <AuthContext.Provider

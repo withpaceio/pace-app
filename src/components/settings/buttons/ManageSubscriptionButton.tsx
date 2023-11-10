@@ -2,15 +2,13 @@ import React, { type FC, useCallback } from 'react';
 import { Linking } from 'react-native';
 
 import { useNetInfo } from '@react-native-community/netinfo';
-import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 
 import { useTheme } from '@theme';
 
 import { ShoppingBagIcon } from '@components/icons';
 import { ActivityIndicator } from '@components/ui';
 
-import Screens from '@navigation/screens';
-import type { SettingsScreenProps } from '@navigation/types';
 import useCurrentSubscription from '@subscription/useCurrentSubscription';
 import i18n from '@translations/i18n';
 
@@ -29,9 +27,8 @@ import {
 
 const ManageSubscriptionButton: FC = () => {
   const { isInternetReachable } = useNetInfo();
+  const router = useRouter();
   const theme = useTheme();
-
-  const navigation = useNavigation<SettingsScreenProps['navigation']>();
 
   const { currentSubscription, loading, managementUrl } = useCurrentSubscription();
 
@@ -41,8 +38,8 @@ const ManageSubscriptionButton: FC = () => {
       return;
     }
 
-    navigation.navigate(Screens.PAYWALL);
-  }, [managementUrl, navigation]);
+    router.push('/settings/paywall');
+  }, [managementUrl, router]);
 
   return (
     <EntryWrapper onPress={onManageSubscription} disabled={!isInternetReachable}>

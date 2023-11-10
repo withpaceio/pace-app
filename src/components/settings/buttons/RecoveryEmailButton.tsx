@@ -2,7 +2,7 @@ import React, { type FC, useCallback } from 'react';
 import { useWindowDimensions } from 'react-native';
 
 import { useNetInfo } from '@react-native-community/netinfo';
-import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 import styled from 'styled-components/native';
 
 import { useTheme } from '@theme';
@@ -13,8 +13,6 @@ import useResendRecoveryEmail from '@api/recoveryEmail/useResendRecoveryEmail';
 import { AtIcon, CheckIcon, RotateLeftIcon, WarningIcon } from '@components/icons';
 import { ActivityIndicator, SecondaryButton, Text } from '@components/ui';
 
-import Screens from '@navigation/screens';
-import type { SettingsScreenProps } from '@navigation/types';
 import i18n from '@translations/i18n';
 
 import {
@@ -75,7 +73,7 @@ const RecoveryEmailButton: FC = () => {
   const { isInternetReachable } = useNetInfo();
   const { width: windowWidth } = useWindowDimensions();
 
-  const navigation = useNavigation<SettingsScreenProps['navigation']>();
+  const router = useRouter();
   const theme = useTheme();
 
   const { data: recoveryEmailData, isFetching } = useRecoveryEmail();
@@ -88,10 +86,11 @@ const RecoveryEmailButton: FC = () => {
   } = useResendRecoveryEmail();
 
   const onConfigureRecoveryEmail = useCallback(() => {
-    navigation.navigate(Screens.CONFIGURE_RECOVERY_EMAIL, {
-      recoveryEmail: recoveryEmailData?.email,
+    router.push({
+      pathname: '/settings/recovery-email',
+      params: { recoveryEmail: recoveryEmailData?.email },
     });
-  }, [navigation, recoveryEmailData?.email]);
+  }, [recoveryEmailData?.email, router]);
 
   return (
     <>

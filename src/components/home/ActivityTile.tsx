@@ -1,15 +1,13 @@
 import React, { type FC, useCallback } from 'react';
 import { Pressable, useWindowDimensions } from 'react-native';
 
-import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 import styled from 'styled-components/native';
 
 import ActivitySummaryTileUI from '@components/common/activity/summaryTile/ActivitySummaryTileUI';
 
 import type { Activity } from '@models/Activity';
 import type { DistanceMeasurementSystem } from '@models/UnitSystem';
-import Screens from '@navigation/screens';
-import type { ActivityDetailsScreenProps } from '@navigation/types';
 
 import ActivityMap from './ActivityMap';
 
@@ -40,11 +38,11 @@ type Props = {
 
 const ActivityTile: FC<Props> = ({ activity, isFirst, distanceMeasurementSystem }) => {
   const { width } = useWindowDimensions();
-  const navigation = useNavigation<ActivityDetailsScreenProps['navigation']>();
+  const router = useRouter();
 
   const goToActivityDetails = useCallback((): void => {
-    navigation.navigate(Screens.ACTIVITY_DETAILS, { activityId: activity.id });
-  }, [activity.id, navigation]);
+    router.push(`/activity/${activity.id}`);
+  }, [activity.id]);
 
   return (
     <Pressable onPress={goToActivityDetails}>

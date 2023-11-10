@@ -1,12 +1,10 @@
 import React, { type FC, useCallback, useMemo } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
 import { format } from 'date-fns';
+import { useRouter } from 'expo-router';
 import styled from 'styled-components/native';
 
 import type { DistanceMeasurementSystem } from '@models/UnitSystem';
-import Screens from '@navigation/screens';
-import type { AccountScreenProps } from '@navigation/types';
 import i18n from '@translations/i18n';
 
 import AccountHeader from './AccountHeader';
@@ -51,7 +49,7 @@ const AccountUI: FC<Props> = ({
   endMonthDate,
   distanceMeasurementSystem,
 }) => {
-  const navigation = useNavigation<AccountScreenProps['navigation']>();
+  const router = useRouter();
 
   const weekSubTitle = useMemo(
     () => `${format(startWeekDate, 'MMMM do')} - ${format(endWeekDate, 'MMMM do')}`,
@@ -61,12 +59,12 @@ const AccountUI: FC<Props> = ({
   const monthSubTitle = useMemo(() => format(startMonthDate, 'MMMM yyyy'), [startMonthDate]);
 
   const goToWeeklySummary = useCallback((): void => {
-    navigation.navigate(Screens.WEEKLY_SUMMARY);
-  }, [navigation]);
+    router.push('/summary/weekly');
+  }, [router]);
 
   const goToMonthlySummary = useCallback((): void => {
-    navigation.navigate(Screens.MONTHLY_SUMMARY);
-  }, [navigation]);
+    router.push('/summary/monthly');
+  }, [router]);
 
   return (
     <Wrapper>

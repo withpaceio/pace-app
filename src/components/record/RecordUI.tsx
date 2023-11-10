@@ -3,8 +3,8 @@ import { Platform } from 'react-native';
 
 import type GorohmBottomSheet from '@gorhom/bottom-sheet';
 import MapLibreGL from '@maplibre/maplibre-react-native';
-import { useNavigation } from '@react-navigation/native';
 import type { LocationObject } from 'expo-location';
+import { useRouter } from 'expo-router';
 import styled from 'styled-components/native';
 
 import { useTheme } from '@theme';
@@ -13,8 +13,6 @@ import ActivityTypeBottomSheet from '@components/common/activity/ActivityTypeBot
 
 import { type ActivityTaskState, ActivityType } from '@models/Activity';
 import type { DistanceMeasurementSystem } from '@models/UnitSystem';
-import Screens from '@navigation/screens';
-import type { RecordScreenProps } from '@navigation/types';
 import ActivityTask, { ActivityListener } from '@tasks/ActivityTask';
 
 import ActivityRunning from './ActivityRunning';
@@ -77,7 +75,7 @@ const RecordUI: FC<Props> = ({
     MapLibreGL.UserTrackingModes.FollowWithCourse,
   );
 
-  const navigation = useNavigation<RecordScreenProps['navigation']>();
+  const router = useRouter();
   const theme = useTheme();
 
   const onRecenterMap = useCallback((): void => {
@@ -191,7 +189,7 @@ const RecordUI: FC<Props> = ({
           )}
         </StyledMapView>
         <RecenterMapButton onPress={onRecenterMap} />
-        <BackButton onPress={() => navigation.navigate(Screens.HOME)} />
+        <BackButton onPress={() => router.push('/')} />
         {activityState === 'notStarted' && (
           <ActivityStart
             activityType={activityType}

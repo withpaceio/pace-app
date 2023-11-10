@@ -1,7 +1,8 @@
-import React, { type FC, useCallback } from 'react';
+import { type FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { KeyboardAvoidingView, Platform } from 'react-native';
 
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useRouter } from 'expo-router';
 import { Controller, useForm } from 'react-hook-form';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import styled from 'styled-components/native';
@@ -9,12 +10,17 @@ import { number, object, ref, string } from 'yup';
 
 import { useTheme } from '@theme';
 
+import useIsUsernameAvailable from '@api/auth/useIsUsernameAvailable';
+import useSignIn from '@api/auth/useSignIn';
+import useSignUp from '@api/auth/useSignUp';
+
 import { CheckIcon, CloseIcon } from '@components/icons';
 import { ActivityIndicator, PasswordStrengthBar, Text, TextInput } from '@components/ui';
 
 import i18n from '@translations/i18n';
 
 import { FormButton, FormErrorText, PasswordInput } from './common-components';
+import SigningProgressModal from './SigningProgressModal';
 
 const Wrapper = styled(Animated.View)`
   flex: 1;
@@ -100,40 +106,70 @@ type FormData = {
 };
 
 type Props = {
-  usernameAvailable: boolean;
-  loadingUsernameAvailability: boolean;
-  loading: boolean;
-  hasError: boolean;
-  onCheckUsernameAvailability: (username: string) => Promise<void>;
-  onSignUp: (username: string, password: string) => void;
+  onLoadingChanged: (loading: boolean) => void;
 };
 
-const SignUpUI: FC<Props> = ({
-  usernameAvailable,
-  loadingUsernameAvailability,
-  loading,
-  hasError,
-  onCheckUsernameAvailability,
-  onSignUp,
-}) => {
-  const { control, getValues, handleSubmit, watch } = useForm<FormData>({
+const SignUpUI: FC<Props> = ({ onLoadingChanged }) => {
+  const router = useRouter();
+
+  const [usernameToCheck, setUsernameToCheck] = useState<string>();
+  const theme = useTheme();
+
+  const { control, handleSubmit, watch } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
 
+  const username = watch('username');
   const password = watch('password');
-  const theme = useTheme();
+
+  const {
+    data: isUsernameAvailableData,
+    fetchStatus: usernameFetchStatus,
+    isLoading: isUsernameLoading,
+  } = useIsUsernameAvailable(usernameToCheck);
+  const { mutate: signIn, isPending: isSignInLoading, isError: isSignInError } = useSignIn();
+  const { mutate: signUp, isPending: isSignUpLoading, isError: isSignUpError } = useSignUp();
+
+  const loadingUsernameAvailability = useMemo(
+    () => usernameFetchStatus === 'fetching' && isUsernameLoading,
+    [isUsernameLoading, usernameFetchStatus],
+  );
+
+  const usernameAvailable = useMemo(
+    () =>
+      (isUsernameAvailableData && isUsernameAvailableData.isAvailable) ||
+      (!isUsernameAvailableData && usernameFetchStatus === 'idle'),
+    [isUsernameAvailableData, usernameFetchStatus],
+  );
 
   const onBlurUsername = useCallback((): void => {
-    const { username } = getValues();
-    onCheckUsernameAvailability(username);
-  }, [getValues, onCheckUsernameAvailability]);
+    setUsernameToCheck(username);
+  }, [username]);
 
   const onSubmit = useCallback(
     ({ username, password: formPassword }: FormData): void => {
-      onSignUp(username, formPassword);
+      signUp(
+        { username, password: formPassword },
+        {
+          onSuccess: () => {
+            signIn(
+              { username, password: formPassword },
+              {
+                onSuccess: () => {
+                  router.replace('/');
+                },
+              },
+            );
+          },
+        },
+      );
     },
-    [onSignUp],
+    [signIn, signUp],
   );
+
+  useEffect(() => {
+    onLoadingChanged(isSignInLoading || isSignUpLoading);
+  }, [isSignInLoading, isSignUpLoading, onLoadingChanged]);
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'android' ? 'height' : 'padding'}>
@@ -147,7 +183,7 @@ const SignUpUI: FC<Props> = ({
                 <UsernameInput
                   placeholder={i18n.t('signUp.inputs.username.placeholder')}
                   value={value}
-                  editable={!loading}
+                  editable={!isSignInLoading && !isSignUpLoading}
                   caption={error?.message}
                   onBlur={() => {
                     onBlurUsername();
@@ -178,7 +214,7 @@ const SignUpUI: FC<Props> = ({
             <PasswordInput
               placeholder={i18n.t('signUp.inputs.password.placeholder')}
               value={value}
-              editable={!loading}
+              editable={!isSignInLoading && !isSignUpLoading}
               autoComplete="password"
               caption={error?.message}
               onBlur={onBlur}
@@ -210,7 +246,7 @@ const SignUpUI: FC<Props> = ({
             <PasswordInput
               placeholder={i18n.t('signUp.inputs.confirmPassword.placeholder')}
               value={value}
-              editable={!loading}
+              editable={!isSignInLoading && !isSignUpLoading}
               autoComplete="password"
               caption={error?.message}
               onBlur={onBlur}
@@ -226,10 +262,18 @@ const SignUpUI: FC<Props> = ({
         <FormButton
           label={i18n.t('signUp.buttons.signUp')}
           onPress={handleSubmit(onSubmit)}
-          disabled={loading || loadingUsernameAvailability || !usernameAvailable}
+          disabled={
+            isSignInLoading || isSignUpLoading || loadingUsernameAvailability || !usernameAvailable
+          }
         />
-        {hasError && <FormErrorText>{i18n.t('signUp.errors.failed')}</FormErrorText>}
+        {(isSignInError || isSignUpError) && (
+          <FormErrorText>{i18n.t('signUp.errors.failed')}</FormErrorText>
+        )}
       </Wrapper>
+      <SigningProgressModal
+        title={i18n.t('signUp.loadingLabel')}
+        visible={isSignUpLoading || isSignInLoading}
+      />
     </KeyboardAvoidingView>
   );
 };

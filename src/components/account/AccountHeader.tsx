@@ -1,8 +1,7 @@
-import React, { type FC, useCallback, useMemo } from 'react';
-import { Pressable } from 'react-native';
+import React, { type FC, useMemo } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
 import { format } from 'date-fns';
+import { Link } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 
@@ -14,8 +13,6 @@ import useProfilePicture from '@api/profilePicture/useProfilePicture';
 import { CameraIcon, SettingsIcon } from '@components/icons';
 import { SecondaryButton, Text } from '@components/ui';
 
-import Screens from '@navigation/screens';
-import type { AccountScreenProps } from '@navigation/types';
 import i18n from '@translations/i18n';
 
 const Wrapper = styled.View<{ safeMarginTop: number }>`
@@ -107,8 +104,6 @@ const UsernameText = styled(Text)`
 `;
 
 const AccountHeader: FC = () => {
-  const navigation = useNavigation<AccountScreenProps['navigation']>();
-
   const { top } = useSafeAreaInsets();
   const theme = useTheme();
 
@@ -123,17 +118,9 @@ const AccountHeader: FC = () => {
     return `${i18n.t('account.joined')} ${format(accountData.createdAt, 'MMMM do, y')}`;
   }, [accountData?.createdAt]);
 
-  const goToSettings = useCallback((): void => {
-    navigation.navigate(Screens.SETTINGS);
-  }, [navigation]);
-
-  const goToChooseProfilePicture = useCallback((): void => {
-    navigation.navigate(Screens.CHOOSE_PROFILE_PICTURE);
-  }, [navigation]);
-
   return (
     <Wrapper safeMarginTop={top}>
-      <Pressable onPress={goToChooseProfilePicture}>
+      <Link href="/settings/profile-picture">
         <ProfilePictureWrapper>
           <DefaultAvatarWrapper>
             {profilePictureData ? (
@@ -146,17 +133,15 @@ const AccountHeader: FC = () => {
             <CameraIcon width={20} height={20} color={theme.colors.primary} />
           </CameraIconWrapper>
         </ProfilePictureWrapper>
-      </Pressable>
+      </Link>
       <DetailsWrapper>
         <AccountWrapper>
           <UsernameText>{accountData?.username}</UsernameText>
           <Text>{formattedDate}</Text>
         </AccountWrapper>
-        <SecondaryButton
-          label={i18n.t('account.buttons.settings')}
-          Icon={SettingsIcon}
-          onPress={goToSettings}
-        />
+        <Link href="/settings" asChild>
+          <SecondaryButton label={i18n.t('account.buttons.settings')} Icon={SettingsIcon} />
+        </Link>
       </DetailsWrapper>
     </Wrapper>
   );

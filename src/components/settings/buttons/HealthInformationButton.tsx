@@ -1,7 +1,7 @@
 import React, { type FC, useCallback, useMemo } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
 import { differenceInYears } from 'date-fns';
+import { useRouter } from 'expo-router';
 
 import { convertKilogramsToPounds } from '@activity';
 import { useTheme } from '@theme';
@@ -13,8 +13,6 @@ import { UserIcon } from '@components/icons';
 import { ActivityIndicator } from '@components/ui';
 
 import { DistanceMeasurementSystem } from '@models/UnitSystem';
-import Screens from '@navigation/screens';
-import type { AccountScreenProps } from '@navigation/types';
 import i18n from '@translations/i18n';
 
 import {
@@ -31,7 +29,7 @@ const HealthInformationButton: FC = () => {
     useHealthInformation();
   const { data: preferencesData, isFetching: isFetchingPreferences } = usePreferences();
 
-  const navigation = useNavigation<AccountScreenProps['navigation']>();
+  const router = useRouter();
   const theme = useTheme();
 
   const label = useMemo(() => {
@@ -57,8 +55,8 @@ const HealthInformationButton: FC = () => {
   }, [healthInformationData, preferencesData?.measurement]);
 
   const onConfigureHealthInformation = useCallback((): void => {
-    navigation.navigate(Screens.CONFIGURE_HEALTH_INFORMATION);
-  }, [navigation]);
+    router.push('/settings/health-information');
+  }, [router]);
 
   return (
     <EntryWrapper

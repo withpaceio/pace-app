@@ -1,4 +1,4 @@
-import React, { type FC, useCallback, useState } from 'react';
+import { type FC, useCallback, useState } from 'react';
 
 import useDeleteAccount from '@api/account/useDeleteAccount';
 import useSignOut from '@api/auth/useSignOut';
@@ -8,10 +8,9 @@ import DeleteAccountWarningModal from '@components/settings/DeleteAccountWarning
 import DeletingAccountModal from '@components/settings/DeletingAccountModal';
 import SettingsUI from '@components/settings/SettingsUI';
 
-import type { SettingsScreenProps } from '@navigation/types';
 import useCurrentSubscription from '@subscription/useCurrentSubscription';
 
-const SettingsScreen: FC<SettingsScreenProps> = () => {
+const SettingsScreen: FC = () => {
   const [deleteAccountWarningModalVisible, setDeleteAccountWarningModalVisible] = useState(false);
   const [confirmDeleteAccountModalVisible, setConfirmDeleteAccountModalVisible] = useState(false);
   const [deletingAccountModalVisible, setDeletingAccountModalVisible] = useState(false);

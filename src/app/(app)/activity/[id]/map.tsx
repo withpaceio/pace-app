@@ -1,4 +1,4 @@
-import React, { type FC } from 'react';
+import { type FC } from 'react';
 
 import { useLocalSearchParams } from 'expo-router';
 
@@ -7,9 +7,7 @@ import useActivityLocations from '@api/activity/useActivityLocations';
 
 import ZoomableMapUI from '@components/activityDetails/ZoomableMapUI';
 
-import type { ActivityDetailsZoomableMapScreenProps } from '@navigation/types';
-
-const ZoomableMapScreen: FC<ActivityDetailsZoomableMapScreenProps> = () => {
+const ZoomableMapScreen: FC = () => {
   const { id: activityId } = useLocalSearchParams<{ id?: string }>();
 
   const { data: activityData } = useActivity(activityId);

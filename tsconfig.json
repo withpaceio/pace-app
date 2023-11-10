@@ -1,11 +1,11 @@
 {
-  "extends": "@tsconfig/react-native/tsconfig.json" /* Recommended React Native TSConfig base */,
+  // "extends": "@tsconfig/react-native/tsconfig.json" /* Recommended React Native TSConfig base */,
+  "extends": "expo/tsconfig.base",
+  "exclude": ["node_modules"],
   "compilerOptions": {
-    /* Visit https://aka.ms/tsconfig.json to read more about this file */
-
-    /* Completeness */
+    "strict": true,
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
-    "types": ["styled-components-react-native"],
+    "types": ["node", "styled-components-react-native"],
     "baseUrl": "./src",
     "paths": {
       "@activity": ["activity"],

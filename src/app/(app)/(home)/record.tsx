@@ -1,7 +1,8 @@
-import React, { type FC, useCallback, useEffect, useState } from 'react';
+import { type FC, useCallback, useEffect, useState } from 'react';
 import { AppState, type AppStateStatus } from 'react-native';
 
 import { useIsFocused } from '@react-navigation/native';
+import * as Battery from 'expo-battery';
 import * as Location from 'expo-location';
 import { useNavigation, useRouter } from 'expo-router';
 
@@ -66,8 +67,6 @@ const RecordScreen: FC = () => {
 
     await askPermissions();
     try {
-      const Battery = await import('expo-battery');
-
       const batteryAvailable = await Battery.isAvailableAsync();
       if (!batteryAvailable) {
         return;

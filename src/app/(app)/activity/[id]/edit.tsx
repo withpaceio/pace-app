@@ -1,4 +1,4 @@
-import React, { type FC, useCallback, useLayoutEffect } from 'react';
+import { type FC, useCallback, useLayoutEffect } from 'react';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
@@ -16,7 +16,6 @@ import SavingModal from '@components/common/SavingModal';
 import EditActivityUI from '@components/editActivity/EditActivityUI';
 
 import type { ActivitySummary, ActivityType } from '@models/Activity';
-import type { EditActivityScreenProps } from '@navigation/types';
 import i18n from '@translations/i18n';
 
 const schema = object().shape({
@@ -28,7 +27,7 @@ type FormData = {
   type: ActivityType;
 };
 
-const EditActivityScreen: FC<EditActivityScreenProps> = () => {
+const EditActivityScreen: FC = () => {
   const router = useRouter();
   const navigation = useNavigation();
   const { id: activityId } = useLocalSearchParams<{ id?: string }>();
@@ -61,7 +60,7 @@ const EditActivityScreen: FC<EditActivityScreenProps> = () => {
       );
 
       updateActivity({
-        activityId,
+        activityId: activity.id,
         summary: updatedSummary,
         activityEncryptionKey: activity.encryptionKey,
       });

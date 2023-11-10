@@ -9,7 +9,9 @@ import useActivityTimeline, { type ActivityTimelineData } from '@api/activity/us
 
 import type { Activity } from '@models/Activity';
 
-export default function useActivity(id: string | undefined): UseQueryResult<Activity, Error> {
+export default function useActivity(
+  id: string | undefined,
+): UseQueryResult<Activity | undefined, Error> {
   const { getProfileData } = useAuth();
 
   const select = useCallback(
@@ -25,5 +27,5 @@ export default function useActivity(id: string | undefined): UseQueryResult<Acti
     [getProfileData, id],
   );
 
-  return useActivityTimeline<Activity>(select);
+  return useActivityTimeline<Activity | undefined>(select);
 }

@@ -5,7 +5,6 @@ import { useRouter } from 'expo-router';
 import styled from 'styled-components/native';
 
 import type { DistanceMeasurementSystem } from '@models/UnitSystem';
-import Screens from '@navigation/screens';
 import i18n from '@translations/i18n';
 
 import AccountHeader from './AccountHeader';

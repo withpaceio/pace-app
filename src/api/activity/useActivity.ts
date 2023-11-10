@@ -9,13 +9,16 @@ import useActivityTimeline, { type ActivityTimelineData } from '@api/activity/us
 
 import type { Activity } from '@models/Activity';
 
-export default function useActivity(id: string): UseQueryResult<Activity, Error> {
+export default function useActivity(id: string | undefined): UseQueryResult<Activity, Error> {
   const { getProfileData } = useAuth();
 
   const select = useCallback(
-    (data: ActivityTimelineData): Activity => {
-      const profileData = getProfileData() as ProfileData;
+    (data: ActivityTimelineData): Activity | undefined => {
+      if (!id) {
+        return undefined;
+      }
 
+      const profileData = getProfileData() as ProfileData;
       const activity = data.activities.find(({ id: activityId }) => activityId === id) as Activity;
       return decryptActivity(activity, profileData.keyPairs.encryptionKeyPair);
     },

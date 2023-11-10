@@ -1,14 +1,12 @@
 import React, { type FC, useCallback } from 'react';
 
 import { useNetInfo } from '@react-native-community/netinfo';
-import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 
 import { useTheme } from '@theme';
 
 import { LockIcon } from '@components/icons';
 
-import Screens from '@navigation/screens';
-import { SettingsScreenProps } from '@navigation/types';
 import i18n from '@translations/i18n';
 
 import { EntryWrapper, ICON_SIZE, IconWrapper, Label } from './common';
@@ -16,11 +14,11 @@ import { EntryWrapper, ICON_SIZE, IconWrapper, Label } from './common';
 const ChangePasswordButton: FC = () => {
   const { isInternetReachable } = useNetInfo();
   const theme = useTheme();
-  const navigation = useNavigation<SettingsScreenProps['navigation']>();
+  const router = useRouter();
 
   const onChangePassword = useCallback((): void => {
-    navigation.navigate(Screens.CHANGE_PASSWORD);
-  }, [navigation]);
+    router.push('/settings/change-password');
+  }, [router]);
 
   return (
     <EntryWrapper onPress={onChangePassword} disabled={!isInternetReachable}>

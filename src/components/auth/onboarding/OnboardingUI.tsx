@@ -1,4 +1,4 @@
-import React, { type FC, useState } from 'react';
+import { type FC, useState } from 'react';
 import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 import { LinearGradient } from 'expo-linear-gradient';
@@ -10,11 +10,10 @@ import { useTheme } from '@theme';
 
 import { CloseIcon, PaceIcon } from '@components/icons';
 
-import SignInScreen from '@screens/auth/SignInScreen';
-import SignUpScreen from '@screens/auth/SignUpScreen';
-
 import LandingUI from './LandingUI';
 import Policies from './Policies';
+import SignInUI from '../SignInUI';
+import SignUpUI from '../SignUpUI';
 
 const HEADER_HEIGHT = 300;
 const COLLAPSED_HEADER_HEIGHT = 100;
@@ -147,8 +146,8 @@ const OnboardingUI: FC = () => {
               }}
             />
           )}
-          {step === 'signIn' && <SignInScreen onLoadingChanged={setLoading} />}
-          {step === 'signUp' && <SignUpScreen onLoadingChanged={setLoading} />}
+          {step === 'signIn' && <SignInUI onLoadingChanged={setLoading} />}
+          {step === 'signUp' && <SignUpUI onLoadingChanged={setLoading} />}
         </Animated.ScrollView>
         {step !== 'landing' && !loading && (
           <BackArrowWrapper

@@ -1,6 +1,6 @@
 import React, { type FC, useCallback } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 
@@ -10,8 +10,6 @@ import ActivityMap from '@components/common/activity/ActivityMap';
 import { CloseIcon } from '@components/icons';
 
 import type { ActivityLocation } from '@models/Activity';
-import Screens from '@navigation/screens';
-import type { ActivityDetailsZoomableMapScreenProps } from '@navigation/types';
 
 import { MAPTILER_URL_DARK, MAPTILER_URL_LIGHT } from '../../consts';
 
@@ -40,18 +38,17 @@ const CloseButtonWrapper = styled.TouchableOpacity<{ safeMarginTop: number }>`
 `;
 
 type Props = {
-  activityId: string;
   locations: ActivityLocation[] | undefined;
 };
 
-const ZoomableMap: FC<Props> = ({ activityId, locations }) => {
-  const navigation = useNavigation<ActivityDetailsZoomableMapScreenProps['navigation']>();
+const ZoomableMap: FC<Props> = ({ locations }) => {
+  const router = useRouter();
   const theme = useTheme();
   const { top: marginTop } = useSafeAreaInsets();
 
-  const goToActivityDetails = useCallback(() => {
-    navigation.navigate(Screens.ACTIVITY_DETAILS, { activityId });
-  }, [activityId, navigation]);
+  const goToActivityDetails = useCallback((): void => {
+    router.back();
+  }, [router]);
 
   return (
     <Wrapper>

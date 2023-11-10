@@ -1,6 +1,6 @@
 import React, { type FC, useCallback } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 
 import { useTheme } from '@theme';
 
@@ -9,8 +9,6 @@ import usePreferences from '@api/preferences/usePreferences';
 import { PreferencesIcon } from '@components/icons';
 import { ActivityIndicator } from '@components/ui';
 
-import Screens from '@navigation/screens';
-import type { AccountScreenProps } from '@navigation/types';
 import i18n from '@translations/i18n';
 
 import {
@@ -23,14 +21,14 @@ import {
 } from './common';
 
 const DisplayPreferencesButton: FC = () => {
+  const router = useRouter();
   const theme = useTheme();
-  const navigation = useNavigation<AccountScreenProps['navigation']>();
 
   const { data: preferencesData, isFetching } = usePreferences();
 
   const onChangeDisplayPreferences = useCallback((): void => {
-    navigation.navigate(Screens.CHANGE_DISPLAY_PREFERENCES);
-  }, [navigation]);
+    router.push('/settings/display-preferences');
+  }, [router]);
 
   return (
     <EntryWrapper onPress={onChangeDisplayPreferences}>

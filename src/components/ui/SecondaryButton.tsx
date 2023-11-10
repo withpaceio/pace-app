@@ -1,4 +1,4 @@
-import React, { type FC } from 'react';
+import React, { type FC, forwardRef } from 'react';
 import { Pressable, type PressableProps } from 'react-native';
 
 import styled from 'styled-components/native';
@@ -45,11 +45,11 @@ type Props = Omit<PressableProps, 'children'> & {
   Icon?: FC<IconProps>;
 };
 
-const SecondaryButton: FC<Props> = ({ label, disabled, Icon, ...props }) => {
+const SecondaryButton = forwardRef<Pressable, Props>(({ label, disabled, Icon, ...props }, ref) => {
   const theme = useTheme();
 
   return (
-    <Pressable disabled={disabled} {...props}>
+    <Pressable ref={ref} disabled={disabled} {...props}>
       <SecondaryButtonWrapper disabled={disabled}>
         {Icon && (
           <IconWrapper>
@@ -68,6 +68,6 @@ const SecondaryButton: FC<Props> = ({ label, disabled, Icon, ...props }) => {
       </SecondaryButtonWrapper>
     </Pressable>
   );
-};
+});
 
 export default SecondaryButton;

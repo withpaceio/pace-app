@@ -246,10 +246,6 @@ const PaywallScreen: FC = () => {
 
     const { routes } = navigation.getState();
     const previousRoutes = routes[routes.length - 2].state?.routes;
-    if (previousRoutes) {
-      console.log(previousRoutes[previousRoutes.length - 1].name);
-    }
-
     if (!previousRoutes || previousRoutes[previousRoutes.length - 1].name !== 'settings') {
       router.push('/account');
       return;

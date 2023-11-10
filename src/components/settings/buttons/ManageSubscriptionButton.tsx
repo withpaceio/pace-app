@@ -2,7 +2,7 @@ import React, { type FC, useCallback } from 'react';
 import { Linking } from 'react-native';
 
 import { useNetInfo } from '@react-native-community/netinfo';
-import { useNavigation, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 
 import { useTheme } from '@theme';
 
@@ -29,13 +29,6 @@ const ManageSubscriptionButton: FC = () => {
   const { isInternetReachable } = useNetInfo();
   const router = useRouter();
   const theme = useTheme();
-
-  const navigation = useNavigation();
-  const { routes } = navigation.getState();
-  const previousRoutes = routes[routes.length - 2].state?.routes;
-  if (previousRoutes) {
-    console.log(previousRoutes[previousRoutes.length - 1]);
-  }
 
   const { currentSubscription, loading, managementUrl } = useCurrentSubscription();
 

@@ -77,7 +77,7 @@ export default class Activity {
     this.recordingListeners.push(listener);
   }
 
-  removedRecordingListener(listener: RecordingListener): void {
+  removeRecordingListener(listener: RecordingListener): void {
     this.recordingListeners = this.recordingListeners.filter((l) => l !== listener);
   }
 

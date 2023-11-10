@@ -20,6 +20,7 @@ import { ActivityIndicator, PasswordStrengthBar, Text, TextInput } from '@compon
 import i18n from '@translations/i18n';
 
 import { FormButton, FormErrorText, PasswordInput } from './common-components';
+import SigningProgressModal from './SigningProgressModal';
 
 const Wrapper = styled(Animated.View)`
   flex: 1;
@@ -269,6 +270,10 @@ const SignUpUI: FC<Props> = ({ onLoadingChanged }) => {
           <FormErrorText>{i18n.t('signUp.errors.failed')}</FormErrorText>
         )}
       </Wrapper>
+      <SigningProgressModal
+        title={i18n.t('signUp.loadingLabel')}
+        visible={isSignUpLoading || isSignInLoading}
+      />
     </KeyboardAvoidingView>
   );
 };

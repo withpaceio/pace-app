@@ -12,6 +12,7 @@ import {
 } from '@react-navigation/native';
 import { focusManager, onlineManager, useIsRestoring } from '@tanstack/react-query';
 import { Slot, SplashScreen } from 'expo-router';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Purchases from 'react-native-purchases';
 import styled, { ThemeProvider } from 'styled-components/native';
 
@@ -28,7 +29,7 @@ MapLibreGL.setAccessToken(null);
 
 SplashScreen.preventAutoHideAsync();
 
-const RootWrapper = styled.View`
+const RootWrapper = styled(GestureHandlerRootView)`
   flex: 1;
 `;
 

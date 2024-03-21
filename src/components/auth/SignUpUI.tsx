@@ -91,15 +91,16 @@ const schema = object().shape({
     .min(3, i18n.t('signUp.inputs.username.tooShort'))
     .required(i18n.t('signUp.inputs.username.error')),
   password: string().required(i18n.t('signUp.inputs.password.error')),
-  passwordStrength: number().min(4, i18n.t('signUp.inputs.passwordStrength.error')),
+  passwordStrength: number()
+    .min(4, i18n.t('signUp.inputs.passwordStrength.tooWeak'))
+    .required('signUp.inputs.passwordStrength.error'),
   confirmPassword: string()
-    .oneOf([ref('password'), null], i18n.t('signUp.inputs.confirmPassword.notMatching'))
+    .oneOf([ref('password'), undefined], i18n.t('signUp.inputs.confirmPassword.notMatching'))
     .required(i18n.t('signUp.inputs.confirmPassword.notMatching')),
 });
 
 type FormData = {
   username: string;
-  email: string;
   password: string;
   passwordStrength: number;
   confirmPassword: string;

@@ -19,7 +19,7 @@ import i18n from '@translations/i18n';
 const schema = object().shape({
   defaultActivityType: string()
     .oneOf(
-      ['CYCLING', 'RUNNING'],
+      [ActivityType.CYCLING, ActivityType.RUNNING],
       i18n.t('settings.changeDefaultActivityType.inputs.activityType.invalid'),
     )
     .required(i18n.t('settings.changeDefaultActivityType.inputs.activityType.required')),

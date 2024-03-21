@@ -14,7 +14,7 @@ import { CancelHeaderButton, SaveHeaderButton } from '@components/common/header-
 import ChooseProfilePictureUI from '@components/settings/profilePicture/ChooseProfilePictureUI';
 
 type FormType = {
-  profilePicture: string | null;
+  profilePicture?: string | null;
 };
 
 const schema = object().shape({

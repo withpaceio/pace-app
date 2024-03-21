@@ -19,13 +19,12 @@ import i18n from '@translations/i18n';
 const schema = object().shape({
   oldPassword: string().required(i18n.t('settings.changePassword.inputs.oldPassword.error')),
   newPassword: string().required(i18n.t('settings.changePassword.inputs.newPassword.error')),
-  passwordStrength: number().min(
-    4,
-    i18n.t('settings.changePassword.inputs.passwordStrength.error'),
-  ),
+  passwordStrength: number()
+    .min(4, i18n.t('settings.changePassword.inputs.passwordStrength.tooWeak'))
+    .required(i18n.t('settings.changePassword.inputs.passwordStrength.error')),
   confirmNewPassword: string()
     .oneOf(
-      [ref('newPassword'), null],
+      [ref('newPassword'), undefined],
       i18n.t('settings.changePassword.inputs.confirmNewPassword.notMatching'),
     )
     .required(i18n.t('settings.changePassword.inputs.confirmNewPassword.error')),

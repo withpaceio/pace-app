@@ -15,11 +15,14 @@ import { CancelHeaderButton, SaveHeaderButton } from '@components/common/header-
 import SavingModal from '@components/common/SavingModal';
 import EditActivityUI from '@components/editActivity/EditActivityUI';
 
-import type { ActivitySummary, ActivityType } from '@models/Activity';
+import { ActivitySummary, ActivityType } from '@models/Activity';
 import i18n from '@translations/i18n';
 
 const schema = object().shape({
   name: string().required(i18n.t('editActivity.form.nameMissing')),
+  type: string()
+    .oneOf([ActivityType.CYCLING, ActivityType.RUNNING])
+    .required(i18n.t('editActivity.form.activityTypeMissing')),
 });
 
 type FormData = {

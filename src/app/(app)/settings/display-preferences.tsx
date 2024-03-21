@@ -18,7 +18,7 @@ import i18n from '@translations/i18n';
 const schema = object().shape({
   unit: string()
     .oneOf(
-      ['imperial', 'metric'],
+      [DistanceMeasurementSystem.IMPERIAL, DistanceMeasurementSystem.METRIC],
       i18n.t('settings.changeDisplayPreferences.inputs.systemOfMeasurement.invalid'),
     )
     .required(i18n.t('settings.changeDisplayPreferences.inputs.systemOfMeasurement.error')),

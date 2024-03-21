@@ -22,6 +22,9 @@ import i18n from '@translations/i18n';
 
 const schema = object().shape({
   name: string().required(i18n.t('saveActivity.form.nameMissing')),
+  type: string()
+    .oneOf([ActivityType.CYCLING, ActivityType.RUNNING])
+    .required(i18n.t('saveAcrtivity.form.activityTypeMissing')),
 });
 
 type FormData = {

@@ -16,6 +16,7 @@ export default {
       running: 'run',
       cycling: 'ride',
     },
+    activityTypeMissing: 'Activity type is required',
   },
   errors: {
     failureMessage: 'An error occurred while saving your activity.',

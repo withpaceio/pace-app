@@ -15,7 +15,8 @@ export default {
       error: 'Password is required.',
     },
     passwordStrength: {
-      error: 'Password is too weak.',
+      tooWeak: 'Password is too weak.',
+      error: 'Password strength is required.',
     },
     confirmPassword: {
       placeholder: 'Confirm password',

@@ -15,7 +15,12 @@ export default {
     android: {
       package: IS_DEV ? 'io.withpace.pace.dev' : 'io.withpace.pace',
       versionCode: 14,
-      permissions: ['ACCESS_FINE_LOCATION', 'FOREGROUND_SERVICE', 'BILLING'],
+      permissions: [
+        'ACCESS_FINE_LOCATION',
+        'FOREGROUND_SERVICE',
+        'FOREGROUND_SERVICE_LOCATION',
+        'BILLING',
+      ],
       blockedPermissions: ['RECORD_AUDIO'],
       adaptiveIcon: {
         foregroundImage: './assets/images/android-app-icon.png',

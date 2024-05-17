@@ -44,7 +44,7 @@ export default async function changePassword(
     newProfileData.passwordHashSalt,
     32,
     ARGON2ID_ITERATIONS,
-    32768 * 1024,
+    BigInt(32768 * 1024),
   );
 
   const authPasswordTokenBuffer = new HKDF(

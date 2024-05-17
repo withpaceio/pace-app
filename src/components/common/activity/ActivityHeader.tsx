@@ -104,7 +104,7 @@ const EditActivityTypeWrapper = styled.Pressable`
 
   border-width: 1px;
   border-style: solid;
-  border-color: ${({ theme }) => theme.colors.textInput.unfocused};
+  border-color: ${({ theme }) => theme.colors.textInput.unfocused.border};
   border-radius: 3px;
 
   background-color: ${({ theme }) => theme.colors.componentBackground};

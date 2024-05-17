@@ -1,0 +1,13 @@
+diff --git a/node_modules/@maplibre/maplibre-react-native/javascript/components/MapView.tsx b/node_modules/@maplibre/maplibre-react-native/javascript/components/MapView.tsx
+index d6bc9f6..874fb34 100644
+--- a/node_modules/@maplibre/maplibre-react-native/javascript/components/MapView.tsx
++++ b/node_modules/@maplibre/maplibre-react-native/javascript/components/MapView.tsx
+@@ -325,7 +325,7 @@ class MapView extends NativeBridgeComponent(
+     this._onDebouncedRegionWillChange = debounce(
+       this._onRegionWillChange.bind(this),
+       props.regionWillChangeDebounceTime,
+-      true,
++      { immediate: true },
+     );
+ 
+     this._onDebouncedRegionDidChange = debounce(

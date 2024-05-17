@@ -71,8 +71,8 @@ const RecordUI: FC<Props> = ({
   const [mapReady, setMapReady] = useState(Platform.OS === 'ios');
   const [coordinates, setCoordinates] = useState<number[][]>([]);
   const [followUserLocation, setFollowUserLocation] = useState(true);
-  const [userFollowMode, setUserFollowMode] = useState<MapLibreGL.UserTrackingModes | null>(
-    MapLibreGL.UserTrackingModes.FollowWithCourse,
+  const [userFollowMode, setUserFollowMode] = useState<MapLibreGL.UserTrackingMode | null>(
+    MapLibreGL.UserTrackingMode.FollowWithCourse,
   );
 
   const router = useRouter();
@@ -80,7 +80,7 @@ const RecordUI: FC<Props> = ({
 
   const onRecenterMap = useCallback((): void => {
     setFollowUserLocation(true);
-    setUserFollowMode(MapLibreGL.UserTrackingModes.FollowWithCourse);
+    setUserFollowMode(MapLibreGL.UserTrackingMode.FollowWithCourse);
   }, []);
 
   const onMapFullyRendered = useCallback((): void => {
@@ -91,8 +91,6 @@ const RecordUI: FC<Props> = ({
   const onUserTrackingModeChange: MapLibreGL.Camera['props']['onUserTrackingModeChange'] = (
     event,
   ): void => {
-    // Types are wrong in the MapLibre package
-    // @ts-expect-error
     setUserFollowMode(event.nativeEvent.payload.followUserMode);
     setFollowUserLocation(event.nativeEvent.payload.followUserLocation);
   };

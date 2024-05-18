@@ -1,7 +1,8 @@
 import React, { type FC, useMemo } from 'react';
 
-import { endOfMonth, endOfWeek, startOfMonth, startOfWeek, subMinutes } from 'date-fns';
 import { useNavigation } from 'expo-router';
+
+import { endOfMonth, endOfWeek, startOfMonth, startOfWeek, subMinutes } from 'date-fns';
 
 import usePreferences from '@api/preferences/usePreferences';
 

@@ -17,6 +17,7 @@ import { Text } from '@components/ui';
 
 import type { Activity, ActivitySummary } from '@models/Activity';
 import type { DistanceMeasurementSystem } from '@models/UnitSystem';
+
 import i18n from '@translations/i18n';
 
 import DistanceBarChart from './DistanceBarChart';

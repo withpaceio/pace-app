@@ -15,7 +15,12 @@ export default {
     android: {
       package: IS_DEV ? 'io.withpace.pace.dev' : 'io.withpace.pace',
       versionCode: 14,
-      permissions: ['ACCESS_FINE_LOCATION', 'FOREGROUND_SERVICE', 'BILLING'],
+      permissions: [
+        'ACCESS_FINE_LOCATION',
+        'FOREGROUND_SERVICE',
+        'FOREGROUND_SERVICE_LOCATION',
+        'BILLING',
+      ],
       blockedPermissions: ['RECORD_AUDIO'],
       adaptiveIcon: {
         foregroundImage: './assets/images/android-app-icon.png',
@@ -38,7 +43,7 @@ export default {
         UIBackgroundModes: ['location'],
       },
     },
-    plugins: ['@maplibre/maplibre-react-native'],
+    plugins: ['expo-font', 'expo-router', 'expo-secure-store', '@maplibre/maplibre-react-native'],
     extra: {
       eas: {
         projectId: 'bbc52990-d7d4-11e9-a07a-3d3351b36399',

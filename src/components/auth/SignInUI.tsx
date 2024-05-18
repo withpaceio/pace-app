@@ -2,6 +2,7 @@ import { type FC, useCallback, useEffect } from 'react';
 import { KeyboardAvoidingView, Linking, Platform } from 'react-native';
 
 import { useRouter } from 'expo-router';
+
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import styled from 'styled-components/native';
 
@@ -10,10 +11,11 @@ import useSignIn from '@api/auth/useSignIn';
 import { SecondaryButton, Text } from '@components/ui';
 
 import i18n from '@translations/i18n';
+
 import { WEB_URL } from '@utils/sendRequest';
 
-import { SignInForm } from './common-components';
 import SigningProgressModal from './SigningProgressModal';
+import { SignInForm } from './common-components';
 
 const Wrapper = styled(Animated.View)`
   margin-top: ${({ theme }) => 3 * theme.sizes.outerPadding}px;

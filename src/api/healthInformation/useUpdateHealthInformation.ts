@@ -9,6 +9,7 @@ import type { HealthInformationData } from '@api/healthInformation/useHealthInfo
 import type { HealthInformation } from '@models/HealthInformation';
 import type { Preferences } from '@models/Preferences';
 import { DistanceMeasurementSystem } from '@models/UnitSystem';
+
 import { API_URL, sendPatchRequest } from '@utils/sendRequest';
 
 import healthInformationKeys from './healthInformationKeys';

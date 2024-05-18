@@ -1,7 +1,8 @@
 import React, { type FC, useMemo, useRef, useState } from 'react';
 
-import type GorhomBottomSheet from '@gorhom/bottom-sheet';
 import { StatusBar } from 'expo-status-bar';
+
+import type GorhomBottomSheet from '@gorhom/bottom-sheet';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import { getCalories, getPaceInMinutesPerKilometers } from '@activity';
@@ -9,13 +10,15 @@ import { useTheme } from '@theme';
 
 import useHealthInformation from '@api/healthInformation/useHealthInformation';
 
+import SavingModal from '@components/common/SavingModal';
 import ActivityDetails from '@components/common/activity/ActivityDetails';
 import ActivityTypeBottomSheet from '@components/common/activity/ActivityTypeBottomSheet';
-import SavingModal from '@components/common/SavingModal';
 
 import { ActivityType } from '@models/Activity';
 import { DistanceMeasurementSystem } from '@models/UnitSystem';
+
 import ActivityTask from '@tasks/ActivityTask';
+
 import i18n from '@translations/i18n';
 
 import DarkSnapshotMap from './DarkSnapshotMap';

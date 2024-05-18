@@ -5,6 +5,7 @@ import { encryptMeasurement, useAuth } from '@auth';
 import type { PreferencesData } from '@api/preferences/usePreferences';
 
 import type { DistanceMeasurementSystem } from '@models/UnitSystem';
+
 import { API_URL, sendPatchRequest } from '@utils/sendRequest';
 
 import preferencesKeys from './preferencesKeys';

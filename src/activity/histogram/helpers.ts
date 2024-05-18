@@ -1,8 +1,8 @@
 import type { ActivityLocation, ActivityLocationDistance } from '@models/Activity';
 import { DistanceMeasurementSystem } from '@models/UnitSystem';
 
-import type { Histogram } from './types';
 import { computeDistanceBetweenPointsInMeters } from '../getDistanceInKilometers';
+import type { Histogram } from './types';
 
 export function binarySearch(locations: ActivityLocationDistance[], distance: number): number {
   let low = 0;

@@ -1,7 +1,8 @@
 import React, { type FC, useCallback, useLayoutEffect } from 'react';
 
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigation, useRouter } from 'expo-router';
+
+import { yupResolver } from '@hookform/resolvers/yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { object, string } from 'yup';
 
@@ -14,7 +15,7 @@ import { CancelHeaderButton, SaveHeaderButton } from '@components/common/header-
 import ChooseProfilePictureUI from '@components/settings/profilePicture/ChooseProfilePictureUI';
 
 type FormType = {
-  profilePicture: string | null;
+  profilePicture?: string | null;
 };
 
 const schema = object().shape({

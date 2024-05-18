@@ -68,4 +68,6 @@ const BottomSheet = forwardRef<GorhomBottomSheet, Props>(
   },
 );
 
+BottomSheet.displayName = 'BottomSheet';
+
 export default BottomSheet;

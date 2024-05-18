@@ -9,8 +9,8 @@ import { useTheme } from '@theme';
 
 import { type ActivityLocationDistance } from '@models/Activity';
 
-import type { Scale } from './useScaleLinear';
 import { getSplitPaths, getStartEndIndices } from '../utils';
+import type { Scale } from './useScaleLinear';
 
 type Args = {
   invertYAxis: boolean;

@@ -2,8 +2,8 @@ import React, { type FC } from 'react';
 
 import { Line, Polygon, Svg } from 'react-native-svg';
 
-import type { IconProps } from './types';
 import theme from '../../theme/theme';
+import type { IconProps } from './types';
 
 const AlertOctagonIcon: FC<IconProps> = ({
   width = 34,

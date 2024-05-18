@@ -1,7 +1,7 @@
-import 'react-native-get-random-values';
-
 import { type FC, useCallback, useEffect, useState } from 'react';
 import { AppState, type AppStateStatus, Platform } from 'react-native';
+
+import { Slot, SplashScreen } from 'expo-router';
 
 import MapLibreGL from '@maplibre/maplibre-react-native';
 import NetInfo from '@react-native-community/netinfo';
@@ -11,7 +11,8 @@ import {
   ThemeProvider as NavigationThemeProvider,
 } from '@react-navigation/native';
 import { focusManager, onlineManager, useIsRestoring } from '@tanstack/react-query';
-import { Slot, SplashScreen } from 'expo-router';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import 'react-native-get-random-values';
 import Purchases from 'react-native-purchases';
 import styled, { ThemeProvider } from 'styled-components/native';
 
@@ -28,7 +29,7 @@ MapLibreGL.setAccessToken(null);
 
 SplashScreen.preventAutoHideAsync();
 
-const RootWrapper = styled.View`
+const RootWrapper = styled(GestureHandlerRootView)`
   flex: 1;
 `;
 

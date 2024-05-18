@@ -1,7 +1,8 @@
 import React, { type FC, useCallback, useLayoutEffect } from 'react';
 
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigation, useRouter } from 'expo-router';
+
+import { yupResolver } from '@hookform/resolvers/yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { number, object, ref, string } from 'yup';
 
@@ -19,13 +20,12 @@ import i18n from '@translations/i18n';
 const schema = object().shape({
   oldPassword: string().required(i18n.t('settings.changePassword.inputs.oldPassword.error')),
   newPassword: string().required(i18n.t('settings.changePassword.inputs.newPassword.error')),
-  passwordStrength: number().min(
-    4,
-    i18n.t('settings.changePassword.inputs.passwordStrength.error'),
-  ),
+  passwordStrength: number()
+    .min(4, i18n.t('settings.changePassword.inputs.passwordStrength.tooWeak'))
+    .required(i18n.t('settings.changePassword.inputs.passwordStrength.error')),
   confirmNewPassword: string()
     .oneOf(
-      [ref('newPassword'), null],
+      [ref('newPassword'), undefined],
       i18n.t('settings.changePassword.inputs.confirmNewPassword.notMatching'),
     )
     .required(i18n.t('settings.changePassword.inputs.confirmNewPassword.error')),
@@ -93,6 +93,7 @@ const ChangePasswordScreen: FC = () => {
         });
 
         goToSettingsScreen();
+        // eslint-disable-next-line no-empty
       } catch {}
     },
     [

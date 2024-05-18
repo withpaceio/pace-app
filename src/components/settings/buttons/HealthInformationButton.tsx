@@ -1,7 +1,8 @@
 import React, { type FC, useCallback, useMemo } from 'react';
 
-import { differenceInYears } from 'date-fns';
 import { useRouter } from 'expo-router';
+
+import { differenceInYears } from 'date-fns';
 
 import { convertKilogramsToPounds } from '@activity';
 import { useTheme } from '@theme';
@@ -13,6 +14,7 @@ import { UserIcon } from '@components/icons';
 import { ActivityIndicator } from '@components/ui';
 
 import { DistanceMeasurementSystem } from '@models/UnitSystem';
+
 import i18n from '@translations/i18n';
 
 import {

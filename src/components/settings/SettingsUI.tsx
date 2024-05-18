@@ -9,6 +9,7 @@ import { Text } from '@components/ui';
 
 import i18n from '@translations/i18n';
 
+import { version } from '../../../package.json';
 import {
   ChangePasswordButton,
   DeleteAccountButton,
@@ -20,7 +21,6 @@ import {
   SignOutButton,
   SportPreferencesButton,
 } from './buttons';
-import { version } from '../../../package.json';
 
 const Wrapper = styled.SafeAreaView`
   flex: 1;

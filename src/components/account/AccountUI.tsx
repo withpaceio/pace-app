@@ -1,10 +1,12 @@
 import React, { type FC, useCallback, useMemo } from 'react';
 
-import { format } from 'date-fns';
 import { useRouter } from 'expo-router';
+
+import { format } from 'date-fns';
 import styled from 'styled-components/native';
 
 import type { DistanceMeasurementSystem } from '@models/UnitSystem';
+
 import i18n from '@translations/i18n';
 
 import AccountHeader from './AccountHeader';

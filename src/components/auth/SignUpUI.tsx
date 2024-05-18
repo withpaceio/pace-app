@@ -1,8 +1,9 @@
 import { type FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { KeyboardAvoidingView, Platform } from 'react-native';
 
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'expo-router';
+
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import styled from 'styled-components/native';
@@ -19,8 +20,8 @@ import { ActivityIndicator, PasswordStrengthBar, Text, TextInput } from '@compon
 
 import i18n from '@translations/i18n';
 
-import { FormButton, FormErrorText, PasswordInput } from './common-components';
 import SigningProgressModal from './SigningProgressModal';
+import { FormButton, FormErrorText, PasswordInput } from './common-components';
 
 const Wrapper = styled(Animated.View)`
   flex: 1;
@@ -91,15 +92,16 @@ const schema = object().shape({
     .min(3, i18n.t('signUp.inputs.username.tooShort'))
     .required(i18n.t('signUp.inputs.username.error')),
   password: string().required(i18n.t('signUp.inputs.password.error')),
-  passwordStrength: number().min(4, i18n.t('signUp.inputs.passwordStrength.error')),
+  passwordStrength: number()
+    .min(4, i18n.t('signUp.inputs.passwordStrength.tooWeak'))
+    .required('signUp.inputs.passwordStrength.error'),
   confirmPassword: string()
-    .oneOf([ref('password'), null], i18n.t('signUp.inputs.confirmPassword.notMatching'))
+    .oneOf([ref('password'), undefined], i18n.t('signUp.inputs.confirmPassword.notMatching'))
     .required(i18n.t('signUp.inputs.confirmPassword.notMatching')),
 });
 
 type FormData = {
   username: string;
-  email: string;
   password: string;
   passwordStrength: number;
   confirmPassword: string;
@@ -164,7 +166,7 @@ const SignUpUI: FC<Props> = ({ onLoadingChanged }) => {
         },
       );
     },
-    [signIn, signUp],
+    [router, signIn, signUp],
   );
 
   useEffect(() => {

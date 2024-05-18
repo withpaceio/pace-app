@@ -16,7 +16,7 @@ export default async function encryptProfileData(
     profileData.passwordHashSalt,
     32,
     ARGON2ID_ITERATIONS,
-    32768 * 1024,
+    BigInt(32768 * 1024),
   );
   const hashedPasswordBuffer = base64.decode(hashedPassword);
 
@@ -24,7 +24,7 @@ export default async function encryptProfileData(
     SHA256,
     hashedPasswordBuffer,
     base64.decode(profileData.profileEncryptionSalt),
-  ).expand(SECRETBOX_KEY_LENGTH);
+  ).expand(Number(SECRETBOX_KEY_LENGTH));
 
   const encryptedProfileData = secretboxSeal(
     JSON.stringify(profileData),

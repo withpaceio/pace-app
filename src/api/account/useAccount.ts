@@ -5,6 +5,7 @@ import { type UseQueryResult, useQuery } from '@tanstack/react-query';
 import { useAuth } from '@auth';
 
 import type { Account } from '@models/Account';
+
 import { API_URL, sendGetRequest } from '@utils/sendRequest';
 
 import accountKeys from './accountKeys';

@@ -2,6 +2,7 @@ import React, { type FC, useCallback, useEffect, useLayoutEffect, useState } fro
 import { Platform } from 'react-native';
 
 import { useNavigation, useRouter } from 'expo-router';
+
 import Purchases, {
   PURCHASES_ERROR_CODE,
   type PurchasesError,

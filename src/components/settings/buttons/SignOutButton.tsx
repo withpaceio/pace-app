@@ -8,8 +8,8 @@ import { OutArrowIcon } from '@components/icons';
 
 import i18n from '@translations/i18n';
 
-import { EntryWrapper, ICON_SIZE, IconWrapper, Label } from './common';
 import SigningOutModal from '../SigningOutModal';
+import { EntryWrapper, ICON_SIZE, IconWrapper, Label } from './common';
 
 const SignOutButton: FC = () => {
   const theme = useTheme();

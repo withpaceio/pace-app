@@ -1,11 +1,9 @@
 {
-  // "extends": "@tsconfig/react-native/tsconfig.json" /* Recommended React Native TSConfig base */,
   "extends": "expo/tsconfig.base",
-  "exclude": ["node_modules"],
   "compilerOptions": {
     "strict": true,
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
-    "types": ["node", "styled-components-react-native"],
+    "types": ["geojson"],
     "baseUrl": "./src",
     "paths": {
       "@activity": ["activity"],

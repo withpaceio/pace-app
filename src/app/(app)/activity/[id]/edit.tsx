@@ -1,7 +1,8 @@
 import { type FC, useCallback, useLayoutEffect } from 'react';
 
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
+
+import { yupResolver } from '@hookform/resolvers/yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { object, string } from 'yup';
 
@@ -11,15 +12,19 @@ import useActivity from '@api/activity/useActivity';
 import useUpdateActivity from '@api/activity/useUpdateActivity';
 import useHealthInformation from '@api/healthInformation/useHealthInformation';
 
-import { CancelHeaderButton, SaveHeaderButton } from '@components/common/header-buttons';
 import SavingModal from '@components/common/SavingModal';
+import { CancelHeaderButton, SaveHeaderButton } from '@components/common/header-buttons';
 import EditActivityUI from '@components/editActivity/EditActivityUI';
 
-import type { ActivitySummary, ActivityType } from '@models/Activity';
+import { ActivitySummary, ActivityType } from '@models/Activity';
+
 import i18n from '@translations/i18n';
 
 const schema = object().shape({
   name: string().required(i18n.t('editActivity.form.nameMissing')),
+  type: string()
+    .oneOf([ActivityType.CYCLING, ActivityType.RUNNING])
+    .required(i18n.t('editActivity.form.activityTypeMissing')),
 });
 
 type FormData = {

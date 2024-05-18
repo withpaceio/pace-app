@@ -162,7 +162,8 @@ export default {
         error: 'You must confirm the new password',
       },
       passwordStrength: {
-        error: 'Password is too weak.',
+        tooWeak: 'Password is too weak.',
+        error: 'Password strength is missing',
       },
     },
     savingModal: {

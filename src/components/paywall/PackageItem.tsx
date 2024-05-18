@@ -1,6 +1,7 @@
 import React, { type FC } from 'react';
 
 import Checkbox from 'expo-checkbox';
+
 import { PACKAGE_TYPE, type PurchasesPackage } from 'react-native-purchases';
 import styled from 'styled-components/native';
 

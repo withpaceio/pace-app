@@ -13,6 +13,7 @@ import type {
   CreateActivityResponse,
   UploadActivityResponse,
 } from '@models/Activity';
+
 import { API_URL, sendGetRequest, sendPostRequest } from '@utils/sendRequest';
 
 import activitiesKeys from './activitiesKeys';

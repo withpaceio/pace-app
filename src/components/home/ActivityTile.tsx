@@ -2,6 +2,7 @@ import React, { type FC, useCallback } from 'react';
 import { Pressable, useWindowDimensions } from 'react-native';
 
 import { useRouter } from 'expo-router';
+
 import styled from 'styled-components/native';
 
 import ActivitySummaryTileUI from '@components/common/activity/summaryTile/ActivitySummaryTileUI';
@@ -42,7 +43,7 @@ const ActivityTile: FC<Props> = ({ activity, isFirst, distanceMeasurementSystem 
 
   const goToActivityDetails = useCallback((): void => {
     router.push(`/activity/${activity.id}`);
-  }, [activity.id]);
+  }, [activity.id, router]);
 
   return (
     <Pressable onPress={goToActivityDetails}>

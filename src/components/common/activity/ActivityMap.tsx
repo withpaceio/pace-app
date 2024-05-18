@@ -1,7 +1,7 @@
 import React, { forwardRef, useMemo } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 
-import MapLibreGL, { type AttributionPosition } from '@maplibre/maplibre-react-native';
+import MapLibreGL from '@maplibre/maplibre-react-native';
 import styled from 'styled-components/native';
 
 import { getBounds, getLineCoordinatesFromSegments } from '@activity';
@@ -28,7 +28,23 @@ type Props = {
   tileUrl: string;
   locations: ActivityLocation[] | null | undefined;
   style?: StyleProp<ViewStyle>;
-  attributionPosition?: AttributionPosition;
+  attributionPosition?:
+    | {
+        top?: number;
+        left?: number;
+      }
+    | {
+        top?: number;
+        right?: number;
+      }
+    | {
+        bottom?: number;
+        left?: number;
+      }
+    | {
+        bottom?: number;
+        right?: number;
+      };
   onDidFinishRenderingFrameFully?: () => void;
 };
 
@@ -122,11 +138,10 @@ const ActivityMap = forwardRef<MapLibreGL.MapView, Props>(
             />
           ))}
         </MapLibreGL.ShapeSource>
-        <MapLibreGL.MarkerView id="start" coordinate={segmentsCoordinates[0][0]}>
+        <MapLibreGL.MarkerView coordinate={segmentsCoordinates[0][0]}>
           <StartMarker />
         </MapLibreGL.MarkerView>
         <MapLibreGL.MarkerView
-          id="end"
           coordinate={
             segmentsCoordinates[segmentsCoordinates.length - 1][
               segmentsCoordinates[segmentsCoordinates.length - 1].length - 1
@@ -138,5 +153,7 @@ const ActivityMap = forwardRef<MapLibreGL.MapView, Props>(
     );
   },
 );
+
+ActivityMap.displayName = 'ActivityMap';
 
 export default ActivityMap;

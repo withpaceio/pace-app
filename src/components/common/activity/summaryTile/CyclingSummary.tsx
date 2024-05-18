@@ -8,10 +8,10 @@ import useActivityLocations from '@api/activity/useActivityLocations';
 import { CyclingIcon } from '@components/icons';
 import { Text } from '@components/ui';
 
-import { ICON_SIZE } from './constants';
 import DurationWrapper from './DurationWrapper';
 import IconWrapper from './IconWrapper';
 import StatsWrapper from './StatsWrapper';
+import { ICON_SIZE } from './constants';
 import type { SummaryProps } from './types';
 
 const CyclingSummary: FC<SummaryProps> = ({

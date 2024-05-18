@@ -1,16 +1,18 @@
 import React, { type FC } from 'react';
 
 import Checkbox from 'expo-checkbox';
+
 import { Controller, useFormContext } from 'react-hook-form';
 import styled from 'styled-components/native';
 
 import { useTheme } from '@theme';
 
-import ActivityIcon from '@components/common/activity/ActivityIcon';
 import SavingModal from '@components/common/SavingModal';
+import ActivityIcon from '@components/common/activity/ActivityIcon';
 import { Text } from '@components/ui';
 
 import { ActivityType } from '@models/Activity';
+
 import i18n from '@translations/i18n';
 
 import type { ChangeDefaultActivityTypeData } from './types';

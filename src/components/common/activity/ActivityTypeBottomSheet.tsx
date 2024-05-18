@@ -8,6 +8,7 @@ import ActivityIcon from '@components/common/activity/ActivityIcon';
 import { BottomSheet, BottomSheetLabel, BottomSheetMenuEntry } from '@components/ui';
 
 import { ActivityType } from '@models/Activity';
+
 import i18n from '@translations/i18n';
 
 const SNAP_POINTS = ['20%'];
@@ -51,5 +52,7 @@ const ActivityTypeBottomSheet = forwardRef<GorohmBottomSheet, Props>(
     );
   },
 );
+
+ActivityTypeBottomSheet.displayName = 'ActivityTypeBottomSheet';
 
 export default ActivityTypeBottomSheet;

@@ -1,7 +1,8 @@
 import React, { type FC, useCallback, useLayoutEffect } from 'react';
 
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigation, useRouter } from 'expo-router';
+
+import { yupResolver } from '@hookform/resolvers/yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { number, object, string } from 'yup';
 
@@ -16,6 +17,7 @@ import ChangeHealthInformationUI from '@components/settings/healthInformation/Ch
 
 import type { HealthInformation } from '@models/HealthInformation';
 import { DistanceMeasurementSystem } from '@models/UnitSystem';
+
 import i18n from '@translations/i18n';
 
 const schema = object().shape({

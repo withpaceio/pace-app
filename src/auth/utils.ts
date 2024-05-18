@@ -1,4 +1,5 @@
 import type { PasswordSaltResponse } from '@models/PasswordSalt';
+
 import { API_URL, sendPostRequest } from '@utils/sendRequest';
 
 export async function fetchPasswordSalt(

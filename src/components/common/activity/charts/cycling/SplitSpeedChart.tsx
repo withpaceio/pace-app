@@ -6,6 +6,7 @@ import type { Split as SplitType } from '@activity';
 
 import { ActivityType } from '@models/Activity';
 import { DistanceMeasurementSystem } from '@models/UnitSystem';
+
 import i18n from '@translations/i18n';
 
 import type { Scale } from '../common/PaceChart/hooks/useScaleLinear';

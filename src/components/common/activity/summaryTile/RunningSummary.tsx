@@ -9,10 +9,10 @@ import { Text } from '@components/ui';
 import type { ActivitySummary } from '@models/Activity';
 import { DistanceMeasurementSystem } from '@models/UnitSystem';
 
-import { ICON_SIZE } from './constants';
 import DurationWrapper from './DurationWrapper';
 import IconWrapper from './IconWrapper';
 import StatsWrapper from './StatsWrapper';
+import { ICON_SIZE } from './constants';
 import type { SummaryProps } from './types';
 
 const RunningSummary: FC<SummaryProps> = ({

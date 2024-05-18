@@ -10,6 +10,7 @@ import { FlagIcon } from '@components/icons';
 import { ActivityIndicator } from '@components/ui';
 
 import { ActivityType } from '@models/Activity';
+
 import i18n from '@translations/i18n';
 
 import {

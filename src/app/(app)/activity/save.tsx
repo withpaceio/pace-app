@@ -1,7 +1,8 @@
 import React, { type FC, useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
+
+import { yupResolver } from '@hookform/resolvers/yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { object, string } from 'yup';
 
@@ -17,11 +18,16 @@ import SaveUI from '@components/save/SaveUI';
 
 import { ActivityType } from '@models/Activity';
 import { DistanceMeasurementSystem } from '@models/UnitSystem';
+
 import ActivityTask from '@tasks/ActivityTask';
+
 import i18n from '@translations/i18n';
 
 const schema = object().shape({
   name: string().required(i18n.t('saveActivity.form.nameMissing')),
+  type: string()
+    .oneOf([ActivityType.CYCLING, ActivityType.RUNNING])
+    .required(i18n.t('saveAcrtivity.form.activityTypeMissing')),
 });
 
 type FormData = {

@@ -2,8 +2,8 @@ import React, { FC } from 'react';
 
 import styled from 'styled-components/native';
 
-import FormText from './FormText';
 import { ActivityIndicator } from '../../ui';
+import FormText from './FormText';
 
 const LoadingWrapper = styled.View`
   margin-top: 20px;

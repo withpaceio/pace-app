@@ -18,7 +18,7 @@ export default async function decryptProfileData(
     passwordHashSalt,
     32,
     ARGON2ID_ITERATIONS,
-    32768 * 1024,
+    BigInt(32768 * 1024),
   );
 
   const hashedPasswordBuffer = base64.decode(hashedPassword);
@@ -28,7 +28,7 @@ export default async function decryptProfileData(
     SHA256,
     hashedPasswordBuffer,
     profileEncryptionSaltBuffer,
-  ).expand(SECRETBOX_KEY_LENGTH);
+  ).expand(Number(SECRETBOX_KEY_LENGTH));
 
   const decryptedProfileData = secretboxOpen(
     encryptedProfileData,

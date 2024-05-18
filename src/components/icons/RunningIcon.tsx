@@ -2,8 +2,8 @@ import React, { type FC } from 'react';
 
 import { Circle, Line, Path, Svg } from 'react-native-svg';
 
-import type { IconProps } from './types';
 import theme from '../../theme/theme';
+import type { IconProps } from './types';
 
 const RunningIcon: FC<IconProps> = ({ width = 34, height = 34, color = theme.colors.white }) => (
   <Svg

@@ -5,10 +5,10 @@ import { useSharedValue } from 'react-native-reanimated';
 
 import { type ActivityLocation, ActivityType } from '@models/Activity';
 
-import PaceChart from './PaceChart';
-import SplitPaceChart from './SplitPaceChart';
 import useSplitPaceChartData from '../common/SplitPaceChart/hooks/useSplitPaceChartData';
 import type { ChartsProps } from '../types';
+import PaceChart from './PaceChart';
+import SplitPaceChart from './SplitPaceChart';
 
 type Props = Pick<ChartsProps, 'summary' | 'locations' | 'distanceMeasurementSystem'>;
 

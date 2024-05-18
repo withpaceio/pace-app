@@ -2,6 +2,7 @@ import { type FC, useState } from 'react';
 import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 import { LinearGradient } from 'expo-linear-gradient';
+
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
@@ -10,10 +11,10 @@ import { useTheme } from '@theme';
 
 import { CloseIcon, PaceIcon } from '@components/icons';
 
-import LandingUI from './LandingUI';
-import Policies from './Policies';
 import SignInUI from '../SignInUI';
 import SignUpUI from '../SignUpUI';
+import LandingUI from './LandingUI';
+import Policies from './Policies';
 
 const HEADER_HEIGHT = 300;
 const COLLAPSED_HEADER_HEIGHT = 100;

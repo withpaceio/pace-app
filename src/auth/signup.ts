@@ -6,6 +6,7 @@ import { argon2idDeriveKey } from 'react-native-nacl-jsi';
 import { ARGON2ID_ITERATIONS, HKDF_PASSWORD_TOKEN_LENGTH } from '@crypto';
 
 import type { SignUpResponse } from '@models/SignUp';
+
 import { API_URL, sendPostRequest } from '@utils/sendRequest';
 
 import encryptProfileData from './encryptProfileData';

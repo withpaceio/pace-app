@@ -1,7 +1,8 @@
 import React, { type FC, useCallback, useLayoutEffect } from 'react';
 
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigation, useRouter } from 'expo-router';
+
+import { yupResolver } from '@hookform/resolvers/yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { number, object, ref, string } from 'yup';
 
@@ -92,6 +93,7 @@ const ChangePasswordScreen: FC = () => {
         });
 
         goToSettingsScreen();
+        // eslint-disable-next-line no-empty
       } catch {}
     },
     [

@@ -5,6 +5,7 @@ import styled from 'styled-components/native';
 import { ActivityIndicator, Text } from '@components/ui';
 
 import { NumberActivities } from '@models/Activity';
+
 import i18n from '@translations/i18n';
 
 const Wrapper = styled.View`

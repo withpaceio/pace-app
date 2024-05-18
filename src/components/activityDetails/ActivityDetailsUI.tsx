@@ -1,7 +1,8 @@
 import React, { type FC, useCallback, useRef } from 'react';
 
-import type GorohmBottomSheet from '@gorhom/bottom-sheet';
 import { useRouter } from 'expo-router';
+
+import type GorohmBottomSheet from '@gorhom/bottom-sheet';
 import styled from 'styled-components/native';
 
 import { useTheme } from '@theme';
@@ -14,6 +15,7 @@ import { ActivityIndicator, Text } from '@components/ui';
 
 import type { Activity, ActivitySummary } from '@models/Activity';
 import type { DistanceMeasurementSystem } from '@models/UnitSystem';
+
 import i18n from '@translations/i18n';
 
 import EditActivityBottomSheet from './EditActivityBottomSheet';

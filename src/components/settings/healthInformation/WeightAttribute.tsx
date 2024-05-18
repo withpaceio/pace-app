@@ -6,6 +6,7 @@ import { TextInput } from '@components/ui';
 
 import type { HealthInformation } from '@models/HealthInformation';
 import { DistanceMeasurementSystem } from '@models/UnitSystem';
+
 import i18n from '@translations/i18n';
 
 type Props = {

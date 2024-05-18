@@ -5,6 +5,7 @@ import styled from 'styled-components/native';
 
 import { type ActivityTaskState, ActivityType } from '@models/Activity';
 import type { DistanceMeasurementSystem } from '@models/UnitSystem';
+
 import ActivityTask from '@tasks/ActivityTask';
 
 import ActionsWrapper from './ActionsWrapper';

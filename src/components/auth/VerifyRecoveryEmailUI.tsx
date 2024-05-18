@@ -1,5 +1,6 @@
 import React, { type FC } from 'react';
 
+import i18n from '../../translations/i18n';
 import AuthLayout from './AuthLayout';
 import {
   FormBoldText,
@@ -9,7 +10,6 @@ import {
   Loading,
   SignInForm,
 } from './common-components';
-import i18n from '../../translations/i18n';
 
 type Props = {
   loading: boolean;

@@ -1,8 +1,8 @@
 import type { ActivityLocationDistance } from '@models/Activity';
 import { DistanceMeasurementSystem } from '@models/UnitSystem';
 
-import { getHistogram } from './helpers';
 import getPaceInMinutesPerKilometers from '../getPaceInMinutesPerKilometers';
+import { getHistogram } from './helpers';
 
 function computePacePoint(
   distanceDifference: number,

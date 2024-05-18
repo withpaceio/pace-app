@@ -2,8 +2,8 @@ import React, { type FC } from 'react';
 
 import { Path, Svg } from 'react-native-svg';
 
-import { IconProps } from './types';
 import theme from '../../theme/theme';
+import { IconProps } from './types';
 
 const ChevronRightIcon: FC<IconProps> = ({
   width = 34,

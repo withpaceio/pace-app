@@ -3,6 +3,7 @@ import { type UseQueryResult, useQuery } from '@tanstack/react-query';
 import { useAuth } from '@auth';
 
 import type { RecoveryEmail } from '@models/RecoveryEmail';
+
 import { API_URL, sendGetRequest } from '@utils/sendRequest';
 
 import recoveryEmailKeys from './recoveryEmailKeys';

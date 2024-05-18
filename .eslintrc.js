@@ -1,6 +1,7 @@
 module.exports = {
   root: true,
-  extends: ['universe/native'],
+  extends: ['expo', 'eslint:recommended'],
+  env: { browser: true, node: true },
   overrides: [
     {
       files: ['*.js', '*.jsx', '*.ts', '*.tsx'],
@@ -10,20 +11,19 @@ module.exports = {
         'import/order': [
           'error',
           {
-            groups: [['external', 'builtin'], 'internal', ['sibling', 'parent'], 'index'],
+            groups: [['builtin', 'external'], 'internal', ['parent', 'sibling'], 'index'],
             pathGroups: [
               {
                 pattern: '@(react|react-native)',
                 group: 'external',
-                position: 'before',
               },
               {
                 pattern: '@(@activity|@auth|@crypto|@theme)',
                 group: 'internal',
                 position: 'before',
               },
-              { pattern: '@api/**', group: 'internal', position: 'before' },
-              { pattern: '@components/**', group: 'internal', position: 'before' },
+              { pattern: '@api/**', group: 'internal' },
+              { pattern: '@components/**', group: 'internal' },
               { pattern: '@models/**', group: 'internal' },
               { pattern: '@navigation/**', group: 'internal' },
               { pattern: '@screens/**', group: 'internal' },
@@ -33,11 +33,7 @@ module.exports = {
               { pattern: '@utils/**', group: 'internal' },
             ],
             pathGroupsExcludedImportTypes: ['internal', 'react'],
-            'newlines-between': 'always',
-            alphabetize: {
-              order: 'asc',
-              caseInsensitive: true,
-            },
+            'newlines-between': 'always-and-inside-groups',
           },
         ],
       },

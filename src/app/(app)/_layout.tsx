@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 
 import { Redirect, Stack } from 'expo-router';
+
 import styled from 'styled-components/native';
 
 import { useAuth } from '@auth';

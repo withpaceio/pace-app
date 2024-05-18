@@ -1,6 +1,7 @@
 import React, { type FC, useCallback } from 'react';
 
 import { useRouter } from 'expo-router';
+
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 

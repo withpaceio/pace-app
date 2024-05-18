@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { DefaultTheme } from 'styled-components/native';
+import type { DefaultTheme } from 'styled-components/native';
 
 declare module 'styled-components/native' {
   export interface DefaultTheme {
@@ -173,3 +174,4 @@ declare module 'styled-components/native' {
     };
   }
 }
+/* eslint-enable no-unused-vars */

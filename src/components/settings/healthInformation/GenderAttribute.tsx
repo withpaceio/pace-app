@@ -1,6 +1,7 @@
 import React, { type FC } from 'react';
 
 import Checkbox from 'expo-checkbox';
+
 import { Controller, useFormContext } from 'react-hook-form';
 import styled from 'styled-components/native';
 
@@ -9,6 +10,7 @@ import { useTheme } from '@theme';
 import { Text } from '@components/ui';
 
 import type { HealthInformation } from '@models/HealthInformation';
+
 import i18n from '@translations/i18n';
 
 const Wrapper = styled.View`

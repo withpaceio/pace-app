@@ -3,9 +3,9 @@ import { Pressable, type PressableProps } from 'react-native';
 
 import styled from 'styled-components/native';
 
-import Text from './Text';
 import { useTheme } from '../../theme';
 import type { IconProps } from '../icons';
+import Text from './Text';
 
 const PrimaryButtonWrapper = styled.View<{ disabled: PressableProps['disabled'] }>`
   display: flex;

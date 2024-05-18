@@ -130,6 +130,7 @@ export default class Activity {
   async stopRecording(): Promise<void> {
     try {
       await stopLocationUpdatesAsync(RECORD_ACTIVITY_TASK_NAME);
+      // eslint-disable-next-line no-empty
     } catch {}
 
     this.recordingListeners.forEach((listener) => {

@@ -13,11 +13,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwtDecode, { type JwtPayload } from 'jwt-decode';
 import Purchases from 'react-native-purchases';
 
+import queryClient from '../queryClient';
 import refreshAccessToken from './refreshAccessToken';
 import signOut from './signout';
 import { type Profile, loadProfile as storageLoadProfile } from './storage';
 import type { ProfileData } from './types';
-import queryClient from '../queryClient';
 
 type AuthState = {
   loading: boolean;
@@ -164,6 +164,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
         if (decodedAccessToken?.exp && decodedAccessToken.exp >= Date.now() / 1000) {
           return { accessToken: accessTokenRef.current, refreshToken: refreshTokenRef.current! };
         }
+        // eslint-disable-next-line no-empty
       } catch {}
     }
 

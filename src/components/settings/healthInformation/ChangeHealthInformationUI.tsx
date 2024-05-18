@@ -9,6 +9,7 @@ import { Text } from '@components/ui';
 import type { HealthInformation } from '@models/HealthInformation';
 import type { Preferences } from '@models/Preferences';
 import { DistanceMeasurementSystem } from '@models/UnitSystem';
+
 import i18n from '@translations/i18n';
 
 import BirthDatePicker from './BirthDatePicker';

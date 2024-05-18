@@ -4,6 +4,7 @@ import { encryptLocations, encryptMapSnapshot, uploadActivity } from '@activity'
 import { useAuth } from '@auth';
 
 import type { ActivityLocation, UploadActivityResponse } from '@models/Activity';
+
 import { API_URL, sendGetRequest } from '@utils/sendRequest';
 
 import activitiesKeys from './activitiesKeys';

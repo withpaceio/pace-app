@@ -1,10 +1,11 @@
 import { type FC, useCallback, useEffect, useState } from 'react';
 import { AppState, type AppStateStatus } from 'react-native';
 
-import { useIsFocused } from '@react-navigation/native';
 import * as Battery from 'expo-battery';
 import * as Location from 'expo-location';
 import { useNavigation, useRouter } from 'expo-router';
+
+import { useIsFocused } from '@react-navigation/native';
 
 import useNumberActivities from '@api/activity/useNumberActivities';
 import usePreferences from '@api/preferences/usePreferences';
@@ -14,7 +15,9 @@ import RecordUI from '@components/record/RecordUI';
 
 import { type ActivityTaskState, ActivityType } from '@models/Activity';
 import { DistanceMeasurementSystem } from '@models/UnitSystem';
+
 import useCurrentSubscription from '@subscription/useCurrentSubscription';
+
 import ActivityTask from '@tasks/ActivityTask';
 
 import { NUMBER_FREE_ACTIVITIES } from '../../../consts';
@@ -74,7 +77,9 @@ const RecordScreen: FC = () => {
 
       const isOptimizationEnabled = await Battery.isLowPowerModeEnabledAsync();
       setHasBatteryOptimization(isOptimizationEnabled);
-    } catch {}
+    } catch {
+      setHasBatteryOptimization(true);
+    }
   }, [askPermissions, isFocused]);
 
   const checkCanRecord = useCallback(async (): Promise<boolean> => {

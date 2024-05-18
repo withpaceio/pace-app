@@ -6,6 +6,7 @@ import { useAuth } from '@auth';
 import type { PreferencesData } from '@api/preferences/usePreferences';
 
 import type { ActivityType } from '@models/Activity';
+
 import { API_URL, sendPatchRequest } from '@utils/sendRequest';
 
 import preferencesKeys from './preferencesKeys';

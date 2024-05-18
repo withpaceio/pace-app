@@ -1,8 +1,9 @@
 import React, { type FC, useCallback } from 'react';
 import { useWindowDimensions } from 'react-native';
 
-import { useNetInfo } from '@react-native-community/netinfo';
 import { useRouter } from 'expo-router';
+
+import { useNetInfo } from '@react-native-community/netinfo';
 import styled from 'styled-components/native';
 
 import { useTheme } from '@theme';

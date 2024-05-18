@@ -1,7 +1,8 @@
 import React, { type FC, useCallback, useLayoutEffect } from 'react';
 
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigation, useRouter } from 'expo-router';
+
+import { yupResolver } from '@hookform/resolvers/yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { object, string } from 'yup';
 
@@ -13,6 +14,7 @@ import ChangeDisplayPreferencesUI from '@components/settings/ChangeDisplayPrefer
 import type { ChangeDisplayPreferencesData } from '@components/settings/types';
 
 import { DistanceMeasurementSystem } from '@models/UnitSystem';
+
 import i18n from '@translations/i18n';
 
 const schema = object().shape({

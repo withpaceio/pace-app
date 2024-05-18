@@ -1,8 +1,9 @@
 import React, { type FC, useMemo } from 'react';
 import { Animated, TouchableOpacity, useWindowDimensions } from 'react-native';
 
-import { differenceInDays, format, formatRelative } from 'date-fns';
 import { LinearGradient } from 'expo-linear-gradient';
+
+import { differenceInDays, format, formatRelative } from 'date-fns';
 import { Control, Controller, type UseFormHandleSubmit } from 'react-hook-form';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
@@ -14,6 +15,7 @@ import { Text, TextInput } from '@components/ui';
 
 import { type ActivityLocation, type ActivitySummary, ActivityType } from '@models/Activity';
 import { DistanceMeasurementSystem } from '@models/UnitSystem';
+
 import i18n from '@translations/i18n';
 
 import ActivityIcon from './ActivityIcon';

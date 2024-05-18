@@ -1,8 +1,9 @@
 import React, { type FC, useCallback } from 'react';
 import { useLayoutEffect } from 'react';
 
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigation, useRouter } from 'expo-router';
+
+import { yupResolver } from '@hookform/resolvers/yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { object, string } from 'yup';
 
@@ -14,6 +15,7 @@ import ChangeDefaultActivityTypeUI from '@components/settings/ChangeDefaultActiv
 import type { ChangeDefaultActivityTypeData } from '@components/settings/types';
 
 import { ActivityType } from '@models/Activity';
+
 import i18n from '@translations/i18n';
 
 const schema = object().shape({

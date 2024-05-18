@@ -65,7 +65,7 @@ const BirthDatePicker: FC = () => {
         setValue('birthDate', selectedDate.toISOString());
       },
     });
-  }, []);
+  }, [birthDate, setValue]);
 
   return (
     <>

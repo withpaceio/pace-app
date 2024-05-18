@@ -6,6 +6,7 @@ import { useAuth } from '@auth';
 import type { ActivityTimelineData } from '@api/activity/useActivityTimeline';
 
 import type { ActivitySummary } from '@models/Activity';
+
 import { API_URL, sendPostRequest } from '@utils/sendRequest';
 
 import activitiesKeys from './activitiesKeys';

@@ -12,6 +12,7 @@ import {
 } from '@activity';
 
 import { DistanceMeasurementSystem } from '@models/UnitSystem';
+
 import i18n from '@translations/i18n';
 
 import {

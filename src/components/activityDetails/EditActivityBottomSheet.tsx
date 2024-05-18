@@ -41,4 +41,6 @@ const EditActivityBottomSheet = forwardRef<GorhomBottomSheet, Props>(
   },
 );
 
+EditActivityBottomSheet.displayName = 'EditActivityBottomSheet';
+
 export default EditActivityBottomSheet;

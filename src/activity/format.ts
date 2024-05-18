@@ -1,5 +1,5 @@
-import convertPaceInMilesPerHour from './convertPaceInMilesPerHour';
 import { DistanceMeasurementSystem } from '../models/UnitSystem';
+import convertPaceInMilesPerHour from './convertPaceInMilesPerHour';
 
 export function formatDistance(
   distanceInKilometers: number,

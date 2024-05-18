@@ -2,8 +2,8 @@ import React, { type FC } from 'react';
 
 import { Rect, Svg } from 'react-native-svg';
 
-import { IconProps } from './types';
 import theme from '../../theme/theme';
+import { IconProps } from './types';
 
 const StopIcon: FC<IconProps> = ({ width = 34, height = 34, color = theme.colors.white }) => (
   <Svg

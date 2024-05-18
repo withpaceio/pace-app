@@ -7,6 +7,7 @@ import Purchases from 'react-native-purchases';
 import { ARGON2ID_ITERATIONS, HKDF_PASSWORD_TOKEN_LENGTH } from '@crypto';
 
 import type { SignInResponse } from '@models/SignIn';
+
 import { API_URL, sendPostRequest } from '@utils/sendRequest';
 
 import decryptProfileData from './decryptProfileData';

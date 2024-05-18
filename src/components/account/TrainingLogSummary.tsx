@@ -11,6 +11,7 @@ import { ActivityIndicator, Text } from '@components/ui';
 
 import type { ActivitySummary } from '@models/Activity';
 import type { DistanceMeasurementSystem } from '@models/UnitSystem';
+
 import i18n from '@translations/i18n';
 
 const Wrapper = styled.TouchableOpacity`

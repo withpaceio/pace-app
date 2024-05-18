@@ -1,10 +1,11 @@
 import React, { type FC, useCallback, useEffect, useRef, useState } from 'react';
 import { Platform } from 'react-native';
 
-import type GorohmBottomSheet from '@gorhom/bottom-sheet';
-import MapLibreGL from '@maplibre/maplibre-react-native';
 import type { LocationObject } from 'expo-location';
 import { useRouter } from 'expo-router';
+
+import type GorohmBottomSheet from '@gorhom/bottom-sheet';
+import MapLibreGL from '@maplibre/maplibre-react-native';
 import styled from 'styled-components/native';
 
 import { useTheme } from '@theme';
@@ -13,8 +14,10 @@ import ActivityTypeBottomSheet from '@components/common/activity/ActivityTypeBot
 
 import { type ActivityTaskState, ActivityType } from '@models/Activity';
 import type { DistanceMeasurementSystem } from '@models/UnitSystem';
+
 import ActivityTask, { ActivityListener } from '@tasks/ActivityTask';
 
+import { MAPTILER_URL_DARK, MAPTILER_URL_LIGHT } from '../../consts';
 import ActivityRunning from './ActivityRunning';
 import ActivityStart from './ActivityStart';
 import AskPermissions from './AskPermissions';
@@ -22,7 +25,6 @@ import BackButton from './BackButton';
 import BatteryModeWarningModal from './BatteryModeWarningModal';
 import PermissionsLoading from './PermissionsLoading';
 import RecenterMapButton from './RecenterMapButton';
-import { MAPTILER_URL_DARK, MAPTILER_URL_LIGHT } from '../../consts';
 
 const Wrapper = styled.View`
   flex: 1;

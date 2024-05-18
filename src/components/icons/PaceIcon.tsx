@@ -2,8 +2,8 @@ import React, { FC } from 'react';
 
 import { Defs, LinearGradient, Path, Stop, Svg } from 'react-native-svg';
 
-import { IconProps } from './types';
 import theme from '../../theme/theme';
+import { IconProps } from './types';
 
 const PaceIcon: FC<IconProps> = ({ width = 73, height = 50 }) => (
   <Svg width={width} height={height} viewBox="0 0 346 215" fill="none">

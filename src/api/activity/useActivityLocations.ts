@@ -6,6 +6,7 @@ import { decryptLocations } from '@activity';
 import { useAuth } from '@auth';
 
 import type { ActivityLocation } from '@models/Activity';
+
 import { API_URL, sendGetRequest } from '@utils/sendRequest';
 
 import activitiesKeys from './activitiesKeys';

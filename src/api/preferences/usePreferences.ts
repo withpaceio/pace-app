@@ -6,6 +6,7 @@ import { decryptDefaultActivityType } from '@activity';
 import { type ProfileData, decryptMeasurement, useAuth } from '@auth';
 
 import type { Preferences } from '@models/Preferences';
+
 import { API_URL, sendGetRequest } from '@utils/sendRequest';
 
 import preferencesKeys from './preferencesKeys';

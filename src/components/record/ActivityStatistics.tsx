@@ -15,7 +15,9 @@ import { Text } from '@components/ui';
 
 import { ActivityType } from '@models/Activity';
 import { DistanceMeasurementSystem } from '@models/UnitSystem';
+
 import ActivityTask from '@tasks/ActivityTask';
+
 import i18n from '@translations/i18n';
 
 const Wrapper = styled.View`

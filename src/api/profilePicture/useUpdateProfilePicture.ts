@@ -3,6 +3,7 @@ import { type UseMutationResult, useMutation, useQueryClient } from '@tanstack/r
 import { encryptProfilePicture, useAuth } from '@auth';
 
 import type { UploadProfilePictureResponse } from '@models/Account';
+
 import { API_URL, sendPostRequest, sendPutRequest } from '@utils/sendRequest';
 
 import profilePictureKeys from './profilePictureKeys';

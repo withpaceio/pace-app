@@ -1,7 +1,8 @@
 import React, { type FC, useCallback } from 'react';
 
-import { useNetInfo } from '@react-native-community/netinfo';
 import { useRouter } from 'expo-router';
+
+import { useNetInfo } from '@react-native-community/netinfo';
 
 import { useTheme } from '@theme';
 

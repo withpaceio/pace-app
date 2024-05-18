@@ -1,4 +1,5 @@
 import type { RefreshTokenResponse } from '@models/RefreshToken';
+
 import { API_URL, sendPostRequest } from '@utils/sendRequest';
 
 import { saveRefreshToken } from './storage';

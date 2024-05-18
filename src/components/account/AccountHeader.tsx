@@ -1,7 +1,8 @@
 import React, { type FC, useMemo } from 'react';
 
-import { format } from 'date-fns';
 import { Link } from 'expo-router';
+
+import { format } from 'date-fns';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 

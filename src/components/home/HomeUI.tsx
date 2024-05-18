@@ -1,8 +1,9 @@
 import React, { type FC, useCallback, useMemo } from 'react';
 import { FlatList, ListRenderItem, RefreshControl } from 'react-native';
 
-import type { InfiniteData } from '@tanstack/react-query';
 import { StatusBar } from 'expo-status-bar';
+
+import type { InfiniteData } from '@tanstack/react-query';
 
 import { useAuth } from '@auth';
 import { useTheme } from '@theme';
@@ -11,6 +12,7 @@ import { ErrorView } from '@components/common';
 
 import type { Activity } from '@models/Activity';
 import type { DistanceMeasurementSystem } from '@models/UnitSystem';
+
 import i18n from '@translations/i18n';
 
 import ActivityTile from './ActivityTile';

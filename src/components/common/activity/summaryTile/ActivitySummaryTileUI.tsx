@@ -9,6 +9,7 @@ import { ActivityIndicator, Text } from '@components/ui';
 
 import { Activity, ActivitySummary, ActivityType } from '@models/Activity';
 import { DistanceMeasurementSystem } from '@models/UnitSystem';
+
 import i18n from '@translations/i18n';
 
 import CyclingSummary from './CyclingSummary';

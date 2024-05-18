@@ -27,7 +27,9 @@ export type ActivityDate = {
 };
 
 export enum ActivityType {
+  // eslint-disable-next-line no-unused-vars
   RUNNING = 'RUNNING',
+  // eslint-disable-next-line no-unused-vars
   CYCLING = 'CYCLING',
 }
 

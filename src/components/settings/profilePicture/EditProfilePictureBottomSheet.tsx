@@ -50,4 +50,6 @@ const EditProfilePictureBottomSheet = forwardRef<GorhomBottomSheet, Props>(
   },
 );
 
+EditProfilePictureBottomSheet.displayName = 'EditProfilePictureBottomSheet';
+
 export default EditProfilePictureBottomSheet;

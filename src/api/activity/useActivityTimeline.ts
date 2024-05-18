@@ -6,6 +6,7 @@ import { decryptActivity } from '@activity';
 import { type ProfileData, useAuth } from '@auth';
 
 import type { Activity } from '@models/Activity';
+
 import { API_URL, sendGetRequest } from '@utils/sendRequest';
 
 import activitiesKeys from './activitiesKeys';

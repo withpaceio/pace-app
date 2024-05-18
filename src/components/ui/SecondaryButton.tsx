@@ -3,9 +3,9 @@ import { Pressable, type PressableProps, View } from 'react-native';
 
 import styled from 'styled-components/native';
 
-import Text from './Text';
 import { useTheme } from '../../theme';
 import { IconProps } from '../icons';
+import Text from './Text';
 
 const SecondaryButtonWrapper = styled.View<{ disabled: PressableProps['disabled'] }>`
   display: flex;
@@ -69,5 +69,7 @@ const SecondaryButton = forwardRef<View, Props>(({ label, disabled, Icon, ...pro
     </Pressable>
   );
 });
+
+SecondaryButton.displayName = 'SecondaryButton';
 
 export default SecondaryButton;

@@ -12,11 +12,12 @@ import { Text as TextUI } from '@components/ui';
 
 import { ActivityType } from '@models/Activity';
 import { DistanceMeasurementSystem } from '@models/UnitSystem';
+
 import i18n from '@translations/i18n';
 
-import useSplitChartTouchHandler from './hooks/useSplitChartTouchHandler';
-import Split from './Split';
 import type { Scale } from '../PaceChart/hooks/useScaleLinear';
+import Split from './Split';
+import useSplitChartTouchHandler from './hooks/useSplitChartTouchHandler';
 
 const Wrapper = styled.View`
   display: flex;

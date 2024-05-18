@@ -3,6 +3,7 @@ import { LayoutChangeEvent, ScrollView } from 'react-native';
 
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
+
 import styled from 'styled-components/native';
 
 import { useTheme } from '@theme';
@@ -12,6 +13,7 @@ import { ActivityIndicator, Text } from '@components/ui';
 
 import type { Activity, ActivitySummary } from '@models/Activity';
 import type { DistanceMeasurementSystem } from '@models/UnitSystem';
+
 import i18n from '@translations/i18n';
 
 const Wrapper = styled(LinearGradient)`

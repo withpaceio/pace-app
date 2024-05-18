@@ -154,4 +154,6 @@ const ActivityMap = forwardRef<MapLibreGL.MapView, Props>(
   },
 );
 
+ActivityMap.displayName = 'ActivityMap';
+
 export default ActivityMap;

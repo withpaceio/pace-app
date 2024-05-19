@@ -10,6 +10,7 @@ import React, {
 } from 'react';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNetInfo } from '@react-native-community/netinfo';
 import jwtDecode, { type JwtPayload } from 'jwt-decode';
 import Purchases from 'react-native-purchases';
 
@@ -104,6 +105,8 @@ function reducer(state: AuthState, action: AuthAction): AuthState {
 }
 
 export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
+  const { isInternetReachable } = useNetInfo();
+
   const accessTokenRef = useRef<string>();
   const refreshTokenRef = useRef<string>();
   const isRefreshingTokensRef = useRef(false);
@@ -172,7 +175,9 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
     const tokens = await refreshAccessToken(refreshTokenRef.current || '');
     if (!tokens) {
-      await onSignOut();
+      if (isInternetReachable) {
+        await onSignOut();
+      }
       return { accessToken: '', refreshToken: '' };
     }
 
@@ -181,7 +186,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     isRefreshingTokensRef.current = false;
 
     return tokens;
-  }, [onSignOut]);
+  }, [isInternetReachable, onSignOut]);
 
   const isRefreshingTokens = useCallback((): boolean => isRefreshingTokensRef.current, []);
 

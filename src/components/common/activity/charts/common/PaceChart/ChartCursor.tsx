@@ -43,13 +43,6 @@ const ChartCursor: FC<ChartCursorProps> = ({
   const fontRegular = useFont(robotoRegularFont, FONT_SIZE);
 
   const theme = useTheme();
-  const {
-    sizes: {
-      paceChart: {
-        cursor: { width: curorWidth, height: cursorHeight },
-      },
-    },
-  } = theme;
 
   const {
     formattedDuration,
@@ -60,7 +53,7 @@ const ChartCursor: FC<ChartCursorProps> = ({
     transformLabel,
     transformSpeed,
     opacity,
-    blur,
+    clip,
   } = useCursorValues({
     x,
     isActive,
@@ -84,7 +77,7 @@ const ChartCursor: FC<ChartCursorProps> = ({
         <Circle cx={0} cy={0} r={4} color={theme.colors.purple} />
       </Group>
       <Group transform={transformLabel} opacity={opacity}>
-        <BackdropBlur blur={blur} clip={rrect(rect(0, 0, curorWidth, cursorHeight), 10, 10)}>
+        <BackdropBlur blur={6} clip={clip}>
           <Fill color={theme.colors.lightPurple} opacity={0.2} />
           <Text
             x={35}

@@ -1,3 +1,4 @@
+import { type SkRRect, rect, rrect } from '@shopify/react-native-skia';
 import { type SharedValue, useDerivedValue, withSpring, withTiming } from 'react-native-reanimated';
 
 import { formatDuration, formatElevation, formatPace, formatSpeed } from '@activity';
@@ -38,7 +39,7 @@ type CursorValues = {
     >
   >;
   opacity: Readonly<SharedValue<number>>;
-  blur: Readonly<SharedValue<number>>;
+  clip: Readonly<SharedValue<SkRRect>>;
 };
 
 export default function useCursorValues({
@@ -128,7 +129,11 @@ export default function useCursorValues({
   );
 
   const opacity = useDerivedValue(() => withTiming((isActive.value ? 1 : 0) as number), [isActive]);
-  const blur = useDerivedValue(() => (isActive.value ? 6 : 0) as number, [isActive]);
+  const clip = useDerivedValue(
+    () =>
+      rrect(rect(0, 0, opacity.value ? cursorWidth : 0, opacity.value ? cursorHeight : 0), 10, 10),
+    [cursorWidth, cursorHeight, opacity],
+  );
 
   return {
     formattedDuration,
@@ -139,6 +144,6 @@ export default function useCursorValues({
     transformElevation,
     transformLabel,
     opacity,
-    blur,
+    clip,
   };
 }

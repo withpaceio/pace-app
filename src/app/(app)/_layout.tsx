@@ -17,6 +17,8 @@ const LoadingWrapper = styled.View`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 const AppLayout: FC = () => {

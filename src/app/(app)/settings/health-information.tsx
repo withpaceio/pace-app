@@ -43,8 +43,9 @@ const ConfigureHealthInformationScreen: FC = () => {
     isError,
     reset,
   } = useUpdateHealthInformation();
-  const { data: preferencesData } = usePreferences();
-  const { data: healthInformationData } = useHealthInformation();
+  const { data: preferencesData, isLoading: isPreferencesLoading } = usePreferences();
+  const { data: healthInformationData, isLoading: isHealthInformationLoading } =
+    useHealthInformation();
 
   const router = useRouter();
   const navigation = useNavigation();
@@ -72,7 +73,7 @@ const ConfigureHealthInformationScreen: FC = () => {
 
   const onSubmitHealthInformation = useCallback(
     (newHealthInformation: HealthInformation): void => {
-      if (!healthInformationData || !preferencesData) {
+      if (isPreferencesLoading || isHealthInformationLoading) {
         return;
       }
 
@@ -80,13 +81,21 @@ const ConfigureHealthInformationScreen: FC = () => {
 
       updateHealthInformation({
         healthInformation: newHealthInformation,
-        encryptionKey: healthInformationData.encryptionKey,
+        encryptionKey: healthInformationData?.encryptionKey,
         preferences: preferencesData,
       });
 
       goToSettingsScreen();
     },
-    [goToSettingsScreen, healthInformationData, preferencesData, reset, updateHealthInformation],
+    [
+      goToSettingsScreen,
+      healthInformationData,
+      preferencesData,
+      reset,
+      updateHealthInformation,
+      isPreferencesLoading,
+      isHealthInformationLoading,
+    ],
   );
 
   useLayoutEffect(() => {

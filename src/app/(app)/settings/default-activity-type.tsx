@@ -47,7 +47,7 @@ const ChangeDefaultActivityTypeScreen: FC = () => {
   });
 
   const goToSettingsScreen = useCallback((): void => {
-    router.push('/settings');
+    router.back();
   }, [router]);
 
   const onDiscard = useCallback((): void => {

@@ -46,7 +46,7 @@ const ConfigureRecoveryEmailScreen: FC = () => {
         { recoveryEmail: data.email },
         {
           onSuccess: () => {
-            router.push('/settings');
+            router.back();
           },
         },
       );

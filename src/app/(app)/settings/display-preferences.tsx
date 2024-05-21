@@ -41,7 +41,7 @@ const ChangeDisplayPreferencesScreen: FC = () => {
   });
 
   const goToSettingsScreen = useCallback(() => {
-    router.push('/settings');
+    router.back();
   }, [router]);
 
   const onDiscard = useCallback((): void => {

@@ -53,8 +53,12 @@ const ChangeDisplayPreferencesScreen: FC = () => {
     ({ unit }: ChangeDisplayPreferencesData): void => {
       reset();
 
-      updatePreferences({ measurement: unit });
-      goToSettingsScreen();
+      updatePreferences(
+        { measurement: unit },
+        {
+          onSuccess: goToSettingsScreen,
+        },
+      );
     },
     [goToSettingsScreen, reset, updatePreferences],
   );

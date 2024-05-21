@@ -58,8 +58,12 @@ const ChangeDefaultActivityTypeScreen: FC = () => {
   const onSubmitDefaultActivityType = useCallback(
     ({ defaultActivityType }: ChangeDefaultActivityTypeData): void => {
       reset();
-      updateDefaultActivityType({ defaultActivityType });
-      goToSettingsScreen();
+      updateDefaultActivityType(
+        { defaultActivityType },
+        {
+          onSuccess: goToSettingsScreen,
+        },
+      );
     },
     [goToSettingsScreen, reset, updateDefaultActivityType],
   );

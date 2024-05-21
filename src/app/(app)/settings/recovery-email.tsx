@@ -54,13 +54,13 @@ const ConfigureRecoveryEmailScreen: FC = () => {
     [reset, router, updateRecoveryEmail],
   );
 
-  const onCancel = useCallback((): void => {
-    router.push('/settings');
+  const goToSettingsScreen = useCallback((): void => {
+    router.back();
   }, [router]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: () => <CancelHeaderButton disabled={isPending} onPress={onCancel} />,
+      headerLeft: () => <CancelHeaderButton disabled={isPending} onPress={goToSettingsScreen} />,
       headerRight: () => (
         <SaveHeaderButton
           disabled={!formState.isValid || !formState.isDirty || isPending}
@@ -68,7 +68,15 @@ const ConfigureRecoveryEmailScreen: FC = () => {
         />
       ),
     });
-  }, [formState.isDirty, formState.isValid, isPending, navigation, onCancel, handleSubmit, onSave]);
+  }, [
+    formState.isDirty,
+    formState.isValid,
+    isPending,
+    navigation,
+    goToSettingsScreen,
+    handleSubmit,
+    onSave,
+  ]);
 
   return (
     <FormProvider formState={formState} handleSubmit={handleSubmit} {...formMethods}>

@@ -41,7 +41,7 @@ const ChangeDisplayPreferencesScreen: FC = () => {
   });
 
   const goToSettingsScreen = useCallback(() => {
-    router.push('/settings');
+    router.back();
   }, [router]);
 
   const onDiscard = useCallback((): void => {
@@ -53,8 +53,12 @@ const ChangeDisplayPreferencesScreen: FC = () => {
     ({ unit }: ChangeDisplayPreferencesData): void => {
       reset();
 
-      updatePreferences({ measurement: unit });
-      goToSettingsScreen();
+      updatePreferences(
+        { measurement: unit },
+        {
+          onSuccess: goToSettingsScreen,
+        },
+      );
     },
     [goToSettingsScreen, reset, updatePreferences],
   );

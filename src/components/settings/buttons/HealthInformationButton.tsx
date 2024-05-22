@@ -45,11 +45,11 @@ const HealthInformationButton: FC = () => {
     )} ${i18n.t('settings.configureHealthInformation.yearsOld')}`;
 
     const weightLabel =
-      preferencesData?.measurement === DistanceMeasurementSystem.METRIC
-        ? `${Math.round(healthInformationData.healthInformation.weight)} kg`
-        : `${Math.round(
+      preferencesData?.measurement === DistanceMeasurementSystem.IMPERIAL
+        ? `${Math.round(
             convertKilogramsToPounds(healthInformationData.healthInformation.weight),
-          )} lbs`;
+          )} lbs`
+        : `${Math.round(healthInformationData.healthInformation.weight)} kg`;
 
     return `${i18n.t(
       `settings.configureHealthInformation.inputs.gender.${healthInformationData.healthInformation.gender}`,

@@ -47,7 +47,7 @@ const ChangeDefaultActivityTypeScreen: FC = () => {
   });
 
   const goToSettingsScreen = useCallback((): void => {
-    router.push('/settings');
+    router.back();
   }, [router]);
 
   const onDiscard = useCallback((): void => {
@@ -58,8 +58,12 @@ const ChangeDefaultActivityTypeScreen: FC = () => {
   const onSubmitDefaultActivityType = useCallback(
     ({ defaultActivityType }: ChangeDefaultActivityTypeData): void => {
       reset();
-      updateDefaultActivityType({ defaultActivityType });
-      goToSettingsScreen();
+      updateDefaultActivityType(
+        { defaultActivityType },
+        {
+          onSuccess: goToSettingsScreen,
+        },
+      );
     },
     [goToSettingsScreen, reset, updateDefaultActivityType],
   );

@@ -17,7 +17,7 @@ import healthInformationKeys from './healthInformationKeys';
 type Args = {
   healthInformation: HealthInformation;
   encryptionKey: Uint8Array | undefined;
-  preferences: Preferences;
+  preferences: Preferences | undefined;
 };
 
 export function useMutationFn(): (args: Args) => Promise<{ message: string }> {

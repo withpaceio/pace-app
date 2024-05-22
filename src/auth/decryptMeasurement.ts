@@ -6,11 +6,17 @@ export default function decryptMeasurement(
   encryptedMeasurement: string,
   encryptionKeyPair: KeyPair,
 ): DistanceMeasurementSystem {
-  const decryptedMeasurement = boxOpen(
-    encryptedMeasurement,
-    encryptionKeyPair.publicKey,
-    encryptionKeyPair.secretKey,
-  );
+  let decryptedMeasurement: string;
+
+  try {
+    decryptedMeasurement = boxOpen(
+      encryptedMeasurement,
+      encryptionKeyPair.publicKey,
+      encryptionKeyPair.secretKey,
+    );
+  } catch {
+    return DistanceMeasurementSystem.METRIC;
+  }
 
   if (!decryptedMeasurement) {
     return DistanceMeasurementSystem.METRIC;

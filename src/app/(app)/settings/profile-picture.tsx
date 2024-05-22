@@ -49,7 +49,7 @@ const ChooseProfilePictureScreen: FC = () => {
   });
 
   const goToAccountScreen = useCallback((): void => {
-    router.push('/account');
+    router.back();
   }, [router]);
 
   const onDeleteProfilePicture = useCallback((): void => {
@@ -66,8 +66,12 @@ const ChooseProfilePictureScreen: FC = () => {
       }
 
       resetUpdateProfilePicture();
-      updateProfilePicture({ profilePicture });
-      goToAccountScreen();
+      updateProfilePicture(
+        { profilePicture },
+        {
+          onSuccess: goToAccountScreen,
+        },
+      );
     },
     [goToAccountScreen, onDeleteProfilePicture, resetUpdateProfilePicture, updateProfilePicture],
   );

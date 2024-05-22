@@ -58,7 +58,7 @@ const ChangePasswordScreen: FC = () => {
   });
 
   const goToSettingsScreen = useCallback((): void => {
-    router.push('/settings');
+    router.back();
   }, [router]);
 
   const onDiscard = useCallback((): void => {
@@ -83,16 +83,20 @@ const ChangePasswordScreen: FC = () => {
           encryptedProfileData,
         } = await changePasswordAuth(username, newPassword, profileData as ProfileData);
 
-        updatePassword({
-          passwordHashSalt,
-          passwordTokenSalt,
-          srpSalt,
-          srpVerifier,
-          profileEncryptionSalt,
-          encryptedProfileData,
-        });
+        updatePassword(
+          {
+            passwordHashSalt,
+            passwordTokenSalt,
+            srpSalt,
+            srpVerifier,
+            profileEncryptionSalt,
+            encryptedProfileData,
+          },
+          {
+            onSuccess: goToSettingsScreen,
+          },
+        );
 
-        goToSettingsScreen();
         // eslint-disable-next-line no-empty
       } catch {}
     },

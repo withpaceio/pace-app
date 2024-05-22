@@ -34,12 +34,12 @@ const SystemMeasurementWrapper = styled.Pressable<{ isSelected: boolean }>`
   align-items: center;
 
   border-width: ${({ isSelected }) => (isSelected ? 2 : 1)}px;
-  border-color: ${({ theme }) => theme.colors.purple}
+  border-color: ${({ theme }) => theme.colors.purple};
   border-radius: 10px;
 
   padding: ${({ theme }) => theme.sizes.outerPadding}px;
   margin-bottom: ${({ theme }) => theme.sizes.innerPadding}px;
-  `;
+`;
 
 const Label = styled(Text)`
   font-size: 16px;

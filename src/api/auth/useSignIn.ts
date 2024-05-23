@@ -17,25 +17,20 @@ export default function useSignIn(): UseMutationResult<
   Args,
   unknown
 > {
-  const { dispatch, setTokens } = useAuth();
+  const { dispatch } = useAuth();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: authKeys.signIn(),
     mutationFn: ({ username, password }) => signIn(username, password),
-    onSuccess: async (
-      { userId, createdAt, accessToken, refreshToken, profileData },
-      { username },
-    ) => {
-      setTokens(accessToken, refreshToken);
+    onSuccess: async ({ userId, createdAt, authToken, profileData }, { username }) => {
       dispatch({
         type: 'AUTH_SIGN_IN',
         payload: {
           userId,
           username,
           createdAt,
-          accessToken,
-          refreshToken,
+          authToken,
           profileData,
         },
       });

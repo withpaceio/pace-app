@@ -8,14 +8,14 @@ export type Profile = {
   userId: string;
   username: string;
   createdAt: Date;
-  refreshToken: string;
+  authToken: string;
   profileData: ProfileData | null;
 };
 
 const USERID_LOCATION = 'USERID';
 const USERNAME_LOCATION = 'USERNAME';
-const CREATEDAT_LOCATION = 'CREATED_AT';
-const REFRESH_TOKEN_LOCATION = 'REFRESH_TOKEN';
+const CREATED_AT_LOCATION = 'CREATED_AT';
+const AUTH_TOKEN_LOCATION = 'AUTH_TOKEN';
 const PROFILE_DATA_LOCATION = 'PROFILE_DATA';
 
 export async function saveProfile(profile: Profile): Promise<boolean> {
@@ -38,8 +38,8 @@ export async function saveProfile(profile: Profile): Promise<boolean> {
   try {
     await SecureStore.setItemAsync(USERID_LOCATION, profile.userId);
     await SecureStore.setItemAsync(USERNAME_LOCATION, profile.username);
-    await SecureStore.setItemAsync(CREATEDAT_LOCATION, profile.createdAt.toISOString());
-    await SecureStore.setItemAsync(REFRESH_TOKEN_LOCATION, profile.refreshToken);
+    await SecureStore.setItemAsync(CREATED_AT_LOCATION, profile.createdAt.toISOString());
+    await SecureStore.setItemAsync(AUTH_TOKEN_LOCATION, profile.authToken);
     await SecureStore.setItemAsync(PROFILE_DATA_LOCATION, serializedProfileData);
 
     return true;
@@ -52,11 +52,11 @@ export async function loadProfile(): Promise<Profile | null> {
   try {
     const userId = await SecureStore.getItemAsync(USERID_LOCATION);
     const username = await SecureStore.getItemAsync(USERNAME_LOCATION);
-    const createdAt = await SecureStore.getItemAsync(CREATEDAT_LOCATION);
-    const refreshToken = await SecureStore.getItemAsync(REFRESH_TOKEN_LOCATION);
+    const createdAt = await SecureStore.getItemAsync(CREATED_AT_LOCATION);
+    const authToken = await SecureStore.getItemAsync(AUTH_TOKEN_LOCATION);
     const serializedProfileData = await SecureStore.getItemAsync(PROFILE_DATA_LOCATION);
 
-    if (!userId || !username || !refreshToken || !serializedProfileData) {
+    if (!userId || !username || !authToken || !serializedProfileData) {
       return null;
     }
 
@@ -66,7 +66,7 @@ export async function loadProfile(): Promise<Profile | null> {
       userId,
       username,
       createdAt: new Date(createdAt as string),
-      refreshToken,
+      authToken,
       profileData: {
         ...profileData,
         keyPairs: {
@@ -90,8 +90,8 @@ export async function deleteProfile(): Promise<boolean> {
   try {
     await SecureStore.deleteItemAsync(USERID_LOCATION);
     await SecureStore.deleteItemAsync(USERNAME_LOCATION);
-    await SecureStore.deleteItemAsync(CREATEDAT_LOCATION);
-    await SecureStore.deleteItemAsync(REFRESH_TOKEN_LOCATION);
+    await SecureStore.deleteItemAsync(CREATED_AT_LOCATION);
+    await SecureStore.deleteItemAsync(AUTH_TOKEN_LOCATION);
     await SecureStore.deleteItemAsync(PROFILE_DATA_LOCATION);
 
     return true;
@@ -100,11 +100,11 @@ export async function deleteProfile(): Promise<boolean> {
   }
 }
 
-export async function saveRefreshToken(refreshToken: string): Promise<boolean> {
+/* export async function saveRefreshToken(refreshToken: string): Promise<boolean> {
   try {
     await SecureStore.setItemAsync(REFRESH_TOKEN_LOCATION, refreshToken);
     return true;
   } catch {
     return false;
   }
-}
+} */

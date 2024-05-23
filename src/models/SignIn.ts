@@ -1,6 +1,6 @@
 import { object, string } from 'yup';
 
-import i18n from '../translations/i18n';
+import i18n from '@translations/i18n';
 
 export const SignInSchema = object().shape({
   username: string().required(i18n.t('signIn.errors.username.missing')),
@@ -12,10 +12,10 @@ export type SignInResponse = {
   userId: string;
   username: string;
   createdAt: Date;
-  accessToken: string;
-  refreshToken: string;
   encryptionPublicKey: string;
   signingPublicKey: string;
   encryptedProfileData: string;
   profileEncryptionSalt: string;
+  serverPublicKey: string;
+  encryptedAuthToken: string;
 };

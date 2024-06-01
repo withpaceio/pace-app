@@ -1,7 +1,12 @@
-import * as base64 from '@stablelib/base64';
 import { HKDF } from '@stablelib/hkdf';
 import { SHA256 } from '@stablelib/sha256';
-import { SECRETBOX_KEY_LENGTH, argon2idDeriveKey, secretboxSeal } from 'react-native-nacl-jsi';
+import {
+  SECRETBOX_KEY_LENGTH,
+  argon2idDeriveKey,
+  decodeUtf8,
+  encodeBase64,
+  secretboxSeal,
+} from 'react-native-nacl-jsi';
 
 import { ARGON2ID_ITERATIONS } from '@crypto';
 
@@ -11,25 +16,24 @@ export default async function encryptProfileData(
   profileData: ProfileData,
   password: string,
 ): Promise<string> {
-  const hashedPassword = argon2idDeriveKey(
-    password,
+  const hashedPasswordBuffer = argon2idDeriveKey(
+    decodeUtf8(password),
     profileData.passwordHashSalt,
     32,
     ARGON2ID_ITERATIONS,
     BigInt(32768 * 1024),
   );
-  const hashedPasswordBuffer = base64.decode(hashedPassword);
 
   const profileEncryptionKey = new HKDF(
     SHA256,
     hashedPasswordBuffer,
-    base64.decode(profileData.profileEncryptionSalt),
+    profileData.profileEncryptionSalt,
   ).expand(Number(SECRETBOX_KEY_LENGTH));
 
   const encryptedProfileData = secretboxSeal(
-    JSON.stringify(profileData),
-    base64.encode(profileEncryptionKey),
+    decodeUtf8(encodeURI(JSON.stringify(profileData))),
+    profileEncryptionKey,
   );
 
-  return encryptedProfileData;
+  return encodeBase64(encryptedProfileData);
 }

@@ -1,8 +1,8 @@
 import type { UserKeyPair } from '../crypto';
 
 export type ProfileData = {
-  passwordHashSalt: string;
-  authHashedPasswordSalt: string;
-  profileEncryptionSalt: string;
+  passwordHashSalt: Uint8Array;
+  authHashedPasswordSalt: Uint8Array;
+  profileEncryptionSalt: Uint8Array;
   keyPairs: UserKeyPair;
 };

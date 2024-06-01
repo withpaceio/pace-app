@@ -2,7 +2,7 @@ import * as hex from '@stablelib/hex';
 import * as sha256 from '@stablelib/sha256';
 import * as utf8 from '@stablelib/utf8';
 import { BigInteger } from 'jsbn';
-import { getRandomBytes } from 'react-native-nacl-jsi';
+import { encodeHexadecimal, getRandomBytes } from 'react-native-nacl-jsi';
 
 type Parameters = {
   N: BigInteger;
@@ -73,7 +73,7 @@ export function getParameters(): Parameters {
 }
 
 export async function generateSalt(parameters: Parameters): Promise<string> {
-  return getRandomBytes(parameters.hashOutputBytes, 'hex');
+  return encodeHexadecimal(getRandomBytes(parameters.hashOutputBytes));
 }
 
 export async function derivePrivateKey(
@@ -106,7 +106,7 @@ export async function generateEphemeral(
 ): Promise<{ secret: string; public: string }> {
   const { N, g } = parameters;
 
-  const a = new BigInteger(getRandomBytes(parameters.hashOutputBytes, 'hex'), 16);
+  const a = new BigInteger(encodeHexadecimal(getRandomBytes(parameters.hashOutputBytes)), 16);
   const A = g.modPow(a, N);
 
   return {

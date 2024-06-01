@@ -1,5 +1,11 @@
-import * as base64 from '@stablelib/base64';
-import { type KeyPair, boxOpen, secretboxOpen } from 'react-native-nacl-jsi';
+import {
+  type KeyPair,
+  boxOpen,
+  decodeBase64,
+  decodeUtf8,
+  encodeUtf8,
+  secretboxOpen,
+} from 'react-native-nacl-jsi';
 
 import type { HealthInformation } from '@models/HealthInformation';
 
@@ -9,18 +15,21 @@ export default function decryptHealthInformation(
   encryptionKeyPair: KeyPair,
 ): { healthInformation: HealthInformation; encryptionKey: Uint8Array } | null {
   try {
-    const healthInformationEncryptionKeyString = boxOpen(
-      encryptedHealthInformationEncryptionKey,
+    const encryptionKey = boxOpen(
+      decodeBase64(encryptedHealthInformationEncryptionKey),
       encryptionKeyPair.publicKey,
       encryptionKeyPair.secretKey,
-    ).replace(/\0/g, '');
-    const healthInformation = secretboxOpen(
-      encryptedHealthInformation,
-      healthInformationEncryptionKeyString,
-    ).replace(/\0/g, '');
-    const encryptionKey = base64.decode(healthInformationEncryptionKeyString);
+    );
 
-    return { healthInformation: JSON.parse(decodeURI(healthInformation)), encryptionKey };
+    const healthInformationBuffer = secretboxOpen(
+      decodeUtf8(encryptedHealthInformation),
+      encryptionKey,
+    );
+    const healthInformation = JSON.parse(
+      decodeURI(encodeUtf8(healthInformationBuffer)),
+    ) as HealthInformation;
+
+    return { healthInformation, encryptionKey };
   } catch {
     return null;
   }

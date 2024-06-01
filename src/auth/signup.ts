@@ -1,7 +1,6 @@
-import * as base64 from '@stablelib/base64';
 import { HKDF } from '@stablelib/hkdf';
 import { SHA256 } from '@stablelib/sha256';
-import { argon2idDeriveKey } from 'react-native-nacl-jsi';
+import { argon2idDeriveKey, decodeUtf8, encodeBase64 } from 'react-native-nacl-jsi';
 
 import { ARGON2ID_ITERATIONS, HKDF_PASSWORD_TOKEN_LENGTH } from '@crypto';
 
@@ -18,7 +17,7 @@ export default async function signUp(username: string, password: string): Promis
   const encryptedProfileData = await encryptProfileData(profileData, password);
 
   const hashedPassword = argon2idDeriveKey(
-    password,
+    decodeUtf8(password),
     profileData.passwordHashSalt,
     32,
     ARGON2ID_ITERATIONS,
@@ -27,8 +26,8 @@ export default async function signUp(username: string, password: string): Promis
 
   const authPasswordTokenBuffer = new HKDF(
     SHA256,
-    base64.decode(hashedPassword),
-    base64.decode(profileData.authHashedPasswordSalt),
+    hashedPassword,
+    profileData.authHashedPasswordSalt,
   ).expand(HKDF_PASSWORD_TOKEN_LENGTH);
 
   const srpParameters = SRP.getParameters();
@@ -36,7 +35,7 @@ export default async function signUp(username: string, password: string): Promis
   const srpPrivateKey = await SRP.derivePrivateKey(
     srpSalt,
     username,
-    base64.encode(authPasswordTokenBuffer),
+    encodeBase64(authPasswordTokenBuffer),
     srpParameters,
   );
   const srpVerifier = SRP.deriveVerifier(srpPrivateKey, srpParameters);

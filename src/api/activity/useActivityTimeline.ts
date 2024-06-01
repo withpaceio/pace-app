@@ -5,7 +5,7 @@ import { type UseQueryResult, useQuery } from '@tanstack/react-query';
 import { decryptActivity } from '@activity';
 import { type ProfileData, useAuth } from '@auth';
 
-import type { Activity } from '@models/Activity';
+import type { Activity, EncryptedActivity } from '@models/Activity';
 
 import { API_URL, sendGetRequest } from '@utils/sendRequest';
 
@@ -16,13 +16,18 @@ export type ActivityTimelineData = {
   nextCursor: string | undefined;
 };
 
+export type EncryptedActivityTimelineData = {
+  activities: EncryptedActivity[];
+  nextCursor: string | undefined;
+};
+
 export default function useActivityTimeline<T = Activity[]>(
-  select?: (data: ActivityTimelineData) => T,
+  select?: (data: EncryptedActivityTimelineData) => T,
 ): UseQueryResult<T, Error> {
   const { getTokens, getProfileData, isRefreshingTokens } = useAuth();
 
   const applySelect = useCallback(
-    (data: ActivityTimelineData): T => {
+    (data: EncryptedActivityTimelineData): T => {
       if (select) {
         return select(data);
       }
@@ -49,7 +54,10 @@ export default function useActivityTimeline<T = Activity[]>(
     queryKey: activitiesKeys.timeline(),
     queryFn: async () => {
       const { accessToken } = await getTokens();
-      return sendGetRequest<ActivityTimelineData>(`${API_URL}/api/activities`, accessToken);
+      return sendGetRequest<EncryptedActivityTimelineData>(
+        `${API_URL}/api/activities`,
+        accessToken,
+      );
     },
     select: applySelect,
     enabled: !isRefreshingTokens(),

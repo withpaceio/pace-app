@@ -13,7 +13,7 @@ import activitiesKeys from './activitiesKeys';
 
 type Args = {
   activityId: string | undefined;
-  activityEncryptionKey: string | undefined;
+  activityEncryptionKey: Uint8Array | undefined;
 };
 
 export default function useActivityLocations({
@@ -35,7 +35,7 @@ export default function useActivityLocations({
     },
     select: useCallback(
       (data: string) => {
-        const decryptedLocations = decryptLocations(data, activityEncryptionKey as string);
+        const decryptedLocations = decryptLocations(data, activityEncryptionKey as Uint8Array);
         return { locations: decryptedLocations };
       },
       [activityEncryptionKey],

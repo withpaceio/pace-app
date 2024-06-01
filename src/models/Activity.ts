@@ -20,7 +20,7 @@ export type Activity = {
   toSync?: boolean;
 };
 
-export type EncryptedActivity = Omit<Activity, 'encryptionKey'> & {
+export type EncryptedActivity = Omit<Activity, 'encryptionKey' | 'summary'> & {
   encryptionKey: string;
   summary: string;
 };

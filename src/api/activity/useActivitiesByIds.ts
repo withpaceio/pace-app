@@ -5,7 +5,9 @@ import { type UseQueryResult } from '@tanstack/react-query';
 import { decryptActivity } from '@activity';
 import { type ProfileData, useAuth } from '@auth';
 
-import useActivityTimeline, { type ActivityTimelineData } from '@api/activity/useActivityTimeline';
+import useActivityTimeline, {
+  type EncryptedActivityTimelineData,
+} from '@api/activity/useActivityTimeline';
 
 import type { Activity } from '@models/Activity';
 
@@ -15,7 +17,7 @@ export default function useActivitiesByIds(
   const { getProfileData } = useAuth();
 
   const select = useCallback(
-    (data: ActivityTimelineData): Activity[] => {
+    (data: EncryptedActivityTimelineData): Activity[] => {
       const profileData = getProfileData() as ProfileData;
 
       return data.activities

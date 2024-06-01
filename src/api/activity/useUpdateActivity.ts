@@ -14,7 +14,7 @@ import activitiesKeys from './activitiesKeys';
 type Args = {
   activityId: string;
   summary: ActivitySummary;
-  activityEncryptionKey: string;
+  activityEncryptionKey: Uint8Array;
 };
 
 export function useMutationFn(): (args: Args) => Promise<{ message: string }> {

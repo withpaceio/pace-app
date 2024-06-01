@@ -7,10 +7,10 @@ import { useAuth } from '@auth';
 import type { ActivityTimelineData } from '@api/activity/useActivityTimeline';
 
 import type {
-  Activity,
   ActivityLocation,
   ActivitySummary,
   CreateActivityResponse,
+  EncryptedActivity,
   UploadActivityResponse,
 } from '@models/Activity';
 
@@ -27,7 +27,7 @@ type Args = {
 
 export function useMutationFn(): (
   args: Args,
-) => Promise<{ id: string; activityEncryptionKey: string }> {
+) => Promise<{ id: string; activityEncryptionKey: Uint8Array }> {
   const { getProfileData, getTokens } = useAuth();
 
   return async ({ summary, locations, mapSnapshot, mapSnapshotDark }: Args) => {
@@ -82,7 +82,7 @@ export function useMutationFn(): (
 }
 
 export default function useCreateActivity(): UseMutationResult<
-  { id: string; activityEncryptionKey: string },
+  { id: string; activityEncryptionKey: Uint8Array },
   unknown,
   Args,
   unknown
@@ -115,7 +115,7 @@ export default function useCreateActivity(): UseMutationResult<
         encryptedSummary,
       } = encryptActivity(summary, profileData.keyPairs.encryptionKeyPair);
 
-      const activity: Activity = {
+      const activity: EncryptedActivity = {
         id: uuidv4(),
         userId,
         summary: encryptedSummary,

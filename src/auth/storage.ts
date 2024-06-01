@@ -1,5 +1,7 @@
 import * as SecureStore from 'expo-secure-store';
 
+import { decodeBase64, encodeBase64 } from 'react-native-nacl-jsi';
+
 import type { ProfileData } from './types';
 
 export type Profile = {
@@ -17,7 +19,21 @@ const REFRESH_TOKEN_LOCATION = 'REFRESH_TOKEN';
 const PROFILE_DATA_LOCATION = 'PROFILE_DATA';
 
 export async function saveProfile(profile: Profile): Promise<boolean> {
-  const serializedProfileData = JSON.stringify(profile.profileData as ProfileData);
+  const profileData = profile.profileData as ProfileData;
+
+  const serializedProfileData = JSON.stringify({
+    ...profileData,
+    keyPairs: {
+      encryptionKeyPair: {
+        publicKey: encodeBase64(profileData.keyPairs.encryptionKeyPair.publicKey),
+        secretKey: encodeBase64(profileData.keyPairs.encryptionKeyPair.secretKey),
+      },
+      signingKeyPair: {
+        publicKey: encodeBase64(profileData.keyPairs.signingKeyPair.publicKey),
+        secretKey: encodeBase64(profileData.keyPairs.signingKeyPair.secretKey),
+      },
+    },
+  });
 
   try {
     await SecureStore.setItemAsync(USERID_LOCATION, profile.userId);
@@ -51,7 +67,19 @@ export async function loadProfile(): Promise<Profile | null> {
       username,
       createdAt: new Date(createdAt as string),
       refreshToken,
-      profileData,
+      profileData: {
+        ...profileData,
+        keyPairs: {
+          encryptionKeyPair: {
+            publicKey: decodeBase64(profileData.keyPairs.encryptionKeyPair.publicKey),
+            secretKey: decodeBase64(profileData.keyPairs.encryptionKeyPair.secretKey),
+          },
+          signingKeyPair: {
+            publicKey: decodeBase64(profileData.keyPairs.signingKeyPair.publicKey),
+            secretKey: decodeBase64(profileData.keyPairs.signingKeyPair.secretKey),
+          },
+        },
+      },
     };
   } catch {
     return null;

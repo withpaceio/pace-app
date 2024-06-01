@@ -38,5 +38,19 @@ export default async function decryptProfileData(
     profileEncryptionKey,
   );
 
-  return JSON.parse(decodeURI(encodeUtf8(decryptedProfileDataBuffer)));
+  const profileData = JSON.parse(decodeURI(encodeUtf8(decryptedProfileDataBuffer)));
+
+  return {
+    ...profileData,
+    keyPairs: {
+      encryptionKeyPair: {
+        publicKey: decodeBase64(profileData.keyPairs.encryptionKeyPair.publicKey),
+        secretKey: decodeBase64(profileData.keyPairs.encryptionKeyPair.secretKey),
+      },
+      signingKeyPair: {
+        publicKey: decodeBase64(profileData.keyPairs.signingKeyPair.publicKey),
+        secretKey: decodeBase64(profileData.keyPairs.signingKeyPair.secretKey),
+      },
+    },
+  };
 }

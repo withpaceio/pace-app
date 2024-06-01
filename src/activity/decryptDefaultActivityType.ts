@@ -1,4 +1,4 @@
-import { type KeyPair, boxOpen } from 'react-native-nacl-jsi';
+import { type KeyPair, boxOpen, decodeBase64, encodeUtf8 } from 'react-native-nacl-jsi';
 
 import { ActivityType } from '@models/Activity';
 
@@ -6,11 +6,11 @@ export default function decryptDefaultActivityType(
   encryptedDefaultActivityType: string,
   encryptionKeyPair: KeyPair,
 ): ActivityType {
-  let decryptedDefaultActivityType;
+  let decryptedDefaultActivityTypeBuffer;
 
   try {
-    decryptedDefaultActivityType = boxOpen(
-      encryptedDefaultActivityType,
+    decryptedDefaultActivityTypeBuffer = boxOpen(
+      decodeBase64(encryptedDefaultActivityType),
       encryptionKeyPair.publicKey,
       encryptionKeyPair.secretKey,
     );
@@ -18,10 +18,5 @@ export default function decryptDefaultActivityType(
     return ActivityType.RUNNING;
   }
 
-  if (!decryptedDefaultActivityType) {
-    return ActivityType.RUNNING;
-  }
-
-  const defaultActivityType = decryptedDefaultActivityType.replace(/\0/g, '');
-  return defaultActivityType as ActivityType;
+  return encodeUtf8(decryptedDefaultActivityTypeBuffer) as ActivityType;
 }

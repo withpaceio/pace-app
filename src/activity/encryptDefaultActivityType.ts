@@ -1,4 +1,4 @@
-import { type KeyPair, boxSeal } from 'react-native-nacl-jsi';
+import { type KeyPair, boxSeal, decodeUtf8, encodeBase64 } from 'react-native-nacl-jsi';
 
 import type { ActivityType } from '@models/Activity';
 
@@ -6,11 +6,11 @@ export default function encryptDefaultActivityType(
   activityType: ActivityType,
   encryptionKeyPair: KeyPair,
 ): string {
-  const encryptedActivityType = boxSeal(
-    activityType,
+  const encryptedActivityTypeBuffer = boxSeal(
+    decodeUtf8(activityType),
     encryptionKeyPair.publicKey,
     encryptionKeyPair.secretKey,
   );
 
-  return encryptedActivityType;
+  return encodeBase64(encryptedActivityTypeBuffer);
 }

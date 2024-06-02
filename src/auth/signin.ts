@@ -112,10 +112,6 @@ export default async function signIn(
 
   const authToken = encodeBase64(authTokenBuffer);
 
-  if (authToken === null) {
-    throw new Error('Failed to decrypt the authentication token');
-  }
-
   await saveProfile({
     userId,
     username,

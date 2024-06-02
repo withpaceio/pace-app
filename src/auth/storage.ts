@@ -99,12 +99,3 @@ export async function deleteProfile(): Promise<boolean> {
     return false;
   }
 }
-
-/* export async function saveRefreshToken(refreshToken: string): Promise<boolean> {
-  try {
-    await SecureStore.setItemAsync(REFRESH_TOKEN_LOCATION, refreshToken);
-    return true;
-  } catch {
-    return false;
-  }
-} */

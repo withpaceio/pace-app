@@ -10,7 +10,6 @@ import encryptProfileData from './encryptProfileData';
 import encryptProfilePicture from './encryptProfilePicture';
 import generateProfile from './generateProfile';
 import loadHealthInformation from './loadHealthInformation';
-import refreshAccessToken from './refreshAccessToken';
 import saveHealthInformation from './saveHealthInformation';
 import signIn from './signin';
 import signOut from './signout';
@@ -39,7 +38,6 @@ export {
   signIn,
   signOut,
   signUp,
-  refreshAccessToken,
   saveHealthInformation,
   saveProfile,
   loadProfile,

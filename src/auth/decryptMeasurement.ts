@@ -1,4 +1,4 @@
-import { type KeyPair, boxOpen } from 'react-native-nacl-jsi';
+import { type KeyPair, boxOpen, decodeBase64, encodeUtf8 } from 'react-native-nacl-jsi';
 
 import { DistanceMeasurementSystem } from '@models/UnitSystem';
 
@@ -6,11 +6,11 @@ export default function decryptMeasurement(
   encryptedMeasurement: string,
   encryptionKeyPair: KeyPair,
 ): DistanceMeasurementSystem {
-  let decryptedMeasurement: string;
+  let decryptedMeasurementBuffer: Uint8Array;
 
   try {
-    decryptedMeasurement = boxOpen(
-      encryptedMeasurement,
+    decryptedMeasurementBuffer = boxOpen(
+      decodeBase64(encryptedMeasurement),
       encryptionKeyPair.publicKey,
       encryptionKeyPair.secretKey,
     );
@@ -18,10 +18,9 @@ export default function decryptMeasurement(
     return DistanceMeasurementSystem.METRIC;
   }
 
-  if (!decryptedMeasurement) {
+  if (!decryptedMeasurementBuffer) {
     return DistanceMeasurementSystem.METRIC;
   }
 
-  const measurement = decryptedMeasurement.replace(/\0/g, '');
-  return measurement as DistanceMeasurementSystem;
+  return encodeUtf8(decryptedMeasurementBuffer) as DistanceMeasurementSystem;
 }

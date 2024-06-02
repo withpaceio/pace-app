@@ -1,4 +1,3 @@
-import * as base64 from '@stablelib/base64';
 import { type UseMutationResult, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { convertPoundsToKilograms } from '@activity';
@@ -38,7 +37,7 @@ export function useMutationFn(): (args: Args) => Promise<{ message: string }> {
               ? convertPoundsToKilograms(healthInformation.weight)
               : healthInformation.weight,
         },
-        encryptionKey ? base64.encode(encryptionKey) : null,
+        encryptionKey || null,
         profileData.keyPairs.encryptionKeyPair,
       );
 
@@ -83,7 +82,7 @@ export default function useUpdateHealthInformation(): UseMutationResult<
                 ? convertPoundsToKilograms(healthInformation.weight)
                 : healthInformation.weight,
           },
-          encryptionKey ? base64.encode(encryptionKey) : null,
+          encryptionKey || null,
           profileData.keyPairs.encryptionKeyPair,
         );
 

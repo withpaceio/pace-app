@@ -12,12 +12,17 @@ export type ActivitySummary = {
 export type Activity = {
   id: string;
   userId: string;
-  encryptionKey: string;
+  encryptionKey: Uint8Array;
   locationsFilePath?: string;
   mapFileLocation: string;
-  summary: string | ActivitySummary | null;
+  summary: ActivitySummary;
   createdAt: string;
   toSync?: boolean;
+};
+
+export type EncryptedActivity = Omit<Activity, 'encryptionKey' | 'summary'> & {
+  encryptionKey: string;
+  summary: string;
 };
 
 export type ActivityDate = {

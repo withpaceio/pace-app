@@ -1,6 +1,6 @@
 const activitiesKeys = {
   timeline: () => ['activities', 'timeline'],
-  locations: (activityId: string | undefined, activityEncryptionKey: string | undefined) => [
+  locations: (activityId: string | undefined, activityEncryptionKey: Uint8Array | undefined) => [
     'activities',
     'locations',
     activityId,
@@ -8,7 +8,7 @@ const activitiesKeys = {
   ],
   mapSnapshot: (
     activityId: string | undefined,
-    activityEncryptionKey: string | undefined,
+    activityEncryptionKey: Uint8Array | undefined,
     theme: 'light' | 'dark',
   ) => ['activities', 'mapSnapshot', activityId, activityEncryptionKey, theme],
   create: () => ['activities', 'create'],

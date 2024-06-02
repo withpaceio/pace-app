@@ -1,7 +1,6 @@
-import * as base64 from '@stablelib/base64';
 import { HKDF } from '@stablelib/hkdf';
 import { SHA256 } from '@stablelib/sha256';
-import { argon2idDeriveKey, getRandomBytes } from 'react-native-nacl-jsi';
+import { argon2idDeriveKey, decodeUtf8, encodeBase64, getRandomBytes } from 'react-native-nacl-jsi';
 
 import {
   ARGON2ID_ITERATIONS,
@@ -40,7 +39,7 @@ export default async function changePassword(
   const newEncryptedProfileData = await encryptProfileData(newProfileData, newPassword);
 
   const hashedPassword = argon2idDeriveKey(
-    newPassword,
+    decodeUtf8(newPassword),
     newProfileData.passwordHashSalt,
     32,
     ARGON2ID_ITERATIONS,
@@ -49,8 +48,8 @@ export default async function changePassword(
 
   const authPasswordTokenBuffer = new HKDF(
     SHA256,
-    base64.decode(hashedPassword),
-    base64.decode(newProfileData.authHashedPasswordSalt),
+    hashedPassword,
+    newProfileData.authHashedPasswordSalt,
   ).expand(HKDF_PASSWORD_TOKEN_LENGTH);
 
   const srpParameters = SRP.getParameters();
@@ -58,17 +57,17 @@ export default async function changePassword(
   const srpPrivateKey = await SRP.derivePrivateKey(
     srpSalt,
     username,
-    base64.encode(authPasswordTokenBuffer),
+    encodeBase64(authPasswordTokenBuffer),
     srpParameters,
   );
   const srpVerifier = SRP.deriveVerifier(srpPrivateKey, srpParameters);
 
   return {
-    passwordHashSalt: newProfileData.passwordHashSalt,
-    passwordTokenSalt: newProfileData.authHashedPasswordSalt,
+    passwordHashSalt: encodeBase64(newProfileData.passwordHashSalt),
+    passwordTokenSalt: encodeBase64(newProfileData.authHashedPasswordSalt),
     srpSalt,
     srpVerifier,
-    profileEncryptionSalt: newProfileData.profileEncryptionSalt,
+    profileEncryptionSalt: encodeBase64(newProfileData.profileEncryptionSalt),
     encryptedProfileData: newEncryptedProfileData,
   };
 }

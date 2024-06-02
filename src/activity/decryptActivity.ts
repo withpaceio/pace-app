@@ -1,22 +1,44 @@
-import { type KeyPair, boxOpen } from 'react-native-nacl-jsi';
+import { type KeyPair, boxOpen, decodeBase64, encodeUtf8 } from 'react-native-nacl-jsi';
 
-import type { Activity } from '@models/Activity';
+import type { Activity, ActivitySummary, EncryptedActivity } from '@models/Activity';
 
 import decryptCreationDate from './decryptCreationDate';
 import decryptSummary from './decryptSummary';
 
+function decryptLegacy(
+  encryptedActivity: EncryptedActivity,
+  encryptionKey: Uint8Array,
+): { summary: ActivitySummary; createdAt: string; activityEncryptionKey: Uint8Array } {
+  const legacyEncryptionKey = decodeBase64(encodeUtf8(encryptionKey));
+
+  return {
+    summary: decryptSummary(encryptedActivity.summary as string, legacyEncryptionKey),
+    createdAt: decryptCreationDate(encryptedActivity.createdAt, legacyEncryptionKey),
+    activityEncryptionKey: legacyEncryptionKey,
+  };
+}
+
 export default function decryptActivity(
-  encryptedActivity: Activity,
+  encryptedActivity: EncryptedActivity,
   encryptionKeyPair: KeyPair,
 ): Activity {
-  const activityEncryptionKey = boxOpen(
-    encryptedActivity.encryptionKey,
+  let activityEncryptionKey = boxOpen(
+    decodeBase64(encryptedActivity.encryptionKey),
     encryptionKeyPair.publicKey,
     encryptionKeyPair.secretKey,
-  ).replace(/\0/g, '');
+  );
 
-  const summary = decryptSummary(encryptedActivity.summary as string, activityEncryptionKey);
-  const createdAt = decryptCreationDate(encryptedActivity.createdAt, activityEncryptionKey);
+  let summary: ActivitySummary;
+  let createdAt: string;
+  try {
+    summary = decryptSummary(encryptedActivity.summary as string, activityEncryptionKey);
+    createdAt = decryptCreationDate(encryptedActivity.createdAt, activityEncryptionKey);
+  } catch {
+    ({ summary, createdAt, activityEncryptionKey } = decryptLegacy(
+      encryptedActivity,
+      activityEncryptionKey,
+    ));
+  }
 
   return {
     ...encryptedActivity,

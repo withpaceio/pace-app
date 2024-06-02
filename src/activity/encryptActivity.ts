@@ -1,4 +1,10 @@
-import { KeyPair, SECRETBOX_KEY_LENGTH, boxSeal, getRandomBytes } from 'react-native-nacl-jsi';
+import {
+  KeyPair,
+  SECRETBOX_KEY_LENGTH,
+  boxSeal,
+  encodeBase64,
+  getRandomBytes,
+} from 'react-native-nacl-jsi';
 
 import type { ActivitySummary } from '@models/Activity';
 
@@ -9,7 +15,7 @@ export default function encryptActivity(
   summary: ActivitySummary,
   encryptionKeyPair: KeyPair,
 ): {
-  activityEncryptionKey: string;
+  activityEncryptionKey: Uint8Array;
   encryptedActivityEncryptionKey: string;
   encryptedSummary: string;
   encryptedCreatedAt: string;
@@ -19,7 +25,7 @@ export default function encryptActivity(
   const encryptedSummary = encryptSummary(summary, activityEncryptionKey);
   const encryptedCreatedAt = encryptCreationDate(summary.createdAt, activityEncryptionKey);
 
-  const encryptedActivityEncryptionKey = boxSeal(
+  const encryptedActivityEncryptionKeyBuffer = boxSeal(
     activityEncryptionKey,
     encryptionKeyPair.publicKey,
     encryptionKeyPair.secretKey,
@@ -27,7 +33,7 @@ export default function encryptActivity(
 
   return {
     activityEncryptionKey,
-    encryptedActivityEncryptionKey,
+    encryptedActivityEncryptionKey: encodeBase64(encryptedActivityEncryptionKeyBuffer),
     encryptedSummary,
     encryptedCreatedAt,
   };

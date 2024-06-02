@@ -11,7 +11,7 @@ import activitiesKeys from './activitiesKeys';
 
 type Args = {
   activityId: string;
-  activityEncryptionKey: string;
+  activityEncryptionKey: Uint8Array;
   locations: ActivityLocation[];
   mapSnapshot: string;
   mapSnapshotDark: string;

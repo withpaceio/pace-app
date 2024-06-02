@@ -5,7 +5,10 @@ import { type InfiniteData, type UseQueryResult } from '@tanstack/react-query';
 import { decryptActivity } from '@activity';
 import { type ProfileData, useAuth } from '@auth';
 
-import useActivityTimeline, { type ActivityTimelineData } from '@api/activity/useActivityTimeline';
+import useActivityTimeline, {
+  type ActivityTimelineData,
+  type EncryptedActivityTimelineData,
+} from '@api/activity/useActivityTimeline';
 
 const PAGE_SIZE = 5;
 
@@ -15,7 +18,7 @@ export default function useActivities(
   const { getProfileData } = useAuth();
 
   const select = useCallback(
-    (data: ActivityTimelineData) => {
+    (data: EncryptedActivityTimelineData) => {
       const profileData = getProfileData() as ProfileData;
 
       const paginatedData: InfiniteData<ActivityTimelineData> = {

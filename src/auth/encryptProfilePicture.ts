@@ -2,6 +2,8 @@ import {
   KeyPair,
   SECRETBOX_KEY_LENGTH,
   boxSeal,
+  decodeUtf8,
+  encodeBase64,
   getRandomBytes,
   secretboxSeal,
 } from 'react-native-nacl-jsi';
@@ -12,12 +14,18 @@ export default function encryptProfilePicture(
 ): { profileEncryptionKey: string; encryptedProfilePicture: string } {
   const profileEncryptionKey = getRandomBytes(SECRETBOX_KEY_LENGTH);
 
-  const encryptedProfilePicture = secretboxSeal(profilePicture, profileEncryptionKey);
-  const encryptedProfileEncryptionKey = boxSeal(
+  const encryptedProfilePictureBuffer = secretboxSeal(
+    decodeUtf8(profilePicture),
+    profileEncryptionKey,
+  );
+  const encryptedProfileEncryptionKeyBuffer = boxSeal(
     profileEncryptionKey,
     encryptionKeyPair.publicKey,
     encryptionKeyPair.secretKey,
   );
 
-  return { profileEncryptionKey: encryptedProfileEncryptionKey, encryptedProfilePicture };
+  return {
+    profileEncryptionKey: encodeBase64(encryptedProfileEncryptionKeyBuffer),
+    encryptedProfilePicture: encodeBase64(encryptedProfilePictureBuffer),
+  };
 }

@@ -1,8 +1,11 @@
-import * as hex from '@stablelib/hex';
 import * as sha256 from '@stablelib/sha256';
-import * as utf8 from '@stablelib/utf8';
 import { BigInteger } from 'jsbn';
-import { getRandomBytes } from 'react-native-nacl-jsi';
+import {
+  decodeHexadecimal,
+  decodeUtf8,
+  encodeHexadecimal,
+  getRandomBytes,
+} from 'react-native-nacl-jsi';
 
 type Parameters = {
   N: BigInteger;
@@ -43,9 +46,9 @@ function hash(...args: (string | BigInteger)[]): BigInteger {
     paddedString = paddedString.padStart(length, '0');
   }
 
-  const h = sha256.hash(hex.decode(stringToHash));
+  const h = sha256.hash(decodeHexadecimal(stringToHash));
 
-  return new BigInteger(hex.encode(h), 16);
+  return new BigInteger(encodeHexadecimal(h), 16);
 }
 
 export function getParameters(): Parameters {
@@ -65,7 +68,10 @@ export function getParameters(): Parameters {
     16,
   );
   const g = new BigInteger('02', 16);
-  const k = new BigInteger(hex.encode(sha256.hash(hex.decode(`${N.toString(16)}02`))), 16);
+  const k = new BigInteger(
+    encodeHexadecimal(sha256.hash(decodeHexadecimal(`${N.toString(16)}02`))),
+    16,
+  );
   const H = hash;
   const hashOutputBytes = 32;
 
@@ -73,7 +79,7 @@ export function getParameters(): Parameters {
 }
 
 export async function generateSalt(parameters: Parameters): Promise<string> {
-  return getRandomBytes(parameters.hashOutputBytes, 'hex');
+  return encodeHexadecimal(getRandomBytes(parameters.hashOutputBytes));
 }
 
 export async function derivePrivateKey(
@@ -88,7 +94,7 @@ export async function derivePrivateKey(
   const I = String(username);
   const p = String(password);
 
-  const x = H(s, H(hex.encode(utf8.encode(`${I}:${p}`))));
+  const x = H(s, H(encodeHexadecimal(decodeUtf8(`${I}:${p}`))));
   return bigIntegerToHex(x);
 }
 
@@ -106,7 +112,7 @@ export async function generateEphemeral(
 ): Promise<{ secret: string; public: string }> {
   const { N, g } = parameters;
 
-  const a = new BigInteger(getRandomBytes(parameters.hashOutputBytes, 'hex'), 16);
+  const a = new BigInteger(encodeHexadecimal(getRandomBytes(parameters.hashOutputBytes)), 16);
   const A = g.modPow(a, N);
 
   return {
@@ -141,7 +147,7 @@ export function deriveSession(
   const S = B.subtract(k.multiply(g.modPow(x, N))).modPow(a.add(u.multiply(x)), N);
   const K = H(S);
 
-  const M = H(H(N).xor(H(g)), H(hex.encode(utf8.encode(I))), s, A, B, K);
+  const M = H(H(N).xor(H(g)), H(encodeHexadecimal(decodeUtf8(I))), s, A, B, K);
 
   return {
     key: bigIntegerToHex(K),

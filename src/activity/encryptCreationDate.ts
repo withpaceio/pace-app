@@ -1,9 +1,13 @@
-import { secretboxSeal } from 'react-native-nacl-jsi';
+import { decodeUtf8, encodeBase64, secretboxSeal } from 'react-native-nacl-jsi';
 
 export default function encryptCreationDate(
   creationDate: string,
-  activityEncryptionKey: string,
+  activityEncryptionKey: Uint8Array,
 ): string {
-  const encryptedCreationDate = secretboxSeal(creationDate, activityEncryptionKey);
-  return encryptedCreationDate;
+  const encryptedCreationDateBuffer = secretboxSeal(
+    decodeUtf8(creationDate),
+    activityEncryptionKey,
+  );
+
+  return encodeBase64(encryptedCreationDateBuffer);
 }

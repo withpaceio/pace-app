@@ -1,7 +1,24 @@
-import * as base64 from '@stablelib/base64';
-import { type KeyPair, boxOpen, secretboxOpen } from 'react-native-nacl-jsi';
+import {
+  type KeyPair,
+  boxOpen,
+  decodeBase64,
+  encodeUtf8,
+  secretboxOpen,
+} from 'react-native-nacl-jsi';
 
 import type { HealthInformation } from '@models/HealthInformation';
+
+function decryptLegacy(
+  encryptedHealthInformationBuffer: Uint8Array,
+  encryptionKey: Uint8Array,
+): { healthInformationBuffer: Uint8Array; encryptionKey: Uint8Array } {
+  const legacyEncryptionKey = decodeBase64(encodeUtf8(encryptionKey));
+
+  return {
+    healthInformationBuffer: secretboxOpen(encryptedHealthInformationBuffer, legacyEncryptionKey),
+    encryptionKey: legacyEncryptionKey,
+  };
+}
 
 export default function decryptHealthInformation(
   encryptedHealthInformation: string,
@@ -9,18 +26,28 @@ export default function decryptHealthInformation(
   encryptionKeyPair: KeyPair,
 ): { healthInformation: HealthInformation; encryptionKey: Uint8Array } | null {
   try {
-    const healthInformationEncryptionKeyString = boxOpen(
-      encryptedHealthInformationEncryptionKey,
+    let encryptionKey = boxOpen(
+      decodeBase64(encryptedHealthInformationEncryptionKey),
       encryptionKeyPair.publicKey,
       encryptionKeyPair.secretKey,
-    ).replace(/\0/g, '');
-    const healthInformation = secretboxOpen(
-      encryptedHealthInformation,
-      healthInformationEncryptionKeyString,
-    ).replace(/\0/g, '');
-    const encryptionKey = base64.decode(healthInformationEncryptionKeyString);
+    );
+    const encryptedHealthInformationBuffer = decodeBase64(encryptedHealthInformation);
 
-    return { healthInformation: JSON.parse(decodeURI(healthInformation)), encryptionKey };
+    let healthInformationBuffer: Uint8Array;
+    try {
+      healthInformationBuffer = secretboxOpen(encryptedHealthInformationBuffer, encryptionKey);
+    } catch {
+      ({ healthInformationBuffer, encryptionKey } = decryptLegacy(
+        encryptedHealthInformationBuffer,
+        encryptionKey,
+      ));
+    }
+
+    const healthInformation = JSON.parse(
+      decodeURI(encodeUtf8(healthInformationBuffer)),
+    ) as HealthInformation;
+
+    return { healthInformation, encryptionKey };
   } catch {
     return null;
   }

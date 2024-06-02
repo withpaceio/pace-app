@@ -1,7 +1,6 @@
-import * as base64 from '@stablelib/base64';
 import { HKDF } from '@stablelib/hkdf';
 import { SHA256 } from '@stablelib/sha256';
-import { argon2idDeriveKey, decodeBase64, decodeUtf8 } from 'react-native-nacl-jsi';
+import { argon2idDeriveKey, decodeBase64, decodeUtf8, encodeBase64 } from 'react-native-nacl-jsi';
 import Purchases from 'react-native-purchases';
 
 import { ARGON2ID_ITERATIONS, HKDF_PASSWORD_TOKEN_LENGTH } from '@crypto';
@@ -47,7 +46,7 @@ async function fetchSignIn(
   const privateKey = await SRP.derivePrivateKey(
     srpSalt,
     username,
-    base64.encode(authPasswordTokenBuffer),
+    encodeBase64(authPasswordTokenBuffer),
     srpParameters,
   );
 

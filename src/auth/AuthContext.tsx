@@ -70,6 +70,7 @@ function reducer(state: AuthState, action: AuthAction): AuthState {
         userId: action.payload.userId,
         username: action.payload.username,
         createdAt: action.payload.createdAt,
+        authToken: action.payload.authToken,
         profileData: action.payload.profileData,
       };
     case 'AUTH_SIGN_OUT':
@@ -77,7 +78,7 @@ function reducer(state: AuthState, action: AuthAction): AuthState {
         loading: false,
         userId: '',
         username: '',
-        authToken: '',
+        authToken: null,
         createdAt: new Date(),
         profileData: null,
       };
@@ -88,6 +89,7 @@ function reducer(state: AuthState, action: AuthAction): AuthState {
         userId: action.payload.profile.userId,
         username: action.payload.profile.username,
         createdAt: action.payload.profile.createdAt,
+        authToken: action.payload.profile.authToken,
         profileData: action.payload.profile.profileData,
       };
     default:

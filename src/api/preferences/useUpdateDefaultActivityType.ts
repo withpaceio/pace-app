@@ -16,9 +16,9 @@ type Args = {
 };
 
 export function useMutationFn(): (args: Args) => Promise<{ message: string }> {
-  const { getProfileData, getTokens } = useAuth();
+  const { getProfileData, getAuthToken } = useAuth();
 
-  return async ({ defaultActivityType }: Args) => {
+  return ({ defaultActivityType }: Args) => {
     const profileData = getProfileData();
     if (profileData === null) {
       throw new Error('Profile data is null');
@@ -29,10 +29,14 @@ export function useMutationFn(): (args: Args) => Promise<{ message: string }> {
       profileData.keyPairs.encryptionKeyPair,
     );
 
-    const { accessToken } = await getTokens();
-    return sendPatchRequest<{ message: string }>(`${API_URL}/api/preferences`, accessToken, {
-      defaultActivityType: encryptedDefaultActivityType,
-    });
+    const authToken = getAuthToken();
+    return sendPatchRequest<{ message: string }>(
+      `${API_URL}/api/preferences`,
+      authToken as string,
+      {
+        defaultActivityType: encryptedDefaultActivityType,
+      },
+    );
   };
 }
 

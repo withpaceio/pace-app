@@ -19,7 +19,7 @@ type Args = {
 
 export default function useUploadActivityData(): UseMutationResult<void, unknown, Args, unknown> {
   const queryClient = useQueryClient();
-  const { getTokens, getProfileData } = useAuth();
+  const { getAuthToken, getProfileData } = useAuth();
 
   return useMutation({
     mutationKey: activitiesKeys.uploadData(),
@@ -39,10 +39,10 @@ export default function useUploadActivityData(): UseMutationResult<void, unknown
       const encryptedMapSnapshot = encryptMapSnapshot(mapSnapshot, activityEncryptionKey);
       const encryptedMapSnapshotDark = encryptMapSnapshot(mapSnapshotDark, activityEncryptionKey);
 
-      const { accessToken } = await getTokens();
+      const authToken = getAuthToken();
       const { url, mapUrlDark, mapUrlLight } = await sendGetRequest<UploadActivityResponse>(
         `${API_URL}/api/activities/${activityId}/upload`,
-        accessToken,
+        authToken as string,
       );
 
       const result = await uploadActivity(

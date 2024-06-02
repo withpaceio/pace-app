@@ -13,7 +13,7 @@ type Args = {
 };
 
 export function useMutationFn(): (args: Args) => Promise<void> {
-  const { getProfileData, getTokens } = useAuth();
+  const { getProfileData, getAuthToken } = useAuth();
 
   return async ({ profilePicture }: Args) => {
     const profileData = getProfileData();
@@ -26,10 +26,10 @@ export function useMutationFn(): (args: Args) => Promise<void> {
       profileData.keyPairs.encryptionKeyPair,
     );
 
-    const { accessToken } = await getTokens();
+    const authToken = getAuthToken();
     const { url } = await sendPostRequest<UploadProfilePictureResponse>(
       `${API_URL}/api/account/profile-picture/upload`,
-      accessToken,
+      authToken as string,
       { profileEncryptionKey },
     );
 

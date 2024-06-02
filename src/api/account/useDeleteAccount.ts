@@ -12,13 +12,16 @@ export default function useDeleteAccount(): UseMutationResult<
   void | undefined,
   unknown
 > {
-  const { getTokens } = useAuth();
+  const { getAuthToken } = useAuth();
 
   return useMutation({
     mutationKey: accountKeys.delete(),
-    mutationFn: async () => {
-      const { accessToken } = await getTokens();
-      return sendPostRequest<{ message: string }>(`${API_URL}/api/account/delete`, accessToken);
+    mutationFn: () => {
+      const authToken = getAuthToken();
+      return sendPostRequest<{ message: string }>(
+        `${API_URL}/api/account/delete`,
+        authToken as string,
+      );
     },
   });
 }

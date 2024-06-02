@@ -19,15 +19,15 @@ export default function useUpdatePassword(): UseMutationResult<
   },
   unknown
 > {
-  const { getTokens } = useAuth();
+  const { getAuthToken } = useAuth();
 
   return useMutation({
     mutationKey: accountKeys.updatePassword(),
-    mutationFn: async (data) => {
-      const { accessToken } = await getTokens();
+    mutationFn: (data) => {
+      const authToken = getAuthToken();
       return sendPostRequest<{ message: string }>(
         `${API_URL}/api/account/change-password`,
-        accessToken,
+        authToken as string,
         data,
       );
     },

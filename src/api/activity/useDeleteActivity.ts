@@ -13,14 +13,14 @@ type Args = {
 };
 
 export function useMutationFn(): (args: Args) => Promise<{ message: string }> {
-  const { getTokens } = useAuth();
+  const { getAuthToken } = useAuth();
 
-  return async ({ activityId }: Args) => {
-    const { accessToken } = await getTokens();
+  return ({ activityId }: Args) => {
+    const authToken = getAuthToken();
 
     return sendPostRequest<{ message: string }>(
       `${API_URL}/api/activities/${activityId}/delete`,
-      accessToken,
+      authToken as string,
     );
   };
 }

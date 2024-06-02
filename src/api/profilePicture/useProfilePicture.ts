@@ -13,14 +13,14 @@ type ProfilePictureData =
   | { encryptedProfilePicture: null; encryptionKey: null };
 
 export function useQueryFn(): () => Promise<ProfilePictureData> {
-  const { getTokens } = useAuth();
+  const { getAuthToken } = useAuth();
 
   return async () => {
-    const { accessToken } = await getTokens();
+    const authToken = getAuthToken();
     const { url, encryptionKey } = await sendGetRequest<{
       url: string | null;
       encryptionKey: string | null;
-    }>(`${API_URL}/api/account/profile-picture`, accessToken);
+    }>(`${API_URL}/api/account/profile-picture`, authToken as string);
 
     if (!url || !encryptionKey) {
       return { encryptedProfilePicture: null, encryptionKey: null };
@@ -37,7 +37,7 @@ export function useQueryFn(): () => Promise<ProfilePictureData> {
 }
 
 export default function useProfilePicture(): UseQueryResult<string | null, Error> {
-  const { getProfileData, isRefreshingTokens } = useAuth();
+  const { getProfileData, getAuthToken } = useAuth();
   const queryFn = useQueryFn();
 
   return useQuery({
@@ -61,6 +61,6 @@ export default function useProfilePicture(): UseQueryResult<string | null, Error
       },
       [getProfileData],
     ),
-    enabled: !isRefreshingTokens(),
+    enabled: Boolean(getAuthToken()),
   });
 }

@@ -18,16 +18,16 @@ export type PreferencesData = {
 };
 
 export function useQueryFn(): () => Promise<PreferencesData> {
-  const { getTokens } = useAuth();
+  const { getAuthToken } = useAuth();
 
-  return async () => {
-    const { accessToken } = await getTokens();
-    return sendGetRequest<PreferencesData>(`${API_URL}/api/preferences`, accessToken);
+  return () => {
+    const authToken = getAuthToken();
+    return sendGetRequest<PreferencesData>(`${API_URL}/api/preferences`, authToken as string);
   };
 }
 
 export default function usePreferences(): UseQueryResult<Preferences, Error> {
-  const { isRefreshingTokens, getProfileData } = useAuth();
+  const { getAuthToken, getProfileData } = useAuth();
   const queryFn = useQueryFn();
 
   return useQuery({
@@ -55,6 +55,6 @@ export default function usePreferences(): UseQueryResult<Preferences, Error> {
       },
       [getProfileData],
     ),
-    enabled: !isRefreshingTokens(),
+    enabled: Boolean(getAuthToken()),
   });
 }

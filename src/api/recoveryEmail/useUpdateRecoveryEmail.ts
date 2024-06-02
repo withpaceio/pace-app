@@ -13,15 +13,15 @@ export default function useUpdateRecoveryEmail(): UseMutationResult<
   unknown
 > {
   const queryClient = useQueryClient();
-  const { getTokens } = useAuth();
+  const { getAuthToken } = useAuth();
 
   return useMutation({
     mutationKey: recoveryEmailKeys.update(),
-    mutationFn: async ({ recoveryEmail }) => {
-      const { accessToken } = await getTokens();
+    mutationFn: ({ recoveryEmail }) => {
+      const authToken = getAuthToken();
       return sendPostRequest<{ message: string }>(
         `${API_URL}/api/account/recovery-email`,
-        accessToken,
+        authToken as string,
         { email: recoveryEmail },
       );
     },

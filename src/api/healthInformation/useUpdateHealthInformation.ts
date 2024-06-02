@@ -20,9 +20,9 @@ type Args = {
 };
 
 export function useMutationFn(): (args: Args) => Promise<{ message: string }> {
-  const { getProfileData, getTokens } = useAuth();
+  const { getProfileData, getAuthToken } = useAuth();
 
-  return async ({ healthInformation, encryptionKey, preferences }: Args) => {
+  return ({ healthInformation, encryptionKey, preferences }: Args) => {
     const profileData = getProfileData();
     if (profileData === null) {
       throw new Error('Profile data is null');
@@ -41,11 +41,15 @@ export function useMutationFn(): (args: Args) => Promise<{ message: string }> {
         profileData.keyPairs.encryptionKeyPair,
       );
 
-    const { accessToken } = await getTokens();
-    return sendPatchRequest<{ message: string }>(`${API_URL}/api/health-information`, accessToken, {
-      healthInformation: encryptedHealthInformation,
-      encryptionKey: encryptedHealthInformationEncryptionKey,
-    });
+    const authToken = getAuthToken();
+    return sendPatchRequest<{ message: string }>(
+      `${API_URL}/api/health-information`,
+      authToken as string,
+      {
+        healthInformation: encryptedHealthInformation,
+        encryptionKey: encryptedHealthInformationEncryptionKey,
+      },
+    );
   };
 }
 

@@ -20,15 +20,15 @@ export default function useActivityMapSnapshot({
   activityEncryptionKey,
   mapSnapshotTheme,
 }: Args): UseQueryResult<{ mapSnapshot: string }, Error> {
-  const { getTokens, isRefreshingTokens } = useAuth();
+  const { getAuthToken } = useAuth();
 
   return useQuery({
     queryKey: activitiesKeys.mapSnapshot(activityId, activityEncryptionKey, mapSnapshotTheme),
     queryFn: async () => {
-      const { accessToken } = await getTokens();
+      const authToken = getAuthToken();
       const response = await sendGetRequest<{ url: string }>(
         `${API_URL}/api/activities/${activityId}/map-snapshot?theme=${mapSnapshotTheme}`,
-        accessToken,
+        authToken as string,
       );
 
       return sendGetRequest<string>(response.url, undefined, 'application/octet-stream');
@@ -42,6 +42,6 @@ export default function useActivityMapSnapshot({
       [activityEncryptionKey],
     ),
     enabled:
-      !isRefreshingTokens() && Boolean(activityId && activityEncryptionKey && mapSnapshotTheme),
+      Boolean(getAuthToken()) && Boolean(activityId && activityEncryptionKey && mapSnapshotTheme),
   });
 }

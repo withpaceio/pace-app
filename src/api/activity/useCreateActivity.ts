@@ -28,7 +28,7 @@ type Args = {
 export function useMutationFn(): (
   args: Args,
 ) => Promise<{ id: string; activityEncryptionKey: Uint8Array }> {
-  const { getProfileData, getTokens } = useAuth();
+  const { getProfileData, getAuthToken } = useAuth();
 
   return async ({ summary, locations, mapSnapshot, mapSnapshotDark }: Args) => {
     const profileData = getProfileData();
@@ -47,10 +47,10 @@ export function useMutationFn(): (
     const encryptedMapSnapshot = encryptMapSnapshot(mapSnapshot, activityEncryptionKey);
     const encryptedMapSnapshotDark = encryptMapSnapshot(mapSnapshotDark, activityEncryptionKey);
 
-    const { accessToken } = await getTokens();
+    const authToken = getAuthToken();
     const { id: activityId } = await sendPostRequest<CreateActivityResponse>(
       `${API_URL}/api/activities/create`,
-      accessToken,
+      authToken as string,
       {
         summary: encryptedSummary,
         createdAt: encryptedCreatedAt,
@@ -61,7 +61,7 @@ export function useMutationFn(): (
 
     const { url, mapUrlDark, mapUrlLight } = await sendGetRequest<UploadActivityResponse>(
       `${API_URL}/api/activities/${activityId}/upload`,
-      accessToken,
+      authToken as string,
     );
 
     const result = await uploadActivity(

@@ -13,16 +13,16 @@ import accountKeys from './accountKeys';
 type AccountData = Omit<Account, 'createdAt'> & { createdAt: string };
 
 export function useQueryFn(): () => Promise<AccountData> {
-  const { getTokens } = useAuth();
+  const { getAuthToken } = useAuth();
 
-  return async () => {
-    const { accessToken } = await getTokens();
-    return sendGetRequest<AccountData>(`${API_URL}/api/account`, accessToken);
+  return () => {
+    const authToken = getAuthToken();
+    return sendGetRequest<AccountData>(`${API_URL}/api/account`, authToken as string);
   };
 }
 
 export default function useAccount(): UseQueryResult<Account, Error> {
-  const { isRefreshingTokens } = useAuth();
+  const { getAuthToken } = useAuth();
   const queryFn = useQueryFn();
 
   return useQuery({
@@ -35,6 +35,6 @@ export default function useAccount(): UseQueryResult<Account, Error> {
       }),
       [],
     ),
-    enabled: !isRefreshingTokens(),
+    enabled: Boolean(getAuthToken()),
   });
 }

@@ -14,11 +14,14 @@ export type HealthInformationData = {
 } | null;
 
 export function useQueryFn(): () => Promise<HealthInformationData> {
-  const { getTokens } = useAuth();
+  const { getAuthToken } = useAuth();
 
-  return async () => {
-    const { accessToken } = await getTokens();
-    return sendGetRequest<HealthInformationData>(`${API_URL}/api/health-information`, accessToken);
+  return () => {
+    const authToken = getAuthToken();
+    return sendGetRequest<HealthInformationData>(
+      `${API_URL}/api/health-information`,
+      authToken as string,
+    );
   };
 }
 
@@ -26,7 +29,7 @@ export default function useHealthInformation(): UseQueryResult<
   ReturnType<typeof decryptHealthInformation>,
   Error
 > {
-  const { getProfileData, isRefreshingTokens } = useAuth();
+  const { getProfileData, getAuthToken } = useAuth();
   const queryFn = useQueryFn();
 
   return useQuery({
@@ -48,6 +51,6 @@ export default function useHealthInformation(): UseQueryResult<
       },
       [getProfileData],
     ),
-    enabled: !isRefreshingTokens(),
+    enabled: Boolean(getAuthToken()),
   });
 }

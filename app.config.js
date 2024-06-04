@@ -43,7 +43,19 @@ export default {
         UIBackgroundModes: ['location'],
       },
     },
-    plugins: ['expo-font', 'expo-router', 'expo-secure-store', '@maplibre/maplibre-react-native'],
+    plugins: [
+      'expo-font',
+      'expo-router',
+      'expo-secure-store',
+      '@maplibre/maplibre-react-native',
+      [
+        'expo-build-properties',
+        {
+          ios: { newArchitectureEnabled: true },
+          android: { newArchitectureEnabled: true },
+        },
+      ],
+    ],
     extra: {
       eas: {
         projectId: 'bbc52990-d7d4-11e9-a07a-3d3351b36399',

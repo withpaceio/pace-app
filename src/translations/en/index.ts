@@ -11,6 +11,7 @@ import passwordStrength from './passwordStrength';
 import paywall from './paywall';
 import recordActivity from './recordActivity';
 import saveActivity from './saveActivity';
+import sessionExpiredModal from './sessionExpiredModal';
 import settings from './settings';
 import signIn from './signIn';
 import signUp from './signUp';
@@ -32,6 +33,7 @@ export default {
   paywall,
   recordActivity,
   saveActivity,
+  sessionExpiredModal,
   settings,
   signIn,
   signUp,

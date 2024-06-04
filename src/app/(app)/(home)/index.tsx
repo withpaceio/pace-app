@@ -10,7 +10,7 @@ import { DistanceMeasurementSystem } from '@models/UnitSystem';
 const App: FC = () => {
   const [page, setPage] = useState(0);
 
-  const { data: activitiesData, isError, isLoading, isFetching, refetch } = useActivities(page);
+  const { data: activitiesData, isLoading, isFetching, refetch } = useActivities(page);
 
   const { data: preferencesData } = usePreferences();
 
@@ -27,7 +27,6 @@ const App: FC = () => {
       data={activitiesData}
       isLoading={isFetching}
       initialLoading={isLoading && !activitiesData}
-      hasError={isError}
       refreshing={false}
       distanceMeasurementSystem={preferencesData?.measurement || DistanceMeasurementSystem.METRIC}
       onEndReached={loadMore}

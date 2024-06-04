@@ -11,7 +11,7 @@ import React, {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Purchases from 'react-native-purchases';
 
-import queryClient from '../queryClient';
+import LoggedOutModal from './LoggedOutModal';
 import signOut from './signout';
 import { type Profile, loadProfile as storageLoadProfile } from './storage';
 import type { ProfileData } from './types';
@@ -19,6 +19,7 @@ import type { ProfileData } from './types';
 type AuthState = Omit<Profile, 'authToken'> & {
   authToken: string | null;
   loading: boolean;
+  isLoggedOutModalOpen: boolean;
 };
 
 type SignInAction = {
@@ -37,7 +38,20 @@ type RestoreProfileAction = {
   };
 };
 
-export type AuthAction = SignInAction | SignOutAction | RestoreProfileAction;
+type OpenLoggedOutModalAction = {
+  type: 'AUTH_OPEN_LOGGED_OUT_MODAL';
+};
+
+type CloseLoggedOutModalAction = {
+  type: 'AUTH_CLOSE_LOGGED_OUT_MODAL';
+};
+
+export type AuthAction =
+  | SignInAction
+  | SignOutAction
+  | RestoreProfileAction
+  | OpenLoggedOutModalAction
+  | CloseLoggedOutModalAction;
 
 // eslint-disable-next-line no-spaced-func
 const AuthContext = createContext<{
@@ -46,6 +60,8 @@ const AuthContext = createContext<{
   getAuthToken: () => string | null;
   getProfileData: () => ProfileData | null;
   signOut: () => Promise<void>;
+  openLoggedOutModal: () => void;
+  closeLoggedOutModal: () => void;
 }>({
   state: {
     loading: true,
@@ -54,11 +70,14 @@ const AuthContext = createContext<{
     authToken: null,
     createdAt: new Date(),
     profileData: null,
+    isLoggedOutModalOpen: false,
   },
   dispatch: () => undefined,
   getAuthToken: () => null,
   getProfileData: () => null,
   signOut: () => Promise.resolve(),
+  openLoggedOutModal: () => undefined,
+  closeLoggedOutModal: () => undefined,
 });
 
 function reducer(state: AuthState, action: AuthAction): AuthState {
@@ -81,6 +100,7 @@ function reducer(state: AuthState, action: AuthAction): AuthState {
         authToken: null,
         createdAt: new Date(),
         profileData: null,
+        isLoggedOutModalOpen: false,
       };
     case 'AUTH_RESTORE_PROFILE':
       return {
@@ -91,6 +111,16 @@ function reducer(state: AuthState, action: AuthAction): AuthState {
         createdAt: action.payload.profile.createdAt,
         authToken: action.payload.profile.authToken,
         profileData: action.payload.profile.profileData,
+      };
+    case 'AUTH_OPEN_LOGGED_OUT_MODAL':
+      return {
+        ...state,
+        isLoggedOutModalOpen: true,
+      };
+    case 'AUTH_CLOSE_LOGGED_OUT_MODAL':
+      return {
+        ...state,
+        isLoggedOutModalOpen: false,
       };
     default:
       return state;
@@ -105,12 +135,11 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     authToken: null,
     createdAt: new Date(),
     profileData: null,
+    isLoggedOutModalOpen: false,
   });
 
   const onSignOut = useCallback(async () => {
     await signOut();
-
-    queryClient.clear();
     AsyncStorage.clear();
 
     dispatch({ type: 'AUTH_SIGN_OUT' });
@@ -138,6 +167,14 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     [state.profileData],
   );
 
+  const openLoggedOutModal = useCallback((): void => {
+    dispatch({ type: 'AUTH_OPEN_LOGGED_OUT_MODAL' });
+  }, []);
+
+  const closeLoggedOutModal = useCallback((): void => {
+    dispatch({ type: 'AUTH_CLOSE_LOGGED_OUT_MODAL' });
+  }, []);
+
   useEffect(() => {
     loadProfile();
   }, [loadProfile]);
@@ -150,8 +187,15 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
         getAuthToken,
         getProfileData,
         signOut: onSignOut,
+        openLoggedOutModal,
+        closeLoggedOutModal,
       }}>
       {children}
+      <LoggedOutModal
+        isOpen={state.isLoggedOutModalOpen}
+        signOut={onSignOut}
+        close={closeLoggedOutModal}
+      />
     </AuthContext.Provider>
   );
 };
@@ -162,4 +206,6 @@ export const useAuth = (): {
   getAuthToken: () => string | null;
   getProfileData: () => ProfileData | null;
   signOut: () => Promise<void>;
+  openLoggedOutModal: () => void;
+  closeLoggedOutModal: () => void;
 } => useContext(AuthContext);

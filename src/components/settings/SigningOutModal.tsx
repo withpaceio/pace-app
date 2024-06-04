@@ -19,7 +19,7 @@ const SigningOutModal: FC<Props> = ({ visible }) => (
   <Modal visible={visible}>
     <ModalTitle>{i18n.t('settings.signingOut')}</ModalTitle>
     <ActivityIndicatorWrapper>
-      <ActivityIndicator />
+      <ActivityIndicator size="large" />
     </ActivityIndicatorWrapper>
   </Modal>
 );

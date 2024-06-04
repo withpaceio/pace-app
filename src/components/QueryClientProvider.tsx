@@ -22,7 +22,7 @@ import { useMutationFn as useMutationFnDeleteProfilePicture } from '@api/profile
 import { useQueryFn as useQueryFnProfilePictureDetails } from '@api/profilePicture/useProfilePicture';
 import { useMutationFn as useMutationFnUpdateProfilePicture } from '@api/profilePicture/useUpdateProfilePicture';
 
-import queryClient from '../queryClient';
+import useQueryClient from '../queryClient';
 
 const persister = createAsyncStoragePersister({
   storage: AsyncStorage,
@@ -34,6 +34,8 @@ type Props = {
 };
 
 const QueryClientProvider: FC<Props> = ({ children }) => {
+  const queryClient = useQueryClient();
+
   const queryFnAccountDetails = useQueryFnAccountDetails();
 
   const mutationFnCreateActivity = useMutationFnCreateActivity();
@@ -54,7 +56,7 @@ const QueryClientProvider: FC<Props> = ({ children }) => {
   const onSuccess = useCallback(async (): Promise<void> => {
     await queryClient.resumePausedMutations();
     queryClient.invalidateQueries();
-  }, []);
+  }, [queryClient]);
 
   const setDefaultQueries = useCallback((): void => {
     queryClient.setQueryDefaults(accountKeys.details(), {
@@ -77,6 +79,7 @@ const QueryClientProvider: FC<Props> = ({ children }) => {
     queryFnHealthInformationDetails,
     queryFnProfilePictureDetails,
     queryFnPreferencesDetails,
+    queryClient,
   ]);
 
   const setDefaultMutations = useCallback((): void => {
@@ -116,6 +119,7 @@ const QueryClientProvider: FC<Props> = ({ children }) => {
     mutationFnUpdateDisplayPreferences,
     mutationFnUpdateProfilePicture,
     mutationFnDeleteProfilePicture,
+    queryClient,
   ]);
 
   useEffect(() => {

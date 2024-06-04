@@ -9,14 +9,14 @@ import profilePictureKeys from './profilePictureKeys';
 type Args = void | object;
 
 export function useMutationFn(): () => Promise<{ message: string }> {
-  const { getTokens } = useAuth();
+  const { getAuthToken } = useAuth();
 
-  return async () => {
-    const { accessToken } = await getTokens();
+  return () => {
+    const authToken = getAuthToken();
 
     return sendPostRequest<{ message: string }>(
       `${API_URL}/api/account/profile-picture/delete`,
-      accessToken,
+      authToken as string,
     );
   };
 }

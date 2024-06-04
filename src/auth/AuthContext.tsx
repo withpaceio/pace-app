@@ -6,31 +6,25 @@ import React, {
   useContext,
   useEffect,
   useReducer,
-  useRef,
 } from 'react';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNetInfo } from '@react-native-community/netinfo';
-import jwtDecode, { type JwtPayload } from 'jwt-decode';
 import Purchases from 'react-native-purchases';
 
-import queryClient from '../queryClient';
-import refreshAccessToken from './refreshAccessToken';
+import LoggedOutModal from './LoggedOutModal';
 import signOut from './signout';
 import { type Profile, loadProfile as storageLoadProfile } from './storage';
 import type { ProfileData } from './types';
 
-type AuthState = {
+type AuthState = Omit<Profile, 'authToken'> & {
+  authToken: string | null;
   loading: boolean;
-  userId: string;
-  username: string;
-  createdAt: Date | null;
-  profileData: ProfileData | null;
+  isLoggedOutModalOpen: boolean;
 };
 
 type SignInAction = {
   type: 'AUTH_SIGN_IN';
-  payload: Profile & { accessToken: string };
+  payload: Profile;
 };
 
 type SignOutAction = {
@@ -44,31 +38,46 @@ type RestoreProfileAction = {
   };
 };
 
-export type AuthAction = SignInAction | SignOutAction | RestoreProfileAction;
+type OpenLoggedOutModalAction = {
+  type: 'AUTH_OPEN_LOGGED_OUT_MODAL';
+};
+
+type CloseLoggedOutModalAction = {
+  type: 'AUTH_CLOSE_LOGGED_OUT_MODAL';
+};
+
+export type AuthAction =
+  | SignInAction
+  | SignOutAction
+  | RestoreProfileAction
+  | OpenLoggedOutModalAction
+  | CloseLoggedOutModalAction;
 
 // eslint-disable-next-line no-spaced-func
 const AuthContext = createContext<{
   state: AuthState;
   dispatch: (action: AuthAction) => void;
+  getAuthToken: () => string | null;
   getProfileData: () => ProfileData | null;
-  getTokens: () => Promise<{ accessToken: string; refreshToken: string }>;
-  setTokens: (accessToken: string, refreshToken: string) => void;
   signOut: () => Promise<void>;
-  isRefreshingTokens: () => boolean;
+  openLoggedOutModal: () => void;
+  closeLoggedOutModal: () => void;
 }>({
   state: {
     loading: true,
     userId: '',
     username: '',
-    createdAt: null,
+    authToken: null,
+    createdAt: new Date(),
     profileData: null,
+    isLoggedOutModalOpen: false,
   },
   dispatch: () => undefined,
+  getAuthToken: () => null,
   getProfileData: () => null,
-  getTokens: () => Promise.resolve({ accessToken: '', refreshToken: '' }),
-  setTokens: () => undefined,
   signOut: () => Promise.resolve(),
-  isRefreshingTokens: () => false,
+  openLoggedOutModal: () => undefined,
+  closeLoggedOutModal: () => undefined,
 });
 
 function reducer(state: AuthState, action: AuthAction): AuthState {
@@ -80,6 +89,7 @@ function reducer(state: AuthState, action: AuthAction): AuthState {
         userId: action.payload.userId,
         username: action.payload.username,
         createdAt: action.payload.createdAt,
+        authToken: action.payload.authToken,
         profileData: action.payload.profileData,
       };
     case 'AUTH_SIGN_OUT':
@@ -87,8 +97,10 @@ function reducer(state: AuthState, action: AuthAction): AuthState {
         loading: false,
         userId: '',
         username: '',
-        createdAt: null,
+        authToken: null,
+        createdAt: new Date(),
         profileData: null,
+        isLoggedOutModalOpen: false,
       };
     case 'AUTH_RESTORE_PROFILE':
       return {
@@ -97,7 +109,18 @@ function reducer(state: AuthState, action: AuthAction): AuthState {
         userId: action.payload.profile.userId,
         username: action.payload.profile.username,
         createdAt: action.payload.profile.createdAt,
+        authToken: action.payload.profile.authToken,
         profileData: action.payload.profile.profileData,
+      };
+    case 'AUTH_OPEN_LOGGED_OUT_MODAL':
+      return {
+        ...state,
+        isLoggedOutModalOpen: true,
+      };
+    case 'AUTH_CLOSE_LOGGED_OUT_MODAL':
+      return {
+        ...state,
+        isLoggedOutModalOpen: false,
       };
     default:
       return state;
@@ -105,28 +128,19 @@ function reducer(state: AuthState, action: AuthAction): AuthState {
 }
 
 export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const { isInternetReachable } = useNetInfo();
-
-  const accessTokenRef = useRef<string>();
-  const refreshTokenRef = useRef<string>();
-  const isRefreshingTokensRef = useRef(false);
-
   const [state, dispatch] = useReducer(reducer, {
     loading: true,
     userId: '',
     username: '',
-    createdAt: null,
+    authToken: null,
+    createdAt: new Date(),
     profileData: null,
+    isLoggedOutModalOpen: false,
   });
 
   const onSignOut = useCallback(async () => {
     await signOut();
-    queryClient.clear();
     AsyncStorage.clear();
-
-    accessTokenRef.current = '';
-    refreshTokenRef.current = '';
-    isRefreshingTokensRef.current = false;
 
     dispatch({ type: 'AUTH_SIGN_OUT' });
   }, []);
@@ -139,8 +153,6 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
 
     await Purchases.logIn(profile.userId);
-    accessTokenRef.current = '';
-    refreshTokenRef.current = profile.refreshToken;
 
     dispatch({
       type: 'AUTH_RESTORE_PROFILE',
@@ -148,51 +160,19 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     });
   }, [onSignOut]);
 
+  const getAuthToken = useCallback((): string | null => state.authToken, [state.authToken]);
+
   const getProfileData = useCallback(
     (): ProfileData | null => state.profileData,
     [state.profileData],
   );
 
-  const getTokens = useCallback(async (): Promise<{
-    accessToken: string;
-    refreshToken: string;
-  }> => {
-    if (isRefreshingTokensRef.current) {
-      throw new Error('Refreshing');
-    }
+  const openLoggedOutModal = useCallback((): void => {
+    dispatch({ type: 'AUTH_OPEN_LOGGED_OUT_MODAL' });
+  }, []);
 
-    if (accessTokenRef.current) {
-      try {
-        const decodedAccessToken = jwtDecode<JwtPayload>(accessTokenRef.current);
-        if (decodedAccessToken?.exp && decodedAccessToken.exp >= Date.now() / 1000) {
-          return { accessToken: accessTokenRef.current, refreshToken: refreshTokenRef.current! };
-        }
-        // eslint-disable-next-line no-empty
-      } catch {}
-    }
-
-    isRefreshingTokensRef.current = true;
-
-    const tokens = await refreshAccessToken(refreshTokenRef.current || '');
-    if (!tokens) {
-      if (isInternetReachable) {
-        await onSignOut();
-      }
-      return { accessToken: '', refreshToken: '' };
-    }
-
-    accessTokenRef.current = tokens.accessToken;
-    refreshTokenRef.current = tokens.refreshToken;
-    isRefreshingTokensRef.current = false;
-
-    return tokens;
-  }, [isInternetReachable, onSignOut]);
-
-  const isRefreshingTokens = useCallback((): boolean => isRefreshingTokensRef.current, []);
-
-  const setTokens = useCallback((accessToken: string, refreshToken: string) => {
-    accessTokenRef.current = accessToken;
-    refreshTokenRef.current = refreshToken;
+  const closeLoggedOutModal = useCallback((): void => {
+    dispatch({ type: 'AUTH_CLOSE_LOGGED_OUT_MODAL' });
   }, []);
 
   useEffect(() => {
@@ -204,13 +184,18 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
       value={{
         state,
         dispatch,
+        getAuthToken,
         getProfileData,
-        getTokens,
-        setTokens,
         signOut: onSignOut,
-        isRefreshingTokens,
+        openLoggedOutModal,
+        closeLoggedOutModal,
       }}>
       {children}
+      <LoggedOutModal
+        isOpen={state.isLoggedOutModalOpen}
+        signOut={onSignOut}
+        close={closeLoggedOutModal}
+      />
     </AuthContext.Provider>
   );
 };
@@ -218,9 +203,9 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 export const useAuth = (): {
   state: AuthState;
   dispatch: (action: AuthAction) => void;
+  getAuthToken: () => string | null;
   getProfileData: () => ProfileData | null;
-  getTokens: () => Promise<{ accessToken: string; refreshToken: string }>;
-  setTokens: (accessToken: string, refreshToken: string) => void;
   signOut: () => Promise<void>;
-  isRefreshingTokens: () => boolean;
+  openLoggedOutModal: () => void;
+  closeLoggedOutModal: () => void;
 } => useContext(AuthContext);

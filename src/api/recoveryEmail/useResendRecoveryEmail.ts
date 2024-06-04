@@ -12,15 +12,15 @@ export default function useResendRecoveryEmail(): UseMutationResult<
   void,
   unknown
 > {
-  const { getTokens } = useAuth();
+  const { getAuthToken } = useAuth();
 
   return useMutation({
     mutationKey: recoveryEmailKeys.resend(),
-    mutationFn: async () => {
-      const { accessToken } = await getTokens();
+    mutationFn: () => {
+      const authToken = getAuthToken();
       return sendPutRequest<{ message: string }>(
         `${API_URL}/api/account/recovery-email/resend`,
-        accessToken,
+        authToken as string,
       );
     },
   });

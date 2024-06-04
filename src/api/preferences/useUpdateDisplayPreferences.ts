@@ -15,9 +15,9 @@ type Args = {
 };
 
 export function useMutationFn(): (args: Args) => Promise<{ message: string }> {
-  const { getProfileData, getTokens } = useAuth();
+  const { getProfileData, getAuthToken } = useAuth();
 
-  return async ({ measurement }: Args) => {
+  return ({ measurement }: Args) => {
     const profileData = getProfileData();
     if (profileData === null) {
       throw new Error('Profile data is null');
@@ -28,10 +28,14 @@ export function useMutationFn(): (args: Args) => Promise<{ message: string }> {
       profileData.keyPairs.encryptionKeyPair,
     );
 
-    const { accessToken } = await getTokens();
-    return sendPatchRequest<{ message: string }>(`${API_URL}/api/preferences`, accessToken, {
-      measurement: encryptedMeasurement,
-    });
+    const authToken = getAuthToken();
+    return sendPatchRequest<{ message: string }>(
+      `${API_URL}/api/preferences`,
+      authToken as string,
+      {
+        measurement: encryptedMeasurement,
+      },
+    );
   };
 }
 

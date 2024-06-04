@@ -24,7 +24,7 @@ export type EncryptedActivityTimelineData = {
 export default function useActivityTimeline<T = Activity[]>(
   select?: (data: EncryptedActivityTimelineData) => T,
 ): UseQueryResult<T, Error> {
-  const { getTokens, getProfileData, isRefreshingTokens } = useAuth();
+  const { getAuthToken, getProfileData } = useAuth();
 
   const applySelect = useCallback(
     (data: EncryptedActivityTimelineData): T => {
@@ -52,14 +52,14 @@ export default function useActivityTimeline<T = Activity[]>(
 
   return useQuery({
     queryKey: activitiesKeys.timeline(),
-    queryFn: async () => {
-      const { accessToken } = await getTokens();
+    queryFn: () => {
+      const authToken = getAuthToken();
       return sendGetRequest<EncryptedActivityTimelineData>(
         `${API_URL}/api/activities`,
-        accessToken,
+        authToken as string,
       );
     },
     select: applySelect,
-    enabled: !isRefreshingTokens(),
+    enabled: Boolean(getAuthToken()),
   });
 }

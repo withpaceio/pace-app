@@ -18,15 +18,15 @@ type Args = {
 };
 
 export function useMutationFn(): (args: Args) => Promise<{ message: string }> {
-  const { getTokens } = useAuth();
+  const { getAuthToken } = useAuth();
 
-  return async ({ activityId, summary, activityEncryptionKey }: Args) => {
+  return ({ activityId, summary, activityEncryptionKey }: Args) => {
     const encryptedSummary = encryptSummary(summary, activityEncryptionKey);
 
-    const { accessToken } = await getTokens();
+    const authToken = getAuthToken();
     return sendPostRequest<{ message: string }>(
       `${API_URL}/api/activities/${activityId}/update`,
-      accessToken,
+      authToken as string,
       { summary: encryptedSummary },
     );
   };

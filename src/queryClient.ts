@@ -1,15 +1,34 @@
-import { QueryClient } from '@tanstack/react-query';
+import { useMemo } from 'react';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      gcTime: Infinity,
-      staleTime: Infinity,
-    },
-    mutations: {
-      gcTime: Infinity,
-    },
-  },
-});
+import { QueryCache, QueryClient } from '@tanstack/react-query';
 
-export default queryClient;
+import { useAuth } from '@auth';
+
+export default function useQueryClient(): QueryClient {
+  const { openLoggedOutModal } = useAuth();
+
+  const queryClient = useMemo(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            gcTime: Infinity,
+            staleTime: Infinity,
+          },
+          mutations: {
+            gcTime: Infinity,
+          },
+        },
+        queryCache: new QueryCache({
+          onError: (error: Error) => {
+            if (error.message === '401') {
+              openLoggedOutModal();
+            }
+          },
+        }),
+      }),
+    [openLoggedOutModal],
+  );
+
+  return queryClient;
+}

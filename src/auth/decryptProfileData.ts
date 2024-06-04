@@ -13,12 +13,12 @@ import { ARGON2ID_ITERATIONS } from '@crypto';
 
 import type { ProfileData } from './types';
 
-export default async function decryptProfileData(
+export default function decryptProfileData(
   encryptedProfileData: string,
   password: string,
   passwordHashSalt: string,
   profileEncryptionSalt: string,
-): Promise<ProfileData> {
+): ProfileData {
   const hashedPasswordBuffer = argon2idDeriveKey(
     decodeUtf8(password),
     decodeBase64(passwordHashSalt),

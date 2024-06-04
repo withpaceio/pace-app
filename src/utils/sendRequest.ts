@@ -4,7 +4,7 @@ export const WEB_URL = process.env.EXPO_PUBLIC_WEB_URL;
 async function sendRequest<T>(
   method: string,
   url: string,
-  token?: string,
+  authToken?: string,
   payload?: unknown,
   contentType?: string,
   skipResponse?: boolean,
@@ -13,7 +13,7 @@ async function sendRequest<T>(
     method,
     headers: {
       'Content-Type': contentType || 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(authToken ? { 'X-Auth-Token': authToken } : {}),
     },
     ...(payload ? { body: JSON.stringify(payload) } : {}),
   });
@@ -32,50 +32,57 @@ async function sendRequest<T>(
 
 export async function sendPostRequest<T>(
   url: string,
-  token?: string,
+  authToken?: string,
   payload?: object,
   contentType?: string,
 ): Promise<T> {
-  const response = await sendRequest<T>('POST', url, token, payload, contentType);
+  const response = await sendRequest<T>('POST', url, authToken, payload, contentType);
   return response as T;
 }
 
 export async function sendPutRequest<T>(
   url: string,
-  token?: string,
+  authToken?: string,
   payload?: unknown,
   contentType?: string,
   skipResponse?: boolean,
 ): Promise<T> {
-  const response = await sendRequest<T>('PUT', url, token, payload, contentType, skipResponse);
+  const response = await sendRequest<T>('PUT', url, authToken, payload, contentType, skipResponse);
   return response as T;
 }
 
 export async function sendPatchRequest<T>(
   url: string,
-  token?: string,
+  authToken?: string,
   payload?: unknown,
   contentType?: string,
   skipResponse?: boolean,
 ): Promise<T> {
-  const response = await sendRequest<T>('PATCH', url, token, payload, contentType, skipResponse);
+  const response = await sendRequest<T>(
+    'PATCH',
+    url,
+    authToken,
+    payload,
+    contentType,
+    skipResponse,
+  );
   return response as T;
 }
 
 export async function sendGetRequest<T>(
   url: string,
-  token?: string,
+  authToken?: string,
   contentType?: string,
 ): Promise<T> {
-  const response = await sendRequest<T>('GET', url, token, undefined, contentType);
+  const response = await sendRequest<T>('GET', url, authToken, undefined, contentType);
   return response as T;
 }
 
 export async function sendDeleteRequest<T>(
   url: string,
-  token?: string,
+  authToken?: string,
   contentType?: string,
 ): Promise<T> {
-  const response = await sendRequest<T>('DELETE', url, token, undefined, contentType);
+  const response = await sendRequest<T>('DELETE', url, authToken, undefined, contentType);
   return response as T;
 }

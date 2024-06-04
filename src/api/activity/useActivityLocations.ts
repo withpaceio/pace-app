@@ -20,15 +20,15 @@ export default function useActivityLocations({
   activityId,
   activityEncryptionKey,
 }: Args): UseQueryResult<{ locations: ActivityLocation[] }, Error> {
-  const { getTokens, isRefreshingTokens } = useAuth();
+  const { getAuthToken } = useAuth();
 
   return useQuery({
     queryKey: activitiesKeys.locations(activityId, activityEncryptionKey),
     queryFn: async () => {
-      const { accessToken } = await getTokens();
+      const authToken = getAuthToken();
       const response = await sendGetRequest<{ url: string }>(
         `${API_URL}/api/activities/${activityId}/locations`,
-        accessToken,
+        authToken as string,
       );
 
       return sendGetRequest<string>(response.url, undefined, 'application/octet-stream');
@@ -40,6 +40,6 @@ export default function useActivityLocations({
       },
       [activityEncryptionKey],
     ),
-    enabled: !isRefreshingTokens() && Boolean(activityId && activityEncryptionKey),
+    enabled: Boolean(getAuthToken()) && Boolean(activityId && activityEncryptionKey),
   });
 }

@@ -9,14 +9,17 @@ import { API_URL, sendGetRequest } from '@utils/sendRequest';
 import recoveryEmailKeys from './recoveryEmailKeys';
 
 export default function useRecoveryEmail(): UseQueryResult<RecoveryEmail, Error> {
-  const { getTokens, isRefreshingTokens } = useAuth();
+  const { getAuthToken } = useAuth();
 
   return useQuery({
     queryKey: recoveryEmailKeys.details(),
-    queryFn: async () => {
-      const { accessToken } = await getTokens();
-      return sendGetRequest<RecoveryEmail>(`${API_URL}/api/account/recovery-email`, accessToken);
+    queryFn: () => {
+      const authToken = getAuthToken();
+      return sendGetRequest<RecoveryEmail>(
+        `${API_URL}/api/account/recovery-email`,
+        authToken as string,
+      );
     },
-    enabled: !isRefreshingTokens(),
+    enabled: Boolean(getAuthToken()),
   });
 }

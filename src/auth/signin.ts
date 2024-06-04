@@ -1,6 +1,12 @@
 import { HKDF } from '@stablelib/hkdf';
 import { SHA256 } from '@stablelib/sha256';
-import { argon2idDeriveKey, decodeBase64, decodeUtf8, encodeBase64 } from 'react-native-nacl-jsi';
+import {
+  argon2idDeriveKey,
+  boxOpen,
+  decodeBase64,
+  decodeUtf8,
+  encodeBase64,
+} from 'react-native-nacl-jsi';
 import Purchases from 'react-native-purchases';
 
 import { ARGON2ID_ITERATIONS, HKDF_PASSWORD_TOKEN_LENGTH } from '@crypto';
@@ -62,6 +68,7 @@ async function fetchSignIn(
   const response = await sendPostRequest<SignInResponse>(`${API_URL}/api/auth/signin`, undefined, {
     username,
     proof: clientSession.proof,
+    authMethod: 'auth-token',
   });
 
   const { serverSessionProof } = response;
@@ -77,32 +84,39 @@ export default async function signIn(
 ): Promise<{
   userId: string;
   createdAt: Date;
-  accessToken: string;
-  refreshToken: string;
+  authToken: string;
   profileData: ProfileData;
 }> {
   const {
     userId,
     createdAt,
-    accessToken,
-    refreshToken,
     encryptedProfileData,
     profileEncryptionSalt,
     passwordHashSalt,
+    encryptedAuthToken,
+    serverPublicKey,
   } = await fetchSignIn(username, password);
 
-  const profileData = await decryptProfileData(
+  const profileData = decryptProfileData(
     encryptedProfileData,
     password,
     passwordHashSalt,
     profileEncryptionSalt,
   );
 
+  const authTokenBuffer = boxOpen(
+    decodeBase64(encryptedAuthToken),
+    decodeBase64(serverPublicKey),
+    profileData.keyPairs.encryptionKeyPair.secretKey,
+  );
+
+  const authToken = encodeBase64(authTokenBuffer);
+
   await saveProfile({
     userId,
     username,
     createdAt,
-    refreshToken,
+    authToken,
     profileData,
   });
 
@@ -111,8 +125,7 @@ export default async function signIn(
   return {
     userId,
     createdAt,
-    accessToken,
-    refreshToken,
+    authToken,
     profileData,
   };
 }

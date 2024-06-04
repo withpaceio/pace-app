@@ -8,12 +8,8 @@ import type { InfiniteData } from '@tanstack/react-query';
 import { useAuth } from '@auth';
 import { useTheme } from '@theme';
 
-import { ErrorView } from '@components/common';
-
 import type { Activity } from '@models/Activity';
 import type { DistanceMeasurementSystem } from '@models/UnitSystem';
-
-import i18n from '@translations/i18n';
 
 import ActivityTile from './ActivityTile';
 import Loading from './Loading';
@@ -23,7 +19,6 @@ type Props = {
   data: InfiniteData<{ activities: Activity[]; nextCursor: string | undefined }> | undefined;
   isLoading: boolean;
   initialLoading: boolean;
-  hasError: boolean;
   refreshing: boolean;
   distanceMeasurementSystem: DistanceMeasurementSystem;
   onEndReached: () => void;
@@ -34,7 +29,6 @@ const HomeUI: FC<Props> = ({
   data,
   isLoading,
   initialLoading,
-  hasError,
   refreshing,
   distanceMeasurementSystem,
   onEndReached,
@@ -66,10 +60,6 @@ const HomeUI: FC<Props> = ({
   );
 
   const keyExtractor = (activity: Activity): string => activity.createdAt;
-
-  if (!data && hasError) {
-    return <ErrorView message={i18n.t('home.errors.activitiesLoading')} />;
-  }
 
   return (
     <>

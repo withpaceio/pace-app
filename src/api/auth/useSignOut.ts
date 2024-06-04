@@ -12,15 +12,16 @@ export default function useSignOut(): UseMutationResult<
   void,
   unknown
 > {
-  const { getTokens, signOut } = useAuth();
+  const { getAuthToken, signOut } = useAuth();
 
   return useMutation({
     mutationKey: authKeys.signOut(),
-    mutationFn: async () => {
-      const { accessToken, refreshToken } = await getTokens();
-      return sendPostRequest<{ message: string }>(`${API_URL}/api/auth/signout`, accessToken, {
-        refreshToken,
-      });
+    mutationFn: () => {
+      const authToken = getAuthToken();
+      return sendPostRequest<{ message: string }>(
+        `${API_URL}/api/auth/signout`,
+        authToken as string,
+      );
     },
     onSettled: () => {
       signOut();

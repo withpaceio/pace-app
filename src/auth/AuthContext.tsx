@@ -8,9 +8,9 @@ import React, {
   useReducer,
 } from 'react';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Purchases from 'react-native-purchases';
 
+import { storage } from '../queryClient/storagePersister';
 import LoggedOutModal from './LoggedOutModal';
 import signOut from './signout';
 import { type Profile, loadProfile as storageLoadProfile } from './storage';
@@ -140,7 +140,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const onSignOut = useCallback(async () => {
     await signOut();
-    AsyncStorage.clear();
+    storage.clearAll();
 
     dispatch({ type: 'AUTH_SIGN_OUT' });
   }, []);

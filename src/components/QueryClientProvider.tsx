@@ -1,7 +1,5 @@
 import React, { type FC, type ReactNode, useCallback, useEffect } from 'react';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 
 import accountKeys from '@api/account/accountKeys';
@@ -22,12 +20,8 @@ import { useMutationFn as useMutationFnDeleteProfilePicture } from '@api/profile
 import { useQueryFn as useQueryFnProfilePictureDetails } from '@api/profilePicture/useProfilePicture';
 import { useMutationFn as useMutationFnUpdateProfilePicture } from '@api/profilePicture/useUpdateProfilePicture';
 
-import useQueryClient from '../queryClient';
-
-const persister = createAsyncStoragePersister({
-  storage: AsyncStorage,
-  throttleTime: 3000,
-});
+import useQueryClient from '../queryClient/queryClient';
+import { persister } from '../queryClient/storagePersister';
 
 type Props = {
   children: ReactNode;

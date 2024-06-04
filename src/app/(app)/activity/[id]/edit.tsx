@@ -70,9 +70,9 @@ const EditActivityScreen: FC = () => {
         activityEncryptionKey: activity.encryptionKey,
       });
 
-      router.push(`/activity/${activityId}`);
+      router.back();
     },
-    [activity, activityId, healthInformationData?.healthInformation, reset, router, updateActivity],
+    [activity, healthInformationData?.healthInformation, reset, router, updateActivity],
   );
 
   useLayoutEffect(() => {

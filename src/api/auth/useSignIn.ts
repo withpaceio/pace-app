@@ -35,10 +35,12 @@ export default function useSignIn(): UseMutationResult<
         },
       });
 
-      queryClient.prefetchQuery({ queryKey: accountKeys.details() });
-      queryClient.prefetchQuery({ queryKey: healthInformationKeys.details() });
-      queryClient.prefetchQuery({ queryKey: preferencesKeys.details() });
-      queryClient.prefetchQuery({ queryKey: profilePictureKeys.details() });
+      requestAnimationFrame(() => {
+        queryClient.prefetchQuery({ queryKey: accountKeys.details() });
+        queryClient.prefetchQuery({ queryKey: healthInformationKeys.details() });
+        queryClient.prefetchQuery({ queryKey: preferencesKeys.details() });
+        queryClient.prefetchQuery({ queryKey: profilePictureKeys.details() });
+      });
     },
   });
 }

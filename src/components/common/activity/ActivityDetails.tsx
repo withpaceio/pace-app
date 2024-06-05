@@ -88,7 +88,7 @@ const ActivityDetails: FC<Props> = ({
           onEditActivityType={onEditActivityType}
           form={form}
         />
-        {summary && locations && locations.length > 0 && !form && (
+        {summary && !form && (
           <ActivityCharts
             summary={summary}
             locations={locations}

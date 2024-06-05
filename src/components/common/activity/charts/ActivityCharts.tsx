@@ -30,7 +30,7 @@ const TextError = styled(Text)`
   font-size: 16px;
   font-weight: bold;
 
-  margin-top: 5px;
+  margin-top: ${({ theme }) => theme.sizes.innerPadding}px;
 `;
 
 type Props = {
@@ -52,20 +52,20 @@ const ActivityCharts: FC<Props> = ({
 
   if (!locations) {
     return (
-      <>
-        {locationsFetching && !locationsError && (
-          <FetchingAndErrorWrapper>
-            <ActivityIndicator />
-          </FetchingAndErrorWrapper>
-        )}
+      <FetchingAndErrorWrapper>
+        {locationsFetching && !locationsError && <ActivityIndicator />}
         {!locationsFetching && locationsError && (
-          <FetchingAndErrorWrapper>
+          <>
             <WarningIcon color={theme.colors.red} />
             <TextError>{i18n.t('activityDetails.errors.locations')}</TextError>
-          </FetchingAndErrorWrapper>
+          </>
         )}
-      </>
+      </FetchingAndErrorWrapper>
     );
+  }
+
+  if (locations.length === 0) {
+    return null;
   }
 
   switch (summary.type) {

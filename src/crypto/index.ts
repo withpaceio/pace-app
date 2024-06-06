@@ -1,6 +1,6 @@
-import type { UserKeyPair } from './types';
+import type { SerializedUserKeyPair, UserKeyPair } from './types';
 
-export type { UserKeyPair };
+export type { SerializedUserKeyPair, UserKeyPair };
 
 export {
   ARGON2ID_ITERATIONS,

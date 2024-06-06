@@ -8,13 +8,13 @@ import type { SignUpResponse } from '@models/SignUp';
 
 import { API_URL, sendPostRequest } from '@utils/sendRequest';
 
-import encryptProfileData from './encryptProfileData';
 import generateProfile from './generateProfile';
+import { encryptProfileData } from './profileData';
 import * as SRP from './srp';
 
 export default async function signUp(username: string, password: string): Promise<void> {
   const profileData = generateProfile();
-  const encryptedProfileData = await encryptProfileData(profileData, password);
+  const encryptedProfileData = encryptProfileData(profileData, password);
 
   const hashedPassword = argon2idDeriveKey(
     decodeUtf8(password),
@@ -54,11 +54,11 @@ export default async function signUp(username: string, password: string): Promis
     username,
     srpSalt,
     srpVerifier,
-    encryptionPublicKey,
-    signingPublicKey,
-    passwordHashSalt,
-    passwordTokenSalt: authHashedPasswordSalt,
-    profileEncryptionSalt,
+    encryptionPublicKey: encodeBase64(encryptionPublicKey),
+    signingPublicKey: encodeBase64(signingPublicKey),
+    passwordHashSalt: encodeBase64(passwordHashSalt),
+    passwordTokenSalt: encodeBase64(authHashedPasswordSalt),
+    profileEncryptionSalt: encodeBase64(profileEncryptionSalt),
     encryptedProfileData,
   });
 }

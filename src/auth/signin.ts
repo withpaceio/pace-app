@@ -15,7 +15,7 @@ import type { SignInResponse } from '@models/SignIn';
 
 import { API_URL, sendPostRequest } from '@utils/sendRequest';
 
-import decryptProfileData from './decryptProfileData';
+import { decryptProfileData } from './profileData';
 import * as SRP from './srp';
 import { saveProfile } from './storage';
 import type { ProfileData } from './types';

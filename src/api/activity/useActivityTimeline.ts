@@ -35,13 +35,19 @@ export default function useActivityTimeline<T = Activity[]>(
       const profileData = getProfileData() as ProfileData;
       // @ts-ignore
       return data.activities
-        .map((activity) => decryptActivity(activity, profileData.keyPairs.encryptionKeyPair))
-        .filter((activity) => activity.summary)
+        .map((activity) => {
+          try {
+            return decryptActivity(activity, profileData.keyPairs.encryptionKeyPair);
+          } catch {
+            return null;
+          }
+        })
+        .filter((activity) => activity?.summary)
         .sort((activity1, activity2) => {
-          if (activity1.createdAt < activity2.createdAt) {
+          if (activity1!.createdAt < activity2!.createdAt) {
             return 1;
           }
-          if (activity1.createdAt > activity2.createdAt) {
+          if (activity1!.createdAt > activity2!.createdAt) {
             return -1;
           }
           return 0;

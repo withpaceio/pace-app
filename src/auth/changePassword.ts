@@ -9,7 +9,7 @@ import {
   HKDF_SALT_LENGTH,
 } from '@crypto';
 
-import encryptProfileData from './encryptProfileData';
+import { encryptProfileData } from './profileData';
 import * as SRP from './srp';
 import type { ProfileData } from './types';
 

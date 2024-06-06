@@ -13,8 +13,8 @@ import Purchases from 'react-native-purchases';
 import { storage } from '../queryClient/storagePersister';
 import LoggedOutModal from './LoggedOutModal';
 import signOut from './signout';
-import { type Profile, loadProfile as storageLoadProfile } from './storage';
-import type { ProfileData } from './types';
+import { loadProfile as storageLoadProfile } from './storage';
+import type { Profile, ProfileData } from './types';
 
 type AuthState = Omit<Profile, 'authToken'> & {
   authToken: string | null;

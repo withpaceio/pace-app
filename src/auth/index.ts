@@ -2,20 +2,19 @@ import { AuthAction as AuthActionImported, AuthProvider, useAuth } from './AuthC
 import changePassword from './changePassword';
 import decryptHealthInformation from './decryptHealthInformation';
 import decryptMeasurement from './decryptMeasurement';
-import decryptProfileData from './decryptProfileData';
 import decryptProfilePicture from './decryptProfilePicture';
 import encryptHealthInformation from './encryptHealthInformation';
 import encryptMeasurement from './encryptMeasurement';
-import encryptProfileData from './encryptProfileData';
 import encryptProfilePicture from './encryptProfilePicture';
 import generateProfile from './generateProfile';
 import loadHealthInformation from './loadHealthInformation';
+import { decryptProfileData, encryptProfileData } from './profileData';
 import saveHealthInformation from './saveHealthInformation';
 import signIn from './signin';
 import signOut from './signout';
 import signUp from './signup';
-import { Profile as ProfileImported, deleteProfile, loadProfile, saveProfile } from './storage';
-import { ProfileData as ProfileDataImported } from './types';
+import { deleteProfile, loadProfile, saveProfile } from './storage';
+import type { ProfileData as ProfileDataImported, Profile as ProfileImported } from './types';
 
 export type AuthAction = AuthActionImported;
 export type Profile = ProfileImported;

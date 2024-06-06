@@ -1,16 +1,7 @@
 import * as SecureStore from 'expo-secure-store';
 
-import { decodeBase64, encodeBase64 } from 'react-native-nacl-jsi';
-
-import type { ProfileData } from './types';
-
-export type Profile = {
-  userId: string;
-  username: string;
-  createdAt: Date;
-  authToken: string;
-  profileData: ProfileData | null;
-};
+import { deserializeProfileData, serializeProfileData } from './profileData';
+import type { Profile, ProfileData } from './types';
 
 const USERID_LOCATION = 'USERID';
 const USERNAME_LOCATION = 'USERNAME';
@@ -20,27 +11,14 @@ const PROFILE_DATA_LOCATION = 'PROFILE_DATA';
 
 export async function saveProfile(profile: Profile): Promise<boolean> {
   const profileData = profile.profileData as ProfileData;
-
-  const serializedProfileData = JSON.stringify({
-    ...profileData,
-    keyPairs: {
-      encryptionKeyPair: {
-        publicKey: encodeBase64(profileData.keyPairs.encryptionKeyPair.publicKey),
-        secretKey: encodeBase64(profileData.keyPairs.encryptionKeyPair.secretKey),
-      },
-      signingKeyPair: {
-        publicKey: encodeBase64(profileData.keyPairs.signingKeyPair.publicKey),
-        secretKey: encodeBase64(profileData.keyPairs.signingKeyPair.secretKey),
-      },
-    },
-  });
+  const serializedProfileData = serializeProfileData(profileData);
 
   try {
     await SecureStore.setItemAsync(USERID_LOCATION, profile.userId);
     await SecureStore.setItemAsync(USERNAME_LOCATION, profile.username);
     await SecureStore.setItemAsync(CREATED_AT_LOCATION, profile.createdAt.toISOString());
     await SecureStore.setItemAsync(AUTH_TOKEN_LOCATION, profile.authToken);
-    await SecureStore.setItemAsync(PROFILE_DATA_LOCATION, serializedProfileData);
+    await SecureStore.setItemAsync(PROFILE_DATA_LOCATION, JSON.stringify(serializedProfileData));
 
     return true;
   } catch {
@@ -67,19 +45,7 @@ export async function loadProfile(): Promise<Profile | null> {
       username,
       createdAt: new Date(createdAt as string),
       authToken,
-      profileData: {
-        ...profileData,
-        keyPairs: {
-          encryptionKeyPair: {
-            publicKey: decodeBase64(profileData.keyPairs.encryptionKeyPair.publicKey),
-            secretKey: decodeBase64(profileData.keyPairs.encryptionKeyPair.secretKey),
-          },
-          signingKeyPair: {
-            publicKey: decodeBase64(profileData.keyPairs.signingKeyPair.publicKey),
-            secretKey: decodeBase64(profileData.keyPairs.signingKeyPair.secretKey),
-          },
-        },
-      },
+      profileData: deserializeProfileData(profileData),
     };
   } catch {
     return null;

@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { type UseQueryResult, useQuery } from '@tanstack/react-query';
+import { type UseQueryResult, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { decryptLocations } from '@activity';
 import { useAuth } from '@auth';
@@ -20,7 +20,10 @@ export default function useActivityLocations({
   activityId,
   activityEncryptionKey,
 }: Args): UseQueryResult<{ locations: ActivityLocation[] }, Error> {
+  const queryClient = useQueryClient();
   const { getAuthToken } = useAuth();
+
+  const queryKey = activitiesKeys.locations(activityId, activityEncryptionKey);
 
   return useQuery({
     queryKey: activitiesKeys.locations(activityId, activityEncryptionKey),
@@ -40,6 +43,9 @@ export default function useActivityLocations({
       },
       [activityEncryptionKey],
     ),
-    enabled: Boolean(getAuthToken()) && Boolean(activityId && activityEncryptionKey),
+    enabled:
+      Boolean(getAuthToken()) &&
+      Boolean(activityId && activityEncryptionKey) &&
+      !queryClient.getQueryData(queryKey),
   });
 }

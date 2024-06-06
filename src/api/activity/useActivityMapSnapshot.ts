@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { type UseQueryResult, useQuery } from '@tanstack/react-query';
+import { type UseQueryResult, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { decryptMapSnapshot } from '@activity';
 import { useAuth } from '@auth';
@@ -20,7 +20,10 @@ export default function useActivityMapSnapshot({
   activityEncryptionKey,
   mapSnapshotTheme,
 }: Args): UseQueryResult<{ mapSnapshot: string }, Error> {
+  const queryClient = useQueryClient();
   const { getAuthToken } = useAuth();
+
+  const queryKey = activitiesKeys.mapSnapshot(activityId, activityEncryptionKey, mapSnapshotTheme);
 
   return useQuery({
     queryKey: activitiesKeys.mapSnapshot(activityId, activityEncryptionKey, mapSnapshotTheme),
@@ -36,12 +39,13 @@ export default function useActivityMapSnapshot({
     select: useCallback(
       (data: string) => {
         const decryptedMapSnapshot = decryptMapSnapshot(data, activityEncryptionKey as Uint8Array);
-
         return { mapSnapshot: decryptedMapSnapshot };
       },
       [activityEncryptionKey],
     ),
     enabled:
-      Boolean(getAuthToken()) && Boolean(activityId && activityEncryptionKey && mapSnapshotTheme),
+      Boolean(getAuthToken()) &&
+      Boolean(activityId && activityEncryptionKey && mapSnapshotTheme) &&
+      !queryClient.getQueryData(queryKey),
   });
 }

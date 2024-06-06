@@ -68,7 +68,6 @@ const SignInForm: FC<Props> = ({ loading, hasError, onSignIn }) => {
             onBlur={onBlur}
             onChangeText={onChange}
             onSubmitEditing={handleSubmit(onSubmit)}
-            secureTextEntry
           />
         )}
         name="password"

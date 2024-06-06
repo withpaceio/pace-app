@@ -38,7 +38,6 @@ const StyledInput = styled.TextInput`
   flex: 1;
   margin-right: ${({ theme }) => theme.sizes.innerPadding / 2}px;
 
-  font-family: 'Roboto-Regular';
   font-size: 14px;
   color: ${({ theme }) => theme.colors.primary};
 `;
@@ -57,7 +56,7 @@ type Props = TextInputProps & {
   caption?: string;
 };
 
-const PasswordInput: FC<Props> = ({ caption, onBlur, onFocus, ...props }) => {
+const PasswordInput: FC<Props> = ({ caption, editable, onBlur, onFocus, ...props }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
 
@@ -95,17 +94,20 @@ const PasswordInput: FC<Props> = ({ caption, onBlur, onFocus, ...props }) => {
         <StyledInput
           {...props}
           placeholderTextColor={theme.colors.textInput.placeholderTextColor}
+          editable={editable}
           onBlur={onBlurHandler}
           onFocus={onFocusHandler}
-          secureTextEntry={isPasswordHidden}
+          secureTextEntry={isPasswordHidden || !editable}
         />
-        <Pressable onPress={togglePasswordVisibility}>
-          {isPasswordHidden ? (
-            <EyeIcon color={theme.colors.secondary} width={18} height={18} />
-          ) : (
-            <CrossedEyeIcon color={theme.colors.secondary} width={18} height={18} />
-          )}
-        </Pressable>
+        {editable && (
+          <Pressable onPress={togglePasswordVisibility}>
+            {isPasswordHidden ? (
+              <EyeIcon color={theme.colors.secondary} width={18} height={18} />
+            ) : (
+              <CrossedEyeIcon color={theme.colors.secondary} width={18} height={18} />
+            )}
+          </Pressable>
+        )}
       </Wrapper>
       {caption && <Caption>{caption}</Caption>}
     </>

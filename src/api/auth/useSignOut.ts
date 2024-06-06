@@ -1,4 +1,4 @@
-import { type UseMutationResult, useMutation } from '@tanstack/react-query';
+import { type UseMutationResult, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useAuth } from '@auth';
 
@@ -12,6 +12,7 @@ export default function useSignOut(): UseMutationResult<
   void,
   unknown
 > {
+  const queryClient = useQueryClient();
   const { getAuthToken, signOut } = useAuth();
 
   return useMutation({
@@ -25,6 +26,7 @@ export default function useSignOut(): UseMutationResult<
     },
     onSettled: () => {
       signOut();
+      queryClient.clear();
     },
   });
 }

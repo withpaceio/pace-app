@@ -26,10 +26,19 @@ type Args = {
   mapSnapshotDark: string;
 };
 
-export function useMutationFn(): (
-  args: Args,
-) => Promise<{ id: string; activityEncryptionKey: string }> {
-  const { getProfileData, getAuthToken } = useAuth();
+export function useMutationFn(): (args: Args) => Promise<
+  EncryptedActivity & {
+    decryptedActivityKey: string;
+    encryptedLocations: string;
+    encryptedMapSnapshot: string;
+    encryptedMapSnapshotDark: string;
+  }
+> {
+  const {
+    state: { userId },
+    getProfileData,
+    getAuthToken,
+  } = useAuth();
 
   return async ({ summary, locations, mapSnapshot, mapSnapshotDark }: Args) => {
     const profileData = getProfileData();
@@ -82,12 +91,23 @@ export function useMutationFn(): (
       throw new Error('Failed to upload activity data');
     }
 
-    return { id: activityId, activityEncryptionKey };
+    return {
+      id: activityId,
+      userId,
+      summary: encryptedSummary,
+      encryptionKey: encryptedActivityEncryptionKey,
+      decryptedActivityKey: activityEncryptionKey,
+      createdAt: encryptedCreatedAt,
+      mapFileLocation: '',
+      encryptedLocations,
+      encryptedMapSnapshot,
+      encryptedMapSnapshotDark,
+    };
   };
 }
 
 export default function useCreateActivity(): UseMutationResult<
-  { id: string; activityEncryptionKey: string },
+  EncryptedActivity,
   unknown,
   Args,
   unknown
@@ -179,26 +199,35 @@ export default function useCreateActivity(): UseMutationResult<
         });
       }
     },
-    onSuccess: (data, _, context) => {
+    onSuccess: (encryptedActivity, _, context) => {
       if (!context?.activity) {
         return;
       }
 
+      const {
+        encryptedLocations,
+        encryptedMapSnapshot,
+        encryptedMapSnapshotDark,
+        decryptedActivityKey,
+        ...encryptedTimelineActivity
+      } = encryptedActivity;
+
+      queryClient.setQueryData(activitiesKeys.timeline(), {
+        activities: [encryptedTimelineActivity, ...(context.previousTimeline?.activities ?? [])],
+        nextCursor: context.previousTimeline?.nextCursor ?? undefined,
+      });
+
       queryClient.setQueryData(
-        activitiesKeys.locations(data.id, context.activityEncryptionKey),
-        queryClient.getQueryData<string>(
-          activitiesKeys.locations(context.activity.id, context.activityEncryptionKey),
-        ),
+        activitiesKeys.locations(encryptedActivity.id, decryptedActivityKey),
+        encryptedLocations,
       );
       queryClient.removeQueries({
         queryKey: activitiesKeys.locations(context.activity.id, context.activityEncryptionKey),
       });
 
       queryClient.setQueryData(
-        activitiesKeys.mapSnapshot(data.id, context.activityEncryptionKey, 'light'),
-        queryClient.getQueryData<string>(
-          activitiesKeys.mapSnapshot(context.activity.id, context.activityEncryptionKey, 'light'),
-        ),
+        activitiesKeys.mapSnapshot(encryptedActivity.id, decryptedActivityKey, 'light'),
+        encryptedMapSnapshot,
       );
       queryClient.removeQueries({
         queryKey: activitiesKeys.mapSnapshot(
@@ -209,10 +238,8 @@ export default function useCreateActivity(): UseMutationResult<
       });
 
       queryClient.setQueryData(
-        activitiesKeys.mapSnapshot(data.id, context.activityEncryptionKey, 'dark'),
-        queryClient.getQueryData<string>(
-          activitiesKeys.mapSnapshot(context.activity.id, context.activityEncryptionKey, 'dark'),
-        ),
+        activitiesKeys.mapSnapshot(encryptedActivity.id, decryptedActivityKey, 'dark'),
+        encryptedMapSnapshotDark,
       );
       queryClient.removeQueries({
         queryKey: activitiesKeys.mapSnapshot(

@@ -46,7 +46,6 @@ const SaveScreen: FC = () => {
   const { data: preferencesData } = usePreferences();
   const {
     isPending: isCreateActivityLoading,
-    isError: isCreateActivityError,
     mutate: createActivity,
     reset: resetCreateActivity,
   } = useCreateActivity();
@@ -163,9 +162,7 @@ const SaveScreen: FC = () => {
             preferencesData?.measurement || DistanceMeasurementSystem.METRIC
           }
           uploading={isCreateActivityLoading}
-          hasError={isCreateActivityError}
           onSubmit={onSubmit}
-          onDiscard={goToHomeScreen}
         />
       </FormProvider>
       <ConfirmDiscardActivityModal

@@ -23,7 +23,6 @@ const ActivityDetailsScreen: FC = () => {
   const {
     mutate: deleteActivity,
     reset: resetDeleteActivityMutation,
-    isPending,
     isError,
   } = useDeleteActivity();
 
@@ -33,10 +32,10 @@ const ActivityDetailsScreen: FC = () => {
     }
 
     resetDeleteActivityMutation();
-    deleteActivity({ activityId });
     setIsConfirmDeleteModalOpen(false);
+    deleteActivity({ activityId });
 
-    router.push('/');
+    router.back();
   }, [activityId, deleteActivity, resetDeleteActivityMutation, router]);
 
   return (
@@ -51,7 +50,6 @@ const ActivityDetailsScreen: FC = () => {
       />
       <ConfirmDeleteActivityModal
         isOpen={isConfirmDeleteModalOpen}
-        isDeleting={isPending}
         isError={isError}
         onDelete={onDeleteActivity}
         onClose={() => {

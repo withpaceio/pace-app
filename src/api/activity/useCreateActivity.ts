@@ -122,6 +122,7 @@ export default function useCreateActivity(): UseMutationResult<
   return useMutation({
     mutationKey: activitiesKeys.create(),
     mutationFn,
+    retry: true,
     onMutate: async ({ summary, locations, mapSnapshot, mapSnapshotDark }) => {
       await queryClient.cancelQueries({ queryKey: activitiesKeys.timeline() });
       const previousTimeline = queryClient.getQueryData<ActivityTimelineData>(

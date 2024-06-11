@@ -35,9 +35,16 @@ export default function useActivities(
             : undefined;
 
         paginatedData.pages.push({
-          activities: pageActivities.map((activity) =>
-            decryptActivity(activity, profileData.keyPairs.encryptionKeyPair),
-          ),
+          // @ts-ignore
+          activities: pageActivities
+            .map((activity) => {
+              try {
+                return decryptActivity(activity, profileData.keyPairs.encryptionKeyPair);
+              } catch {
+                return null;
+              }
+            })
+            .filter((activity) => activity?.summary),
           nextCursor,
         });
         paginatedData.pageParams.push(nextCursor);

@@ -4,7 +4,7 @@ import { decodeBase64 } from 'react-native-nacl-jsi';
 import { encryptSummary } from '@activity';
 import { useAuth } from '@auth';
 
-import type { ActivityTimelineData } from '@api/activity/useActivityTimeline';
+import type { EncryptedActivityTimelineData } from '@api/activity/useActivityTimeline';
 
 import type { ActivitySummary } from '@models/Activity';
 
@@ -47,7 +47,7 @@ export default function useUpdateActivity(): UseMutationResult<
     mutationFn,
     onMutate: async ({ activityId, summary, activityEncryptionKey }) => {
       await queryClient.cancelQueries({ queryKey: activitiesKeys.timeline() });
-      const previousTimeline = queryClient.getQueryData<ActivityTimelineData>(
+      const previousTimeline = queryClient.getQueryData<EncryptedActivityTimelineData>(
         activitiesKeys.timeline(),
       );
 

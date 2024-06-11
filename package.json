@@ -23,6 +23,7 @@
     "@shopify/react-native-skia": "1.2.3",
     "@stablelib/hkdf": "1.0.1",
     "@stablelib/sha256": "1.0.1",
+    "@stablelib/utf8": "^1.0.2",
     "@tanstack/query-sync-storage-persister": "5.40.0",
     "@tanstack/react-query": "5.40.1",
     "@tanstack/react-query-persist-client": "5.40.1",

@@ -4,11 +4,11 @@ import { ActivityLocation } from '@models/Activity';
 
 export default function decryptLocations(
   encryptedLocations: string,
-  activityEncryptionKey: Uint8Array,
+  activityEncryptionKey: string,
 ): ActivityLocation[] {
   const decryptedLocationsBuffer = secretboxOpen(
     decodeBase64(encryptedLocations),
-    activityEncryptionKey,
+    decodeBase64(activityEncryptionKey),
   );
   const decryptedLocations = encodeUtf8(decryptedLocationsBuffer);
 

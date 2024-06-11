@@ -11,7 +11,7 @@ import activitiesKeys from './activitiesKeys';
 
 type Args = {
   activityId: string | undefined;
-  activityEncryptionKey: Uint8Array | undefined;
+  activityEncryptionKey: string | undefined;
   mapSnapshotTheme: 'light' | 'dark';
 };
 
@@ -38,7 +38,7 @@ export default function useActivityMapSnapshot({
     },
     select: useCallback(
       (data: string) => {
-        const decryptedMapSnapshot = decryptMapSnapshot(data, activityEncryptionKey as Uint8Array);
+        const decryptedMapSnapshot = decryptMapSnapshot(data, activityEncryptionKey!);
         return { mapSnapshot: decryptedMapSnapshot };
       },
       [activityEncryptionKey],

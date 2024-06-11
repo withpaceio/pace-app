@@ -1,4 +1,10 @@
-import { type KeyPair, boxOpen, decodeBase64, encodeUtf8 } from 'react-native-nacl-jsi';
+import {
+  type KeyPair,
+  boxOpen,
+  decodeBase64,
+  encodeBase64,
+  encodeUtf8,
+} from 'react-native-nacl-jsi';
 
 import type { Activity, ActivitySummary, EncryptedActivity } from '@models/Activity';
 
@@ -42,7 +48,7 @@ export default function decryptActivity(
 
   return {
     ...encryptedActivity,
-    encryptionKey: activityEncryptionKey,
+    encryptionKey: encodeBase64(activityEncryptionKey),
     summary,
     createdAt,
   };

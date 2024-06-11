@@ -15,7 +15,7 @@ export default function encryptActivity(
   summary: ActivitySummary,
   encryptionKeyPair: KeyPair,
 ): {
-  activityEncryptionKey: Uint8Array;
+  activityEncryptionKey: string;
   encryptedActivityEncryptionKey: string;
   encryptedSummary: string;
   encryptedCreatedAt: string;
@@ -32,7 +32,7 @@ export default function encryptActivity(
   );
 
   return {
-    activityEncryptionKey,
+    activityEncryptionKey: encodeBase64(activityEncryptionKey),
     encryptedActivityEncryptionKey: encodeBase64(encryptedActivityEncryptionKeyBuffer),
     encryptedSummary,
     encryptedCreatedAt,

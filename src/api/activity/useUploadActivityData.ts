@@ -1,4 +1,5 @@
 import { type UseMutationResult, useMutation, useQueryClient } from '@tanstack/react-query';
+import { decodeBase64 } from 'react-native-nacl-jsi';
 
 import { encryptLocations, encryptMapSnapshot, uploadActivity } from '@activity';
 import { useAuth } from '@auth';
@@ -11,7 +12,7 @@ import activitiesKeys from './activitiesKeys';
 
 type Args = {
   activityId: string;
-  activityEncryptionKey: Uint8Array;
+  activityEncryptionKey: string;
   locations: ActivityLocation[];
   mapSnapshot: string;
   mapSnapshotDark: string;
@@ -35,9 +36,13 @@ export default function useUploadActivityData(): UseMutationResult<void, unknown
         throw new Error('Profile data is null');
       }
 
-      const encryptedLocations = encryptLocations(locations, activityEncryptionKey);
-      const encryptedMapSnapshot = encryptMapSnapshot(mapSnapshot, activityEncryptionKey);
-      const encryptedMapSnapshotDark = encryptMapSnapshot(mapSnapshotDark, activityEncryptionKey);
+      const activityEncryptionKeyBuffer = decodeBase64(activityEncryptionKey);
+      const encryptedLocations = encryptLocations(locations, activityEncryptionKeyBuffer);
+      const encryptedMapSnapshot = encryptMapSnapshot(mapSnapshot, activityEncryptionKeyBuffer);
+      const encryptedMapSnapshotDark = encryptMapSnapshot(
+        mapSnapshotDark,
+        activityEncryptionKeyBuffer,
+      );
 
       const authToken = getAuthToken();
       const { url, mapUrlDark, mapUrlLight } = await sendGetRequest<UploadActivityResponse>(
@@ -89,19 +94,20 @@ export default function useUploadActivityData(): UseMutationResult<void, unknown
         activitiesKeys.mapSnapshot(activityId, activityEncryptionKey, 'dark'),
       );
 
+      const activityEncryptionKeyBuffer = decodeBase64(activityEncryptionKey);
       queryClient.setQueryData(
         activitiesKeys.locations(activityId, activityEncryptionKey),
-        encryptLocations(locations, activityEncryptionKey),
+        encryptLocations(locations, activityEncryptionKeyBuffer),
       );
 
       queryClient.setQueryData(
         activitiesKeys.mapSnapshot(activityId, activityEncryptionKey, 'light'),
-        encryptMapSnapshot(mapSnapshot, activityEncryptionKey),
+        encryptMapSnapshot(mapSnapshot, activityEncryptionKeyBuffer),
       );
 
       queryClient.setQueryData(
         activitiesKeys.mapSnapshot(activityId, activityEncryptionKey, 'dark'),
-        encryptMapSnapshot(mapSnapshotDark, activityEncryptionKey),
+        encryptMapSnapshot(mapSnapshotDark, activityEncryptionKeyBuffer),
       );
 
       return { previousLocations, previousMapSnapshotLight, previousMapSnapshotDark };

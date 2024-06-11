@@ -4,13 +4,17 @@ import { Platform } from 'react-native';
 import styled from 'styled-components/native';
 
 import { PaceIcon } from '../icons';
+import SyncIndicator from './SyncIndicator';
 
 const ICON_SIZE = 30;
 
 const Wrapper = styled.View`
+  position: relative;
+  min-width: 100%;
+
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: ${Platform.OS === 'ios' ? 'center' : 'flex-start'};
   align-items: center;
 
   background-color: ${({ theme }) => theme.colors.navigation.backgroundColor};
@@ -31,6 +35,7 @@ const Header: FC = () => (
   <Wrapper>
     <PaceIcon width={ICON_SIZE} height={ICON_SIZE} />
     <PaceText>PACE</PaceText>
+    <SyncIndicator />
   </Wrapper>
 );
 

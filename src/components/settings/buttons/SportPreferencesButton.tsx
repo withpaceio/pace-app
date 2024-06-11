@@ -39,7 +39,7 @@ const SportPreferencesButton: FC = () => {
       </IconWrapper>
       <ConfigureWrapper>
         <Label>{i18n.t('settings.buttons.defaultActivityType')}</Label>
-        {isFetching ? (
+        {!preferencesData && isFetching ? (
           <ActivityIndicator />
         ) : (
           <SecondaryLabel>

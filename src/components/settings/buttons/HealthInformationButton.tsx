@@ -69,7 +69,7 @@ const HealthInformationButton: FC = () => {
       </IconWrapper>
       <ConfigureWrapper>
         <Label>{i18n.t('settings.buttons.healthInformation')}</Label>
-        {isFetchingHealthInformation || isFetchingPreferences ? (
+        {isFetchingHealthInformation && isFetchingPreferences ? (
           <ActivityIndicator />
         ) : (
           <SecondaryLabel>{label}</SecondaryLabel>

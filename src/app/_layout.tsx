@@ -35,6 +35,7 @@ const RootWrapper = styled(GestureHandlerRootView)`
 
 const RootLayout: FC = () => {
   const [fontLoaded, setFontLoaded] = useState(false);
+  const [netInfoReady, setNetInfoReady] = useState(false);
 
   const theme = useTheme();
   const isRestoring = useIsRestoring();
@@ -52,12 +53,12 @@ const RootLayout: FC = () => {
   }, []);
 
   const onLayoutRootView = useCallback(async (): Promise<void> => {
-    if (!fontLoaded || isRestoring) {
+    if (!fontLoaded || isRestoring || !netInfoReady) {
       return;
     }
 
     await SplashScreen.hideAsync();
-  }, [fontLoaded, isRestoring]);
+  }, [fontLoaded, isRestoring, netInfoReady]);
 
   useEffect(() => {
     load();
@@ -79,6 +80,10 @@ const RootLayout: FC = () => {
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
+      if (state.isConnected !== null && state.isInternetReachable !== null) {
+        setNetInfoReady(true);
+      }
+
       onlineManager.setOnline(
         state.isConnected !== null && state.isConnected && Boolean(state.isInternetReachable),
       );
@@ -89,7 +94,7 @@ const RootLayout: FC = () => {
     };
   }, []);
 
-  if (!fontLoaded || isRestoring) {
+  if (!fontLoaded || isRestoring || !netInfoReady) {
     return null;
   }
 

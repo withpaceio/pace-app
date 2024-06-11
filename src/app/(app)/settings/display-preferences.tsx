@@ -52,13 +52,8 @@ const ChangeDisplayPreferencesScreen: FC = () => {
   const onSubmitDisplayPreferences = useCallback(
     ({ unit }: ChangeDisplayPreferencesData): void => {
       reset();
-
-      updatePreferences(
-        { measurement: unit },
-        {
-          onSuccess: goToSettingsScreen,
-        },
-      );
+      updatePreferences({ measurement: unit });
+      goToSettingsScreen();
     },
     [goToSettingsScreen, reset, updatePreferences],
   );

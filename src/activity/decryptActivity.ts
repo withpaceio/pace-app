@@ -1,10 +1,5 @@
-import {
-  type KeyPair,
-  boxOpen,
-  decodeBase64,
-  encodeBase64,
-  encodeUtf8,
-} from 'react-native-nacl-jsi';
+import * as utf8 from '@stablelib/utf8';
+import { type KeyPair, boxOpen, decodeBase64, encodeBase64 } from 'react-native-nacl-jsi';
 
 import type { Activity, ActivitySummary, EncryptedActivity } from '@models/Activity';
 
@@ -15,7 +10,7 @@ function decryptLegacy(
   encryptedActivity: EncryptedActivity,
   encryptionKey: Uint8Array,
 ): { summary: ActivitySummary; createdAt: string; activityEncryptionKey: Uint8Array } {
-  const legacyEncryptionKey = decodeBase64(encodeUtf8(encryptionKey));
+  const legacyEncryptionKey = decodeBase64(utf8.decode(encryptionKey));
 
   return {
     summary: decryptSummary(encryptedActivity.summary as string, legacyEncryptionKey),

@@ -1,10 +1,11 @@
-import { KeyPair, boxOpen, decodeBase64, encodeUtf8, secretboxOpen } from 'react-native-nacl-jsi';
+import * as utf8 from '@stablelib/utf8';
+import { KeyPair, boxOpen, decodeBase64, secretboxOpen } from 'react-native-nacl-jsi';
 
 function decryptLegacy(
   encryptedPictureBuffer: Uint8Array,
   encryptionKey: Uint8Array,
 ): { pictureBuffer: Uint8Array; encryptionKey: Uint8Array } {
-  const legacyEncryptionKey = decodeBase64(encodeUtf8(encryptionKey));
+  const legacyEncryptionKey = decodeBase64(utf8.decode(encryptionKey));
 
   return {
     pictureBuffer: secretboxOpen(encryptedPictureBuffer, legacyEncryptionKey),
@@ -31,5 +32,5 @@ export default function decryptProfilePicture(
     ({ pictureBuffer, encryptionKey } = decryptLegacy(encryptedPictureBuffer, encryptionKey));
   }
 
-  return { picture: encodeUtf8(pictureBuffer), encryptionKey };
+  return { picture: utf8.decode(pictureBuffer), encryptionKey };
 }

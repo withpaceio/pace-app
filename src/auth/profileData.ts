@@ -1,12 +1,12 @@
 import { HKDF } from '@stablelib/hkdf';
 import { SHA256 } from '@stablelib/sha256';
+import * as utf8 from '@stablelib/utf8';
 import {
   SECRETBOX_KEY_LENGTH,
   argon2idDeriveKey,
   decodeBase64,
   decodeUtf8,
   encodeBase64,
-  encodeUtf8,
   secretboxOpen,
   secretboxSeal,
 } from 'react-native-nacl-jsi';
@@ -102,7 +102,7 @@ export function decryptProfileData(
   );
 
   const serializedProfileData: SerializedProfileData = JSON.parse(
-    decodeURI(encodeUtf8(decryptedProfileDataBuffer)),
+    decodeURI(utf8.decode(decryptedProfileDataBuffer)),
   );
 
   return deserializeProfileData(serializedProfileData);

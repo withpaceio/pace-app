@@ -1,4 +1,5 @@
-import { decodeBase64, encodeUtf8, secretboxOpen } from 'react-native-nacl-jsi';
+import * as utf8 from '@stablelib/utf8';
+import { decodeBase64, secretboxOpen } from 'react-native-nacl-jsi';
 
 import { ActivityLocation } from '@models/Activity';
 
@@ -10,7 +11,7 @@ export default function decryptLocations(
     decodeBase64(encryptedLocations),
     decodeBase64(activityEncryptionKey),
   );
-  const decryptedLocations = encodeUtf8(decryptedLocationsBuffer);
+  const decryptedLocations = utf8.decode(decryptedLocationsBuffer);
 
   return JSON.parse(decodeURI(decryptedLocations)) as ActivityLocation[];
 }

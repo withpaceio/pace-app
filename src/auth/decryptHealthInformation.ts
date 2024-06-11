@@ -2,6 +2,7 @@ import {
   type KeyPair,
   boxOpen,
   decodeBase64,
+  encodeBase64,
   encodeUtf8,
   secretboxOpen,
 } from 'react-native-nacl-jsi';
@@ -24,7 +25,7 @@ export default function decryptHealthInformation(
   encryptedHealthInformation: string,
   encryptedHealthInformationEncryptionKey: string,
   encryptionKeyPair: KeyPair,
-): { healthInformation: HealthInformation; encryptionKey: Uint8Array } | null {
+): { healthInformation: HealthInformation; encryptionKey: string } | null {
   try {
     let encryptionKey = boxOpen(
       decodeBase64(encryptedHealthInformationEncryptionKey),
@@ -47,7 +48,7 @@ export default function decryptHealthInformation(
       decodeURI(encodeUtf8(healthInformationBuffer)),
     ) as HealthInformation;
 
-    return { healthInformation, encryptionKey };
+    return { healthInformation, encryptionKey: encodeBase64(encryptionKey) };
   } catch {
     return null;
   }

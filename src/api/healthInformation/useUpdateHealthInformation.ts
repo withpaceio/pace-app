@@ -15,7 +15,7 @@ import healthInformationKeys from './healthInformationKeys';
 
 type Args = {
   healthInformation: HealthInformation;
-  encryptionKey: Uint8Array | undefined;
+  encryptionKey: string | undefined;
   preferences: Preferences | undefined;
 };
 

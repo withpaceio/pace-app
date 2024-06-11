@@ -1,4 +1,5 @@
 import { type UseMutationResult, useMutation, useQueryClient } from '@tanstack/react-query';
+import { decodeBase64 } from 'react-native-nacl-jsi';
 import { v4 as uuidv4 } from 'uuid';
 
 import { encryptActivity, encryptLocations, encryptMapSnapshot, uploadActivity } from '@activity';
@@ -25,10 +26,19 @@ type Args = {
   mapSnapshotDark: string;
 };
 
-export function useMutationFn(): (
-  args: Args,
-) => Promise<{ id: string; activityEncryptionKey: Uint8Array }> {
-  const { getProfileData, getAuthToken } = useAuth();
+export function useMutationFn(): (args: Args) => Promise<
+  EncryptedActivity & {
+    decryptedActivityKey: string;
+    encryptedLocations: string;
+    encryptedMapSnapshot: string;
+    encryptedMapSnapshotDark: string;
+  }
+> {
+  const {
+    state: { userId },
+    getProfileData,
+    getAuthToken,
+  } = useAuth();
 
   return async ({ summary, locations, mapSnapshot, mapSnapshotDark }: Args) => {
     const profileData = getProfileData();
@@ -42,10 +52,14 @@ export function useMutationFn(): (
       encryptedSummary,
       encryptedCreatedAt,
     } = encryptActivity(summary, profileData.keyPairs.encryptionKeyPair);
+    const activityEncryptionKeyBuffer = decodeBase64(activityEncryptionKey);
 
-    const encryptedLocations = encryptLocations(locations, activityEncryptionKey);
-    const encryptedMapSnapshot = encryptMapSnapshot(mapSnapshot, activityEncryptionKey);
-    const encryptedMapSnapshotDark = encryptMapSnapshot(mapSnapshotDark, activityEncryptionKey);
+    const encryptedLocations = encryptLocations(locations, activityEncryptionKeyBuffer);
+    const encryptedMapSnapshot = encryptMapSnapshot(mapSnapshot, activityEncryptionKeyBuffer);
+    const encryptedMapSnapshotDark = encryptMapSnapshot(
+      mapSnapshotDark,
+      activityEncryptionKeyBuffer,
+    );
 
     const authToken = getAuthToken();
     const { id: activityId } = await sendPostRequest<CreateActivityResponse>(
@@ -77,12 +91,23 @@ export function useMutationFn(): (
       throw new Error('Failed to upload activity data');
     }
 
-    return { id: activityId, activityEncryptionKey };
+    return {
+      id: activityId,
+      userId,
+      summary: encryptedSummary,
+      encryptionKey: encryptedActivityEncryptionKey,
+      decryptedActivityKey: activityEncryptionKey,
+      createdAt: encryptedCreatedAt,
+      mapFileLocation: '',
+      encryptedLocations,
+      encryptedMapSnapshot,
+      encryptedMapSnapshotDark,
+    };
   };
 }
 
 export default function useCreateActivity(): UseMutationResult<
-  { id: string; activityEncryptionKey: Uint8Array },
+  EncryptedActivity,
   unknown,
   Args,
   unknown
@@ -97,6 +122,7 @@ export default function useCreateActivity(): UseMutationResult<
   return useMutation({
     mutationKey: activitiesKeys.create(),
     mutationFn,
+    retry: true,
     onMutate: async ({ summary, locations, mapSnapshot, mapSnapshotDark }) => {
       await queryClient.cancelQueries({ queryKey: activitiesKeys.timeline() });
       const previousTimeline = queryClient.getQueryData<ActivityTimelineData>(
@@ -114,6 +140,7 @@ export default function useCreateActivity(): UseMutationResult<
         encryptedCreatedAt,
         encryptedSummary,
       } = encryptActivity(summary, profileData.keyPairs.encryptionKeyPair);
+      const activityEncryptionKeyBuffer = decodeBase64(activityEncryptionKey);
 
       const activity: EncryptedActivity = {
         id: uuidv4(),
@@ -128,19 +155,20 @@ export default function useCreateActivity(): UseMutationResult<
         activities: [activity, ...(previousTimeline?.activities ?? [])],
         nextCursor: previousTimeline?.nextCursor ?? undefined,
       });
+
       queryClient.setQueryData(
         activitiesKeys.locations(activity.id, activityEncryptionKey),
-        encryptLocations(locations, activityEncryptionKey),
+        encryptLocations(locations, activityEncryptionKeyBuffer),
       );
 
       queryClient.setQueryData(
         activitiesKeys.mapSnapshot(activity.id, activityEncryptionKey, 'light'),
-        encryptMapSnapshot(mapSnapshot, activityEncryptionKey),
+        encryptMapSnapshot(mapSnapshot, activityEncryptionKeyBuffer),
       );
 
       queryClient.setQueryData(
         activitiesKeys.mapSnapshot(activity.id, activityEncryptionKey, 'dark'),
-        encryptMapSnapshot(mapSnapshotDark, activityEncryptionKey),
+        encryptMapSnapshot(mapSnapshotDark, activityEncryptionKeyBuffer),
       );
 
       return { previousTimeline, activity, activityEncryptionKey };
@@ -172,26 +200,35 @@ export default function useCreateActivity(): UseMutationResult<
         });
       }
     },
-    onSuccess: (data, _, context) => {
+    onSuccess: (encryptedActivity, _, context) => {
       if (!context?.activity) {
         return;
       }
 
+      const {
+        encryptedLocations,
+        encryptedMapSnapshot,
+        encryptedMapSnapshotDark,
+        decryptedActivityKey,
+        ...encryptedTimelineActivity
+      } = encryptedActivity;
+
+      queryClient.setQueryData(activitiesKeys.timeline(), {
+        activities: [encryptedTimelineActivity, ...(context.previousTimeline?.activities ?? [])],
+        nextCursor: context.previousTimeline?.nextCursor ?? undefined,
+      });
+
       queryClient.setQueryData(
-        activitiesKeys.locations(data.id, context.activityEncryptionKey),
-        queryClient.getQueryData<string>(
-          activitiesKeys.locations(context.activity.id, context.activityEncryptionKey),
-        ),
+        activitiesKeys.locations(encryptedActivity.id, decryptedActivityKey),
+        encryptedLocations,
       );
       queryClient.removeQueries({
         queryKey: activitiesKeys.locations(context.activity.id, context.activityEncryptionKey),
       });
 
       queryClient.setQueryData(
-        activitiesKeys.mapSnapshot(data.id, context.activityEncryptionKey, 'light'),
-        queryClient.getQueryData<string>(
-          activitiesKeys.mapSnapshot(context.activity.id, context.activityEncryptionKey, 'light'),
-        ),
+        activitiesKeys.mapSnapshot(encryptedActivity.id, decryptedActivityKey, 'light'),
+        encryptedMapSnapshot,
       );
       queryClient.removeQueries({
         queryKey: activitiesKeys.mapSnapshot(
@@ -202,10 +239,8 @@ export default function useCreateActivity(): UseMutationResult<
       });
 
       queryClient.setQueryData(
-        activitiesKeys.mapSnapshot(data.id, context.activityEncryptionKey, 'dark'),
-        queryClient.getQueryData<string>(
-          activitiesKeys.mapSnapshot(context.activity.id, context.activityEncryptionKey, 'dark'),
-        ),
+        activitiesKeys.mapSnapshot(encryptedActivity.id, decryptedActivityKey, 'dark'),
+        encryptedMapSnapshotDark,
       );
       queryClient.removeQueries({
         queryKey: activitiesKeys.mapSnapshot(

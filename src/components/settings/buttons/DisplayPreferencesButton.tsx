@@ -37,7 +37,7 @@ const DisplayPreferencesButton: FC = () => {
       </IconWrapper>
       <ConfigureWrapper>
         <Label>{i18n.t('settings.buttons.displayPreferences')}</Label>
-        {isFetching ? (
+        {!preferencesData && isFetching ? (
           <ActivityIndicator />
         ) : (
           <SecondaryLabel>

@@ -1,13 +1,14 @@
-import { decodeBase64, encodeUtf8, secretboxOpen } from 'react-native-nacl-jsi';
+import * as utf8 from '@stablelib/utf8';
+import { decodeBase64, secretboxOpen } from 'react-native-nacl-jsi';
 
 export default function decryptMapSnapshot(
   encryptedMapSnapshot: string,
-  activityEncryptionKey: Uint8Array,
+  activityEncryptionKey: string,
 ): string {
   const decryptedMapSnapshotBuffer = secretboxOpen(
     decodeBase64(encryptedMapSnapshot),
-    activityEncryptionKey,
+    decodeBase64(activityEncryptionKey),
   );
 
-  return encodeUtf8(decryptedMapSnapshotBuffer);
+  return utf8.decode(decryptedMapSnapshotBuffer);
 }

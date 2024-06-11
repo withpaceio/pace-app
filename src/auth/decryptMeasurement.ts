@@ -1,4 +1,5 @@
-import { type KeyPair, boxOpen, decodeBase64, encodeUtf8 } from 'react-native-nacl-jsi';
+import * as utf8 from '@stablelib/utf8';
+import { type KeyPair, boxOpen, decodeBase64 } from 'react-native-nacl-jsi';
 
 import { DistanceMeasurementSystem } from '@models/UnitSystem';
 
@@ -22,5 +23,5 @@ export default function decryptMeasurement(
     return DistanceMeasurementSystem.METRIC;
   }
 
-  return encodeUtf8(decryptedMeasurementBuffer) as DistanceMeasurementSystem;
+  return utf8.decode(decryptedMeasurementBuffer) as DistanceMeasurementSystem;
 }

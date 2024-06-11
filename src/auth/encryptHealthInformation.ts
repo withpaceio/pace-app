@@ -2,6 +2,7 @@ import {
   type KeyPair,
   SECRETBOX_KEY_LENGTH,
   boxSeal,
+  decodeBase64,
   decodeUtf8,
   encodeBase64,
   getRandomBytes,
@@ -12,14 +13,16 @@ import type { HealthInformation } from '@models/HealthInformation';
 
 export default function encryptHealthInformation(
   healthInformation: HealthInformation,
-  healthInformationEncryptionKey: Uint8Array | null,
+  healthInformationEncryptionKey: string | null,
   encryptionKeyPair: KeyPair,
 ): {
   healthInformationEncryptionKey: string;
   encryptedHealthInformationEncryptionKey: string;
   encryptedHealthInformation: string;
 } {
-  const encryptionKey = healthInformationEncryptionKey || getRandomBytes(SECRETBOX_KEY_LENGTH);
+  const encryptionKey = healthInformationEncryptionKey
+    ? decodeBase64(healthInformationEncryptionKey)
+    : getRandomBytes(SECRETBOX_KEY_LENGTH);
 
   const encryptedHealthInformation = secretboxSeal(
     decodeUtf8(encodeURI(JSON.stringify(healthInformation))),

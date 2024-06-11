@@ -79,16 +79,13 @@ const ConfigureHealthInformationScreen: FC = () => {
 
       reset();
 
-      updateHealthInformation(
-        {
-          healthInformation: newHealthInformation,
-          encryptionKey: healthInformationData?.encryptionKey,
-          preferences: preferencesData,
-        },
-        {
-          onSuccess: goToSettingsScreen,
-        },
-      );
+      updateHealthInformation({
+        healthInformation: newHealthInformation,
+        encryptionKey: healthInformationData?.encryptionKey,
+        preferences: preferencesData,
+      });
+
+      goToSettingsScreen();
     },
     [
       goToSettingsScreen,

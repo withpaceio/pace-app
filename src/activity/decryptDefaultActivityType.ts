@@ -1,4 +1,5 @@
-import { type KeyPair, boxOpen, decodeBase64, encodeUtf8 } from 'react-native-nacl-jsi';
+import * as utf8 from '@stablelib/utf8';
+import { type KeyPair, boxOpen, decodeBase64 } from 'react-native-nacl-jsi';
 
 import { ActivityType } from '@models/Activity';
 
@@ -18,5 +19,5 @@ export default function decryptDefaultActivityType(
     return ActivityType.RUNNING;
   }
 
-  return encodeUtf8(decryptedDefaultActivityTypeBuffer) as ActivityType;
+  return utf8.decode(decryptedDefaultActivityTypeBuffer) as ActivityType;
 }

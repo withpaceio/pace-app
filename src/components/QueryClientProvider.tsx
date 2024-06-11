@@ -1,5 +1,6 @@
 import React, { type FC, type ReactNode, useCallback, useEffect } from 'react';
 
+import { onlineManager } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 
 import accountKeys from '@api/account/accountKeys';
@@ -48,8 +49,15 @@ const QueryClientProvider: FC<Props> = ({ children }) => {
   const mutationFnUpdateProfilePicture = useMutationFnUpdateProfilePicture();
 
   const onSuccess = useCallback(async (): Promise<void> => {
+    if (!onlineManager.isOnline()) {
+      return;
+    }
+
     await queryClient.resumePausedMutations();
-    queryClient.invalidateQueries();
+    queryClient.invalidateQueries({ queryKey: activitiesKeys.timeline() });
+    queryClient.refetchQueries({ queryKey: profilePictureKeys.details() });
+    queryClient.refetchQueries({ queryKey: preferencesKeys.details() });
+    queryClient.refetchQueries({ queryKey: healthInformationKeys.details() });
   }, [queryClient]);
 
   const setDefaultQueries = useCallback((): void => {

@@ -9,12 +9,25 @@ import React, {
 } from 'react';
 
 import Purchases from 'react-native-purchases';
+import styled from 'styled-components/native';
+
+import { PaceIcon } from '@components/icons';
 
 import { storage } from '../queryClient/storagePersister';
 import LoggedOutModal from './LoggedOutModal';
 import signOut from './signout';
 import { loadProfile as storageLoadProfile } from './storage';
 import type { Profile, ProfileData } from './types';
+
+const LoadingWrapper = styled.View`
+  flex: 1;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: ${({ theme }) => theme.colors.black};
+`;
 
 type AuthState = Omit<Profile, 'authToken'> & {
   authToken: string | null;
@@ -178,6 +191,14 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   useEffect(() => {
     loadProfile();
   }, [loadProfile]);
+
+  if (state.loading) {
+    return (
+      <LoadingWrapper>
+        <PaceIcon width={110} height={75} />
+      </LoadingWrapper>
+    );
+  }
 
   return (
     <AuthContext.Provider

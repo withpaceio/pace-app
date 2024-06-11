@@ -10,7 +10,6 @@ import { useTheme } from '@theme';
 
 import useHealthInformation from '@api/healthInformation/useHealthInformation';
 
-import SavingModal from '@components/common/SavingModal';
 import ActivityDetails from '@components/common/activity/ActivityDetails';
 import ActivityTypeBottomSheet from '@components/common/activity/ActivityTypeBottomSheet';
 
@@ -18,8 +17,6 @@ import { ActivityType } from '@models/Activity';
 import { DistanceMeasurementSystem } from '@models/UnitSystem';
 
 import ActivityTask from '@tasks/ActivityTask';
-
-import i18n from '@translations/i18n';
 
 import DarkSnapshotMap from './DarkSnapshotMap';
 import LightSnapshotMap from './LightSnapshotMap';
@@ -32,18 +29,10 @@ type FormData = {
 type Props = {
   distanceMeasurementSystem: DistanceMeasurementSystem;
   uploading: boolean;
-  hasError: boolean;
   onSubmit: (data: FormData) => void;
-  onDiscard: () => void;
 };
 
-const SaveUI: FC<Props> = ({
-  distanceMeasurementSystem,
-  uploading,
-  hasError,
-  onSubmit,
-  onDiscard,
-}) => {
+const SaveUI: FC<Props> = ({ distanceMeasurementSystem, uploading, onSubmit }) => {
   const activityTypeBottomSheetRef = useRef<GorhomBottomSheet>(null);
 
   const [snapshotLightReady, setSnapshotLightReady] = useState(false);
@@ -141,16 +130,6 @@ const SaveUI: FC<Props> = ({
         )}
         name="type"
         rules={{ required: true }}
-      />
-      <SavingModal
-        title={i18n.t('saveActivity.saving')}
-        errorMessage={i18n.t('saveActivity.errors.failureMessage')}
-        saving={uploading}
-        hasError={hasError}
-        retryLabel={i18n.t('saveActivity.errors.retry')}
-        onRetry={handleSubmit(onSubmit)}
-        discardLabel={i18n.t('saveActivity.errors.cancel')}
-        onDiscard={onDiscard}
       />
       {!snapshotLightReady && (
         <LightSnapshotMap

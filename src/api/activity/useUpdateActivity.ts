@@ -1,9 +1,10 @@
 import { type UseMutationResult, useMutation, useQueryClient } from '@tanstack/react-query';
+import { decodeBase64 } from 'react-native-nacl-jsi';
 
 import { encryptSummary } from '@activity';
 import { useAuth } from '@auth';
 
-import type { ActivityTimelineData } from '@api/activity/useActivityTimeline';
+import type { EncryptedActivityTimelineData } from '@api/activity/useActivityTimeline';
 
 import type { ActivitySummary } from '@models/Activity';
 
@@ -14,14 +15,14 @@ import activitiesKeys from './activitiesKeys';
 type Args = {
   activityId: string;
   summary: ActivitySummary;
-  activityEncryptionKey: Uint8Array;
+  activityEncryptionKey: string;
 };
 
 export function useMutationFn(): (args: Args) => Promise<{ message: string }> {
   const { getAuthToken } = useAuth();
 
   return ({ activityId, summary, activityEncryptionKey }: Args) => {
-    const encryptedSummary = encryptSummary(summary, activityEncryptionKey);
+    const encryptedSummary = encryptSummary(summary, decodeBase64(activityEncryptionKey));
 
     const authToken = getAuthToken();
     return sendPostRequest<{ message: string }>(
@@ -46,11 +47,11 @@ export default function useUpdateActivity(): UseMutationResult<
     mutationFn,
     onMutate: async ({ activityId, summary, activityEncryptionKey }) => {
       await queryClient.cancelQueries({ queryKey: activitiesKeys.timeline() });
-      const previousTimeline = queryClient.getQueryData<ActivityTimelineData>(
+      const previousTimeline = queryClient.getQueryData<EncryptedActivityTimelineData>(
         activitiesKeys.timeline(),
       );
 
-      const encryptedSummary = encryptSummary(summary, activityEncryptionKey);
+      const encryptedSummary = encryptSummary(summary, decodeBase64(activityEncryptionKey));
       const newTimelineActivities =
         previousTimeline?.activities.map((activity) => {
           if (activity.id !== activityId) {

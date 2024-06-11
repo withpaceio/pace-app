@@ -1,4 +1,5 @@
-import { decodeBase64, encodeUtf8, secretboxOpen } from 'react-native-nacl-jsi';
+import * as utf8 from '@stablelib/utf8';
+import { decodeBase64, secretboxOpen } from 'react-native-nacl-jsi';
 
 export default function decryptCreationDate(
   encryptedCreationDate: string,
@@ -9,5 +10,5 @@ export default function decryptCreationDate(
     activityEncryptionKey,
   );
 
-  return encodeUtf8(decryptedCreationDateBuffer);
+  return utf8.decode(decryptedCreationDateBuffer);
 }

@@ -1,8 +1,9 @@
+import * as utf8 from '@stablelib/utf8';
 import {
   type KeyPair,
   boxOpen,
   decodeBase64,
-  encodeUtf8,
+  encodeBase64,
   secretboxOpen,
 } from 'react-native-nacl-jsi';
 
@@ -12,7 +13,7 @@ function decryptLegacy(
   encryptedHealthInformationBuffer: Uint8Array,
   encryptionKey: Uint8Array,
 ): { healthInformationBuffer: Uint8Array; encryptionKey: Uint8Array } {
-  const legacyEncryptionKey = decodeBase64(encodeUtf8(encryptionKey));
+  const legacyEncryptionKey = decodeBase64(utf8.decode(encryptionKey));
 
   return {
     healthInformationBuffer: secretboxOpen(encryptedHealthInformationBuffer, legacyEncryptionKey),
@@ -24,7 +25,7 @@ export default function decryptHealthInformation(
   encryptedHealthInformation: string,
   encryptedHealthInformationEncryptionKey: string,
   encryptionKeyPair: KeyPair,
-): { healthInformation: HealthInformation; encryptionKey: Uint8Array } | null {
+): { healthInformation: HealthInformation; encryptionKey: string } | null {
   try {
     let encryptionKey = boxOpen(
       decodeBase64(encryptedHealthInformationEncryptionKey),
@@ -44,10 +45,10 @@ export default function decryptHealthInformation(
     }
 
     const healthInformation = JSON.parse(
-      decodeURI(encodeUtf8(healthInformationBuffer)),
+      decodeURI(utf8.decode(healthInformationBuffer)),
     ) as HealthInformation;
 
-    return { healthInformation, encryptionKey };
+    return { healthInformation, encryptionKey: encodeBase64(encryptionKey) };
   } catch {
     return null;
   }

@@ -12,7 +12,7 @@ export type ActivitySummary = {
 export type Activity = {
   id: string;
   userId: string;
-  encryptionKey: Uint8Array;
+  encryptionKey: string;
   locationsFilePath?: string;
   mapFileLocation: string;
   summary: ActivitySummary;

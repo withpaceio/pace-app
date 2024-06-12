@@ -42,6 +42,14 @@ export default {
           'This allows you to choose an existing picture in your library for your profile picture.',
         UIBackgroundModes: ['location'],
       },
+      privacyManifests: {
+        NSPrivacyAccessedAPITypes: [
+          {
+            NSPrivacyAccessedAPIType: 'NSPrivacyAccessedAPICategoryUserDefaults',
+            NSPrivacyAccessedAPITypeReasons: ['CA92.1'],
+          },
+        ],
+      },
     },
     plugins: [
       'expo-font',

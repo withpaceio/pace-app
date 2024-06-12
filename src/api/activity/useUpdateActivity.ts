@@ -8,7 +8,7 @@ import type { EncryptedActivityTimelineData } from '@api/activity/useActivityTim
 
 import type { ActivitySummary } from '@models/Activity';
 
-import { API_URL, sendPostRequest } from '@utils/sendRequest';
+import { API_URL, sendPatchRequest } from '@utils/sendRequest';
 
 import activitiesKeys from './activitiesKeys';
 
@@ -25,8 +25,8 @@ export function useMutationFn(): (args: Args) => Promise<{ message: string }> {
     const encryptedSummary = encryptSummary(summary, decodeBase64(activityEncryptionKey));
 
     const authToken = getAuthToken();
-    return sendPostRequest<{ message: string }>(
-      `${API_URL}/api/activities/${activityId}/update`,
+    return sendPatchRequest<{ message: string }>(
+      `${API_URL}/api/activities/${activityId}`,
       authToken as string,
       { summary: encryptedSummary },
     );

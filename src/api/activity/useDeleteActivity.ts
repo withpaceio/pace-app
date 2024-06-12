@@ -4,7 +4,7 @@ import { useAuth } from '@auth';
 
 import type { ActivityTimelineData } from '@api/activity/useActivityTimeline';
 
-import { API_URL, sendPostRequest } from '@utils/sendRequest';
+import { API_URL, sendDeleteRequest } from '@utils/sendRequest';
 
 import activitiesKeys from './activitiesKeys';
 
@@ -18,8 +18,8 @@ export function useMutationFn(): (args: Args) => Promise<{ message: string }> {
   return ({ activityId }: Args) => {
     const authToken = getAuthToken();
 
-    return sendPostRequest<{ message: string }>(
-      `${API_URL}/api/activities/${activityId}/delete`,
+    return sendDeleteRequest<{ message: string }>(
+      `${API_URL}/api/activities/${activityId}`,
       authToken as string,
     );
   };

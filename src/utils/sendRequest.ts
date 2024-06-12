@@ -83,6 +83,13 @@ export async function sendDeleteRequest<T>(
   authToken?: string,
   contentType?: string,
 ): Promise<T> {
-  const response = await sendRequest<T>('DELETE', url, authToken, undefined, contentType);
+  const response = await sendRequest<T>(
+    'DELETE',
+    url,
+    authToken,
+    process.env.NODE_ENV === 'development' ? {} : undefined,
+    contentType,
+  );
+
   return response as T;
 }

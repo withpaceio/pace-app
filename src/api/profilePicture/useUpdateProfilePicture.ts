@@ -28,7 +28,7 @@ export function useMutationFn(): (args: Args) => Promise<void> {
 
     const authToken = getAuthToken();
     const { url } = await sendPostRequest<UploadProfilePictureResponse>(
-      `${API_URL}/api/account/profile-picture/upload`,
+      `${API_URL}/api/account/profile-picture`,
       authToken as string,
       { profileEncryptionKey },
     );

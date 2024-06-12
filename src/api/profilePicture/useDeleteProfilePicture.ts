@@ -2,7 +2,7 @@ import { type UseMutationResult, useMutation, useQueryClient } from '@tanstack/r
 
 import { useAuth } from '@auth';
 
-import { API_URL, sendPostRequest } from '@utils/sendRequest';
+import { API_URL, sendDeleteRequest } from '@utils/sendRequest';
 
 import profilePictureKeys from './profilePictureKeys';
 
@@ -14,8 +14,8 @@ export function useMutationFn(): () => Promise<{ message: string }> {
   return () => {
     const authToken = getAuthToken();
 
-    return sendPostRequest<{ message: string }>(
-      `${API_URL}/api/account/profile-picture/delete`,
+    return sendDeleteRequest<{ message: string }>(
+      `${API_URL}/api/account/profile-picture`,
       authToken as string,
     );
   };

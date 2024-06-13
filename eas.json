@@ -23,6 +23,9 @@
         "EXPO_PUBLIC_API_URL": "https://api.withpace.io",
         "EXPO_PUBLIC_WEB_URL": "https://withpace.io",
         "EXPO_PUBLIC_NUMBER_FREE_ACTIVITIES": "10"
+      },
+      "android": {
+        "buildType": "apk"
       }
     },
     "production": {

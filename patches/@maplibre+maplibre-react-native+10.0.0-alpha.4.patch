@@ -11,3 +11,20 @@ index d6bc9f6..874fb34 100644
      );
  
      this._onDebouncedRegionDidChange = debounce(
+diff --git a/node_modules/@maplibre/maplibre-react-native/plugin/build/.withMapLibre.js.swp b/node_modules/@maplibre/maplibre-react-native/plugin/build/.withMapLibre.js.swp
+new file mode 100644
+index 0000000..4e8ba4b
+Binary files /dev/null and b/node_modules/@maplibre/maplibre-react-native/plugin/build/.withMapLibre.js.swp differ
+diff --git a/node_modules/@maplibre/maplibre-react-native/plugin/build/withMapLibre.js b/node_modules/@maplibre/maplibre-react-native/plugin/build/withMapLibre.js
+index 8cd695d..51b64d1 100644
+--- a/node_modules/@maplibre/maplibre-react-native/plugin/build/withMapLibre.js
++++ b/node_modules/@maplibre/maplibre-react-native/plugin/build/withMapLibre.js
+@@ -110,7 +110,7 @@ exports.setExcludedArchitectures = setExcludedArchitectures;
+ const withoutSignatures = config => {
+     const shellScript = `if [ "$XCODE_VERSION_MAJOR" = "1500" ]; then
+     echo "Remove signature files (Xcode 15 workaround)";
+-    rm -rf "$CONFIGURATION_BUILD_DIR/Mapbox.xcframework-ios.signature";
++    rm -rf "$CONFIGURATION_BUILD_DIR/Maplibre.xcframework-ios.signature";
+   fi`;
+     return (0, config_plugins_1.withXcodeProject)(config, async (config) => {
+         const xcodeProject = config.modResults;

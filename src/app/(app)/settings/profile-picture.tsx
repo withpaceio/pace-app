@@ -66,12 +66,8 @@ const ChooseProfilePictureScreen: FC = () => {
       }
 
       resetUpdateProfilePicture();
-      updateProfilePicture(
-        { profilePicture },
-        {
-          onSuccess: goToAccountScreen,
-        },
-      );
+      updateProfilePicture({ profilePicture });
+      goToAccountScreen();
     },
     [goToAccountScreen, onDeleteProfilePicture, resetUpdateProfilePicture, updateProfilePicture],
   );

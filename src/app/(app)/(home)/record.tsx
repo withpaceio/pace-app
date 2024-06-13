@@ -51,7 +51,7 @@ const RecordScreen: FC = () => {
 
   const goToPaywall = useCallback((): void => {
     setHasReachedLimit(false);
-    router.push('/paywall');
+    router.push('/settings/paywall');
   }, [router]);
 
   const askPermissions = useCallback(async (): Promise<void> => {
@@ -178,9 +178,9 @@ const RecordScreen: FC = () => {
     }
 
     (async () => {
-      /* if (!(await checkCanRecord())) {
+      if (!(await checkCanRecord())) {
         return;
-        } */
+      }
 
       await checkPermissionsAndBattery();
     })();

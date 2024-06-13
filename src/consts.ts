@@ -11,6 +11,6 @@ export const REVENUE_CAT_ENTITLEMENT_MONTHLY_ID = 'pro';
 export const REVENUE_CAT_ENTITLEMENT_YEARLY_ID = 'pro-yearly';
 
 export const NUMBER_FREE_ACTIVITIES = parseInt(
-  process.env.EXPO_PUBLIC_FREE_NUMBER_ACTIVITIES as string,
+  process.env.EXPO_PUBLIC_NUMBER_FREE_ACTIVITIES as string,
   10,
 );

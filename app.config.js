@@ -14,7 +14,7 @@ export default {
     icon: './assets/images/app-icon.png',
     android: {
       package: IS_DEV ? 'io.withpace.pace.dev' : 'io.withpace.pace',
-      versionCode: 14,
+      versionCode: 15,
       permissions: [
         'ACCESS_FINE_LOCATION',
         'FOREGROUND_SERVICE',
@@ -29,7 +29,7 @@ export default {
     },
     ios: {
       bundleIdentifier: IS_DEV ? 'io.withpace.pace.dev' : 'io.withpace.pace',
-      buildNumber: '2.1.0',
+      buildNumber: '2.1.10',
       infoPlist: {
         NSLocationAlwaysAndWhenInUseUsageDescription:
           'Turning on location services allows PACE to record your activities.',

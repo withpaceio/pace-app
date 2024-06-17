@@ -1,6 +1,6 @@
 {
   "name": "pace",
-  "version": "2.1.10",
+  "version": "2.2.0",
   "private": true,
   "main": "expo-router/entry",
   "scripts": {

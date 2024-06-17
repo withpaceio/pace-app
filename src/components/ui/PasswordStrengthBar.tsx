@@ -23,15 +23,15 @@ const BarWrapper = styled.View`
   align-items: center;
 `;
 
-const Bar = styled.View<{ backgroundColor: string; isOn: boolean; isLast?: boolean }>`
+const Bar = styled.View<{ barColor: string; isOn: boolean; isLast?: boolean }>`
   flex-grow: 1;
   height: 3px;
 
   margin-right: ${({ isLast, theme }) => (isLast ? 0 : theme.sizes.innerPadding / 2)}px;
   margin-bottom: ${({ theme }) => theme.sizes.innerPadding / 2}px;
 
-  background-color: ${({ isOn, backgroundColor, theme }) =>
-    isOn ? backgroundColor : theme.colors.componentBackground};
+  background-color: ${({ barColor, isOn, theme }) =>
+    isOn ? barColor : theme.colors.componentBackground};
 `;
 
 const Label = styled(Text)`
@@ -77,10 +77,10 @@ const PasswordStrengthBar: FC<Props> = ({ password, onScoreChanged }) => {
   return (
     <Wrapper>
       <BarWrapper>
-        <Bar backgroundColor={barColor} isOn={score >= 1} />
-        <Bar backgroundColor={barColor} isOn={score >= 2} />
-        <Bar backgroundColor={barColor} isOn={score >= 3} />
-        <Bar backgroundColor={barColor} isOn={score >= 4} isLast />
+        <Bar barColor={barColor} isOn={score >= 1} />
+        <Bar barColor={barColor} isOn={score >= 2} />
+        <Bar barColor={barColor} isOn={score >= 3} />
+        <Bar barColor={barColor} isOn={score >= 4} isLast />
       </BarWrapper>
       <Label>{label}</Label>
     </Wrapper>

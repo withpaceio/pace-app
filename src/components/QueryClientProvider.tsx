@@ -132,7 +132,7 @@ const QueryClientProvider: FC<Props> = ({ children }) => {
   return (
     <PersistQueryClientProvider
       client={queryClient}
-      persistOptions={{ persister }}
+      persistOptions={{ persister, maxAge: Infinity }}
       onSuccess={onSuccess}>
       {children}
     </PersistQueryClientProvider>

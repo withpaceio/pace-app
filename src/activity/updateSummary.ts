@@ -21,10 +21,13 @@ export default function updateSummary(
   name: string,
   type: ActivityType,
   summary: ActivitySummary,
-  healthInformation: HealthInformation,
+  healthInformation: HealthInformation | undefined,
 ): ActivitySummary {
   const pace = convertPace(summary.pace, summary.type, type);
-  const calories = getCalories(type, summary.pace, summary.duration, healthInformation);
+  const calories = healthInformation
+    ? getCalories(type, summary.pace, summary.duration, healthInformation)
+    : undefined;
+
   const updatedSummary: ActivitySummary = {
     ...summary,
     name,

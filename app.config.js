@@ -29,7 +29,7 @@ export default {
     },
     ios: {
       bundleIdentifier: IS_DEV ? 'io.withpace.pace.dev' : 'io.withpace.pace',
-      buildNumber: '2.2.0',
+      buildNumber: '2.2.0.0',
       infoPlist: {
         NSLocationAlwaysAndWhenInUseUsageDescription:
           'Turning on location services allows PACE to record your activities.',

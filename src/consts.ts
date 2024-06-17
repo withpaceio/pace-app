@@ -14,3 +14,6 @@ export const NUMBER_FREE_ACTIVITIES = parseInt(
   process.env.EXPO_PUBLIC_NUMBER_FREE_ACTIVITIES as string,
   10,
 );
+
+export const ACTIVITY_TITLE_MIN_LENGTH = 3;
+export const ACTIVITY_TITLE_MAX_LENGTH = 100;

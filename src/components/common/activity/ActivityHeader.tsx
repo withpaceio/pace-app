@@ -91,10 +91,6 @@ const Title = styled(Text)`
   margin-bottom: ${({ theme }) => theme.sizes.innerPadding}px;
 `;
 
-const TitleTextInput = styled(TextInput)`
-  margin-bottom: ${({ theme }) => theme.sizes.innerPadding}px;
-`;
-
 const EditActivityTypeWrapper = styled.Pressable`
   display: flex;
   flex-direction: row;
@@ -103,6 +99,7 @@ const EditActivityTypeWrapper = styled.Pressable`
 
   width: 100%;
   padding: ${({ theme }) => 0.5 * theme.sizes.innerPadding}px;
+  margin-top: ${({ theme }) => theme.sizes.innerPadding}px;
 
   border-width: 1px;
   border-style: solid;
@@ -258,7 +255,7 @@ const ActivityHeader: FC<Props> = ({
                     <Controller
                       control={form.control}
                       render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
-                        <TitleTextInput
+                        <TextInput
                           placeholder={i18n.t('saveActivity.form.namePlaceholder')}
                           value={value}
                           caption={error?.message}

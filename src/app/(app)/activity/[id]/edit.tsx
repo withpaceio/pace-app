@@ -20,8 +20,14 @@ import { ActivitySummary, ActivityType } from '@models/Activity';
 
 import i18n from '@translations/i18n';
 
+import { ACTIVITY_TITLE_MAX_LENGTH, ACTIVITY_TITLE_MIN_LENGTH } from '../../../../consts';
+
 const schema = object().shape({
-  name: string().required(i18n.t('editActivity.form.nameMissing')),
+  name: string()
+    .trim()
+    .min(ACTIVITY_TITLE_MIN_LENGTH, i18n.t('editActivity.form.nameTooShort'))
+    .max(ACTIVITY_TITLE_MAX_LENGTH, i18n.t('editActivity.form.nameTooLong'))
+    .required(i18n.t('editActivity.form.nameMissing')),
   type: string()
     .oneOf([ActivityType.CYCLING, ActivityType.RUNNING])
     .required(i18n.t('editActivity.form.activityTypeMissing')),
@@ -58,7 +64,7 @@ const EditActivityScreen: FC = () => {
       reset();
 
       const updatedSummary = updateSummary(
-        name,
+        name.trim(),
         type,
         activity.summary as ActivitySummary,
         healthInformationData?.healthInformation!,

@@ -1,4 +1,4 @@
-![banner](https://github.com/remyd/pace-app/assets/574977/0ff2fbb9-9eff-49d5-8a89-a35f21c02aa0)
+![banner](.github/github-banner.png)
 
 # PACE - Private Fitness App
 
@@ -9,13 +9,13 @@ The app is available on Android and iOS.
 ### Android
 
 <a href="https://play.google.com/store/apps/details?id=io.withpace.pace">
-  <img width="185" alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png">
+  <img width="185" alt="Get it on Google Play" src=".github/google-play-badge.png">
 </a>
 
 ### iOS
 
 <a href="https://apps.apple.com/app/pace-privacy/id6444367013">
-  <img width="185" alt="Get it on the App Store" src="https://github.com/remyd/pace-app/assets/574977/bc4cfb37-dd70-4ef7-a9ba-075455a13b6f">
+  <img width="185" alt="Get it on the App Store" src=".github/apple-app-store-badge.png">
 </a>
 
 ## Features

@@ -28,10 +28,6 @@ The app is available on Android and iOS.
 - **Anonymous**: No email or personal information is required to use the app.
 - **No ads or tracking**: The app does not contain any ads.
 
-## Security
-
-You can read our whitepaper [here](https://withpace.io/pace-whitepaper.pdf).
-
 ## Building from source
 
 PACE is built with [Expo](https://expo.io/), written in TypeScript.
@@ -43,6 +39,10 @@ PACE is built with [Expo](https://expo.io/), written in TypeScript.
 5. Start the app (add `--device` to start on a physical device):
    - Android: `npm run android`
    - iOS: `npm run ios`
+
+## Security
+
+You can read our whitepaper [here](https://withpace.io/pace-whitepaper.pdf).
 
 ## Community
 

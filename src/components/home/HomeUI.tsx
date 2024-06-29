@@ -1,5 +1,5 @@
 import React, { type FC, useCallback, useMemo } from 'react';
-import { FlatList, ListRenderItem, RefreshControl } from 'react-native';
+import { FlatList, ListRenderItem, Platform, RefreshControl } from 'react-native';
 
 import { StatusBar } from 'expo-status-bar';
 
@@ -65,6 +65,7 @@ const HomeUI: FC<Props> = ({
     <>
       <StatusBar translucent />
       <FlatList
+        style={{ paddingTop: Platform.OS === 'web' ? theme.sizes.outerPadding : 0 }}
         data={sortedActivities}
         renderItem={renderItem}
         keyExtractor={keyExtractor}

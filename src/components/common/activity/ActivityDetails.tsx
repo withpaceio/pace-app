@@ -1,6 +1,8 @@
 import React, { type FC, useMemo, useRef } from 'react';
 import { Animated, useWindowDimensions } from 'react-native';
 
+import { WithSkiaWeb } from '@shopify/react-native-skia/lib/module/web';
+
 import { useTheme } from '@theme';
 
 import StaticMapImage from '@components/common/StaticMapImage';

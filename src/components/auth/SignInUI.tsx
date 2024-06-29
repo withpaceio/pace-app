@@ -18,6 +18,11 @@ import SigningProgressModal from './SigningProgressModal';
 import { SignInForm } from './common-components';
 
 const Wrapper = styled(Animated.View)`
+  width: 100%;
+  max-width: 900px;
+
+  align-self: center;
+
   margin-top: ${({ theme }) => 3 * theme.sizes.outerPadding}px;
   margin-bottom: ${({ theme }) => theme.sizes.outerPadding}px;
 `;

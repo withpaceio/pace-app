@@ -1,4 +1,4 @@
-import React, { type FC, useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
+/* import React, { type FC, useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 
 import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
 
@@ -179,5 +179,11 @@ const SaveScreen: FC = () => {
     </>
   );
 };
+
+export default SaveScreen;
+*/
+import type { FC } from 'react';
+
+const SaveScreen: FC = () => <div>save</div>;
 
 export default SaveScreen;

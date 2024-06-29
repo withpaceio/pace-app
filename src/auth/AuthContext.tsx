@@ -7,6 +7,7 @@ import React, {
   useEffect,
   useReducer,
 } from 'react';
+import { Platform } from 'react-native';
 
 import Purchases from 'react-native-purchases';
 import styled from 'styled-components/native';
@@ -159,6 +160,11 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   const loadProfile = useCallback(async (): Promise<void> => {
+    if (Platform.OS === 'web') {
+      onSignOut();
+      return;
+    }
+
     const profile = await storageLoadProfile();
     if (!profile) {
       onSignOut();

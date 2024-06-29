@@ -1,3 +1,5 @@
+import { Platform } from 'react-native';
+
 import { HKDF } from '@stablelib/hkdf';
 import { SHA256 } from '@stablelib/sha256';
 import * as utf8 from '@stablelib/utf8';
@@ -51,13 +53,16 @@ export function deserializeProfileData(serializedProfileData: SerializedProfileD
   };
 }
 
-export function encryptProfileData(profileData: ProfileData, password: string): string {
-  const hashedPasswordBuffer = argon2idDeriveKey(
+export async function encryptProfileData(
+  profileData: ProfileData,
+  password: string,
+): Promise<string> {
+  const hashedPasswordBuffer = await argon2idDeriveKey(
     decodeUtf8(password),
     profileData.passwordHashSalt,
     32,
     ARGON2ID_ITERATIONS,
-    BigInt(32768 * 1024),
+    Platform.OS === 'web' ? BigInt(32768) : BigInt(32768 * 1024),
   );
 
   const profileEncryptionKey = new HKDF(
@@ -76,18 +81,18 @@ export function encryptProfileData(profileData: ProfileData, password: string): 
   return encodeBase64(encryptedProfileData);
 }
 
-export function decryptProfileData(
+export async function decryptProfileData(
   encryptedProfileData: string,
   password: string,
   passwordHashSalt: string,
   profileEncryptionSalt: string,
-): ProfileData {
-  const hashedPasswordBuffer = argon2idDeriveKey(
+): Promise<ProfileData> {
+  const hashedPasswordBuffer = await argon2idDeriveKey(
     decodeUtf8(password),
     decodeBase64(passwordHashSalt),
     32,
     ARGON2ID_ITERATIONS,
-    BigInt(32768 * 1024),
+    Platform.OS === 'web' ? BigInt(32768) : BigInt(32768 * 1024),
   );
 
   const profileEncryptionKey = new HKDF(

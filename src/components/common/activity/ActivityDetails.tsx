@@ -1,8 +1,6 @@
 import React, { type FC, useMemo, useRef } from 'react';
 import { Animated, useWindowDimensions } from 'react-native';
 
-import { WithSkiaWeb } from '@shopify/react-native-skia/lib/module/web';
-
 import { useTheme } from '@theme';
 
 import StaticMapImage from '@components/common/StaticMapImage';
@@ -11,7 +9,7 @@ import type { ActivityLocation } from '@models/Activity';
 
 import ActivityHeader, { Props as ActivityHeaderProps } from './ActivityHeader';
 import BackButton from './BackButton';
-import ActivityCharts from './charts/ActivityCharts';
+import ActivityChartsProvider from './charts/ActivityChartsProvider';
 
 type Props = Omit<ActivityHeaderProps, 'imageHeight' | 'top' | 'isLoading'> & {
   mapSnapshot: string | undefined;
@@ -91,7 +89,7 @@ const ActivityDetails: FC<Props> = ({
           form={form}
         />
         {summary && !form && (
-          <ActivityCharts
+          <ActivityChartsProvider
             summary={summary}
             locations={locations}
             locationsFetching={locationsFetching}

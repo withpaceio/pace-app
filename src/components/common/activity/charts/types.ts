@@ -8,3 +8,8 @@ export type ChartsProps = {
   locationsError: boolean;
   distanceMeasurementSystem: DistanceMeasurementSystem;
 };
+
+export type ChartsContextValue = Pick<
+  ChartsProps,
+  'summary' | 'locations' | 'distanceMeasurementSystem'
+>;

@@ -1,5 +1,5 @@
 import React, { type FC } from 'react';
-import { useWindowDimensions } from 'react-native';
+import { Platform, useWindowDimensions } from 'react-native';
 
 import { useSharedValue } from 'react-native-reanimated';
 
@@ -16,7 +16,7 @@ const RunningCharts: FC = () => {
 
   const { splits, paceScale } = useSplitPaceChartData({
     activityType: ActivityType.RUNNING,
-    chartWidth: windowWidth,
+    chartWidth: windowWidth * (Platform.OS === 'web' ? 0.6 : 1),
     splitLengthInMeters: 1000,
     locations: locations as ActivityLocation[],
     distanceMeasurementSystem,

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useWindowDimensions } from 'react-native';
+import { Platform, useWindowDimensions } from 'react-native';
 
 import { useTheme } from '@theme';
 
@@ -24,5 +24,9 @@ export default function useChartDimensions(): {
     ],
   );
 
-  return { chartWidth: windowWidth, chartHeight: theme.sizes.paceChart.height, yTop };
+  return {
+    chartWidth: windowWidth * (Platform.OS === 'web' ? 0.6 : 1),
+    chartHeight: theme.sizes.paceChart.height,
+    yTop,
+  };
 }

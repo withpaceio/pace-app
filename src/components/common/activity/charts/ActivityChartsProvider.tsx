@@ -7,14 +7,9 @@ import { useTheme } from '@theme';
 import { WarningIcon } from '@components/icons';
 import { ActivityIndicator, Text } from '@components/ui';
 
-import { ActivityLocation, ActivitySummary, ActivityType } from '@models/Activity';
-import type { DistanceMeasurementSystem } from '@models/UnitSystem';
-
 import i18n from '@translations/i18n';
 
 import ActivityCharts from './ActivityCharts';
-import CyclingCharts from './cycling/CyclingCharts';
-import RunningCharts from './running/RunningCharts';
 import type { ChartsContextValue, ChartsProps } from './types';
 
 const ActivityChartsContext = createContext<ChartsContextValue | undefined>(undefined);

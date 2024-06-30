@@ -1,3 +1,5 @@
+import { Platform } from 'react-native';
+
 import { type UseMutationResult, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { signIn, useAuth } from '@auth';
@@ -35,12 +37,14 @@ export default function useSignIn(): UseMutationResult<
         },
       });
 
-      requestAnimationFrame(() => {
-        queryClient.prefetchQuery({ queryKey: accountKeys.details() });
-        queryClient.prefetchQuery({ queryKey: healthInformationKeys.details() });
-        queryClient.prefetchQuery({ queryKey: preferencesKeys.details() });
-        queryClient.prefetchQuery({ queryKey: profilePictureKeys.details() });
-      });
+      if (Platform.OS !== 'web') {
+        requestAnimationFrame(() => {
+          queryClient.prefetchQuery({ queryKey: accountKeys.details() });
+          queryClient.prefetchQuery({ queryKey: healthInformationKeys.details() });
+          queryClient.prefetchQuery({ queryKey: preferencesKeys.details() });
+          queryClient.prefetchQuery({ queryKey: profilePictureKeys.details() });
+        });
+      }
     },
   });
 }

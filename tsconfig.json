@@ -2,6 +2,7 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
+    "module": "ESNext",
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "types": ["geojson"],
     "baseUrl": "./src",

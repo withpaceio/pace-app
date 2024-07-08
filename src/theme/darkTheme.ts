@@ -107,8 +107,6 @@ const Theme: DefaultTheme = {
     },
   },
   sizes: {
-    contentMaxWidth: 800,
-    mobileMaxWidth: 1000,
     outerPadding: 20,
     innerPadding: 10,
     menuBar: 50,
@@ -166,6 +164,15 @@ const Theme: DefaultTheme = {
           numberFontSize: 14,
         },
       },
+    },
+  },
+  web: {
+    menuBarHeight: 50,
+    breakpoints: {
+      small: 576,
+      medium: 768,
+      large: 992,
+      xLarge: 1200,
     },
   },
 };

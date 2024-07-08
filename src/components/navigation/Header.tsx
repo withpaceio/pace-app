@@ -11,6 +11,7 @@ const ICON_SIZE = 30;
 const Wrapper = styled.View`
   position: relative;
   min-width: 100%;
+  height: ${({ theme }) => theme.web.menuBarHeight}px;
 
   display: flex;
   flex-direction: row;

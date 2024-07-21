@@ -1,6 +1,11 @@
 import styled from 'styled-components/native';
 
 export const Wrapper = styled.View`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
   padding-top: ${({ theme }) => theme.sizes.innerPadding}px;
   padding-left: ${({ theme }) => theme.sizes.outerPadding}px;
   padding-right: ${({ theme }) => theme.sizes.outerPadding}px;
@@ -9,6 +14,9 @@ export const Wrapper = styled.View`
 `;
 
 export const InnerWrapper = styled.View`
+  width: 100%;
+  max-width: 800px;
+
   display: flex;
   flex-direction: column;
   justify-content: center;

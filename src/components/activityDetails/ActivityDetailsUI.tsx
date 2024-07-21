@@ -10,6 +10,7 @@ import useActivityMapSnapshot from '@api/activity/useActivityMapSnapshot';
 
 import ActivityIcon from '@components/common/activity/ActivityIcon';
 import ActivityChartsProvider from '@components/common/activity/charts/ActivityChartsProvider';
+import ActivityStatistics from '@components/common/activity/statistics/ActivityStatistics';
 import { CloseIcon } from '@components/icons';
 import { Text } from '@components/ui';
 
@@ -99,7 +100,8 @@ const MapImage = styled.Image`
   max-width: 800px;
   align-self: center;
 
-  margin: ${({ theme }) => theme.sizes.outerPadding}px;
+  margin-horizontal: ${({ theme }) => theme.sizes.outerPadding}px;
+  margin-bottom: ${({ theme }) => theme.sizes.innerPadding}px;
   margin-top: 75px;
 
   aspect-ratio: 8/5;
@@ -189,15 +191,22 @@ const ActivityDetailsUI: FC<Props> = ({
       </HeaderWrapper>
       {mapSnapshotData && <MapImage source={{ uri: mapSnapshotData.mapSnapshot }} />}
       {activity?.summary && (
-        <ChartsWrapper>
-          <ActivityChartsProvider
+        <>
+          <ActivityStatistics
             summary={activity.summary}
             locations={activityLocationsData?.locations}
-            locationsFetching={isActivityLocationsLoading}
-            locationsError={isActivityLocationsError}
             distanceMeasurementSystem={distanceMeasurementSystem}
           />
-        </ChartsWrapper>
+          <ChartsWrapper>
+            <ActivityChartsProvider
+              summary={activity.summary}
+              locations={activityLocationsData?.locations}
+              locationsFetching={isActivityLocationsLoading}
+              locationsError={isActivityLocationsError}
+              distanceMeasurementSystem={distanceMeasurementSystem}
+            />
+          </ChartsWrapper>
+        </>
       )}
     </Wrapper>
   );

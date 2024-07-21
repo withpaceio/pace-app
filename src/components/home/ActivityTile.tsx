@@ -2,6 +2,8 @@ import type { FC } from 'react';
 
 import styled from 'styled-components/native';
 
+import { useTheme } from '@theme';
+
 import ActivitySummaryTileUI from '@components/common/activity/summaryTile/ActivitySummaryTileUI';
 
 import type { Activity } from '@models/Activity';
@@ -11,17 +13,15 @@ const Wrapper = styled.Pressable<{ isOpen: boolean }>`
   width: 100%;
   align-self: center;
   margin-bottom: ${({ theme }) => theme.sizes.innerPadding}px;
+  background-color: ${({ isOpen, theme }) =>
+    isOpen ? theme.colors.componentBackground : 'transparent'};
 
-  background-color: ${({ theme }) => theme.colors.componentBackground};
   padding: 5px;
-  border-radius: 4px;
+  margin-bottom: 5px;
 
-  border-width: 1px;
+  border-radius: 5px;
 
-  transition: border-color 0.25s ease;
-
-  border-color: ${({ isOpen, theme }) =>
-    isOpen ? theme.colors.purple : theme.colors.componentBackground};
+  transition: background-color 0.25s ease;
 `;
 
 type Props = {
@@ -32,14 +32,24 @@ type Props = {
   onPress?: () => void;
 };
 
-const ActivityTile: FC<Props> = ({ activity, distanceMeasurementSystem, isOpen, onPress }) => (
-  <Wrapper isOpen={Boolean(isOpen)} onPress={onPress}>
-    <ActivitySummaryTileUI
-      activity={activity}
-      distanceMeasurementSystem={distanceMeasurementSystem}
-      hasError={false}
-    />
-  </Wrapper>
-);
+const ActivityTile: FC<Props> = ({ activity, distanceMeasurementSystem, isOpen, onPress }) => {
+  const theme = useTheme();
+
+  return (
+    <Wrapper
+      isOpen={Boolean(isOpen)}
+      onPress={onPress}
+      // @ts-expect-error
+      style={({ hovered }) =>
+        hovered ? { backgroundColor: theme.colors.componentBackground } : {}
+      }>
+      <ActivitySummaryTileUI
+        activity={activity}
+        distanceMeasurementSystem={distanceMeasurementSystem}
+        hasError={false}
+      />
+    </Wrapper>
+  );
+};
 
 export default ActivityTile;

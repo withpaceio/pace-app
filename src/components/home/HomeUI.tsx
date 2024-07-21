@@ -10,6 +10,7 @@ import ActivityDetailsUI from '@components/activityDetails/ActivityDetailsUI';
 
 import type { Activity } from '@models/Activity';
 
+import ActivityListHeader from './ActivityListHeader';
 import ActivityTile from './ActivityTile';
 import Loading from './Loading';
 import NoActivities from './NoActivities';
@@ -25,6 +26,8 @@ const Wrapper = styled.View<{ windowWidth: number }>`
   align-items: flex-start;
 
   overflow-y: scroll;
+
+  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 const StyledFlatList = styled.FlatList`
@@ -90,12 +93,13 @@ const HomeUI: FC<Props> = ({
 
   return (
     <Wrapper windowWidth={windowWidth}>
+      <ActivityListHeader />
       {/* @ts-ignore */}
       <StyledFlatList
         contentContainerStyle={{
           paddingLeft: theme.sizes.outerPadding,
           paddingRight: theme.sizes.outerPadding,
-          paddingTop: 70,
+          paddingTop: 120,
         }}
         data={sortedActivities}
         renderItem={renderItem}

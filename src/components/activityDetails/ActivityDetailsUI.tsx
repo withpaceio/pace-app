@@ -27,16 +27,23 @@ const Wrapper = styled.View`
 `;
 
 const HeaderWrapper = styled.View`
+  position: fixed;
+
+  width: 60%;
+  height: 50px;
+
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 
   padding: ${({ theme }) => theme.sizes.innerPadding}px;
-  border-bottom-color: ${({ theme }) => theme.colors.separatorColor};
+
+  border-color: ${({ theme }) => theme.colors.separatorColor};
+  border-top-width: 1px;
   border-bottom-width: 1px;
 
-  background-color: ${({ theme }) => theme.colors.componentBackground};
+  background-color: ${({ theme }) => theme.colors.background};
 
   z-index: 2;
 `;
@@ -93,6 +100,7 @@ const MapImage = styled.Image`
   align-self: center;
 
   margin: ${({ theme }) => theme.sizes.outerPadding}px;
+  margin-top: 75px;
 
   aspect-ratio: 8/5;
   border-radius: 8px;

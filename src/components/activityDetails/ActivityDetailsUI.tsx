@@ -10,12 +10,15 @@ import useActivityMapSnapshot from '@api/activity/useActivityMapSnapshot';
 
 import ActivityIcon from '@components/common/activity/ActivityIcon';
 import ActivityChartsProvider from '@components/common/activity/charts/ActivityChartsProvider';
+import { CloseIcon } from '@components/icons';
 import { Text } from '@components/ui';
 
 import type { Activity, ActivitySummary } from '@models/Activity';
 import type { DistanceMeasurementSystem } from '@models/UnitSystem';
 
 import i18n from '@translations/i18n';
+
+const ICON_SIZE = 15;
 
 const Wrapper = styled.View`
   flex: 1;
@@ -24,22 +27,26 @@ const Wrapper = styled.View`
 `;
 
 const HeaderWrapper = styled.View`
-  position: fixed;
-  width: 100%;
-
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
-  gap: ${({ theme }) => theme.sizes.innerPadding}px;
 
-  padding: ${({ theme }) => theme.sizes.outerPadding}px;
+  padding: ${({ theme }) => theme.sizes.innerPadding}px;
   border-bottom-color: ${({ theme }) => theme.colors.separatorColor};
   border-bottom-width: 1px;
 
   background-color: ${({ theme }) => theme.colors.componentBackground};
 
   z-index: 2;
+`;
+
+const TitleIconWrapper = styled.View`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: ${({ theme }) => theme.sizes.innerPadding}px;
 `;
 
 const HeaderTitleWrapper = styled.View`
@@ -51,11 +58,12 @@ const HeaderTitleWrapper = styled.View`
 `;
 
 const HeaderTitle = styled(Text)`
-  font-size: 18px;
+  font-size: 0.8rem;
   font-weight: bold;
 `;
 
 const CreatedAt = styled(Text)`
+  font-size: 0.75rem;
   font-style: italic;
   color: ${({ theme }) => theme.colors.secondary};
 `;
@@ -66,23 +74,27 @@ const ActivityIconWrapper = styled.View`
   justify-content: center;
   align-items: center;
 
-  width: 36px;
-  height: 36px;
-  border-radius: 23px;
+  width: ${ICON_SIZE + 14}px;
+  height: ${ICON_SIZE + 14}px;
+  border-radius: ${ICON_SIZE / 2 + 7}px;
 
   background-color: ${({ theme }) => theme.colors.darkComponentBackground};
 `;
 
+const CloseIconWrapper = styled.Pressable`
+  padding: 5px;
+  border-radius: 5px;
+  transition: background-color 0.25s ease-out;
+`;
+
 const MapImage = styled.Image`
-  width: 100%;
-  max-width: 500px;
+  width: calc(100% - 2 * ${({ theme }) => theme.sizes.outerPadding}px);
+  max-width: 800px;
   align-self: center;
 
   margin: ${({ theme }) => theme.sizes.outerPadding}px;
-  margin-top: 100px;
 
   aspect-ratio: 8/5;
-
   border-radius: 8px;
 `;
 
@@ -94,9 +106,14 @@ const ChartsWrapper = styled.View`
 type Props = {
   activity: Activity | undefined;
   distanceMeasurementSystem: DistanceMeasurementSystem;
+  onCloseActivityDetails: () => void;
   onDeleteActivity: () => void;
 };
-const ActivityDetailsUI: FC<Props> = ({ activity, distanceMeasurementSystem }) => {
+const ActivityDetailsUI: FC<Props> = ({
+  activity,
+  distanceMeasurementSystem,
+  onCloseActivityDetails,
+}) => {
   const theme = useTheme();
 
   const {
@@ -138,13 +155,29 @@ const ActivityDetailsUI: FC<Props> = ({ activity, distanceMeasurementSystem }) =
   return (
     <Wrapper>
       <HeaderWrapper>
-        <ActivityIconWrapper>
-          <ActivityIcon activityType={activity!.summary.type} width={20} height={20} />
-        </ActivityIconWrapper>
-        <HeaderTitleWrapper>
-          <HeaderTitle>{activity?.summary.name}</HeaderTitle>
-          <CreatedAt>{activityDate}</CreatedAt>
-        </HeaderTitleWrapper>
+        <TitleIconWrapper>
+          <ActivityIconWrapper>
+            <ActivityIcon
+              activityType={activity!.summary.type}
+              width={ICON_SIZE}
+              height={ICON_SIZE}
+            />
+          </ActivityIconWrapper>
+          <HeaderTitleWrapper>
+            <HeaderTitle>{activity?.summary.name}</HeaderTitle>
+            <CreatedAt>{activityDate}</CreatedAt>
+          </HeaderTitleWrapper>
+        </TitleIconWrapper>
+        <CloseIconWrapper
+          // @ts-expect-error
+          style={({ hovered }) =>
+            hovered
+              ? { backgroundColor: theme.colors.darkComponentBackground }
+              : { backgroundColor: theme.colors.componentBackground }
+          }
+          onPress={onCloseActivityDetails}>
+          <CloseIcon width={ICON_SIZE} height={ICON_SIZE} />
+        </CloseIconWrapper>
       </HeaderWrapper>
       {mapSnapshotData && <MapImage source={{ uri: mapSnapshotData.mapSnapshot }} />}
       {activity?.summary && (

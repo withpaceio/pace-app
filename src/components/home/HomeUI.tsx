@@ -1,5 +1,5 @@
 import { type FC, useCallback, useMemo, useState } from 'react';
-import { type ListRenderItem, RefreshControl, View, useWindowDimensions } from 'react-native';
+import { type ListRenderItem, RefreshControl, useWindowDimensions } from 'react-native';
 
 import styled from 'styled-components/native';
 
@@ -7,7 +7,6 @@ import { useAuth } from '@auth';
 import { useTheme } from '@theme';
 
 import ActivityDetailsUI from '@components/activityDetails/ActivityDetailsUI';
-import { Text } from '@components/ui';
 
 import type { Activity } from '@models/Activity';
 
@@ -119,16 +118,15 @@ const HomeUI: FC<Props> = ({
         }
       />
       <ActivityDetailsWrapper windowWidth={windowWidth}>
-        {openedActivity ? (
+        {openedActivity && (
           <ActivityDetailsUI
             activity={openedActivity}
             distanceMeasurementSystem={distanceMeasurementSystem}
             onDeleteActivity={console.log}
+            onCloseActivityDetails={() => {
+              setOpenedActivity(undefined);
+            }}
           />
-        ) : (
-          <View>
-            <Text>select an activity</Text>
-          </View>
         )}
       </ActivityDetailsWrapper>
     </Wrapper>

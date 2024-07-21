@@ -117,18 +117,20 @@ const HomeUI: FC<Props> = ({
           />
         }
       />
-      <ActivityDetailsWrapper windowWidth={windowWidth}>
-        {openedActivity && (
-          <ActivityDetailsUI
-            activity={openedActivity}
-            distanceMeasurementSystem={distanceMeasurementSystem}
-            onDeleteActivity={console.log}
-            onCloseActivityDetails={() => {
-              setOpenedActivity(undefined);
-            }}
-          />
-        )}
-      </ActivityDetailsWrapper>
+      {(openedActivity || windowWidth > theme.web.breakpoints.large) && (
+        <ActivityDetailsWrapper windowWidth={windowWidth}>
+          {openedActivity && (
+            <ActivityDetailsUI
+              activity={openedActivity}
+              distanceMeasurementSystem={distanceMeasurementSystem}
+              onDeleteActivity={console.log}
+              onCloseActivityDetails={() => {
+                setOpenedActivity(undefined);
+              }}
+            />
+          )}
+        </ActivityDetailsWrapper>
+      )}
     </Wrapper>
   );
 };

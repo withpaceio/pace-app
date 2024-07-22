@@ -3,7 +3,6 @@ import { AppState, type AppStateStatus, Platform } from 'react-native';
 
 import { Slot, SplashScreen } from 'expo-router';
 
-import MapLibreGL from '@maplibre/maplibre-react-native';
 import NetInfo from '@react-native-community/netinfo';
 import {
   DarkTheme,
@@ -24,8 +23,6 @@ import QueryClientProvider from '@components/QueryClientProvider';
 import loadFonts from '@utils/loadFonts';
 
 import { REVENUE_CAT_API_KEY_ANDROID, REVENUE_CAT_API_KEY_IOS } from '../consts';
-
-MapLibreGL.setAccessToken(null);
 
 SplashScreen.preventAutoHideAsync();
 
@@ -65,7 +62,9 @@ const RootLayout: FC = () => {
   }, [load]);
 
   useEffect(() => {
-    loadPurchases();
+    if (Platform.OS !== 'web') {
+      loadPurchases();
+    }
   }, [loadPurchases]);
 
   useEffect(() => {

@@ -16,7 +16,7 @@ export default async function signUp(username: string, password: string): Promis
   const profileData = generateProfile();
   const encryptedProfileData = encryptProfileData(profileData, password);
 
-  const hashedPassword = argon2idDeriveKey(
+  const hashedPassword = await argon2idDeriveKey(
     decodeUtf8(password),
     profileData.passwordHashSalt,
     32,

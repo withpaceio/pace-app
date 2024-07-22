@@ -38,7 +38,7 @@ export default async function changePassword(
 
   const newEncryptedProfileData = await encryptProfileData(newProfileData, newPassword);
 
-  const hashedPassword = argon2idDeriveKey(
+  const hashedPassword = await argon2idDeriveKey(
     decodeUtf8(newPassword),
     newProfileData.passwordHashSalt,
     32,

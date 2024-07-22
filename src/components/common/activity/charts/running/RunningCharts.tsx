@@ -1,23 +1,22 @@
 import React, { type FC } from 'react';
-import { useWindowDimensions } from 'react-native';
+import { Platform, useWindowDimensions } from 'react-native';
 
 import { useSharedValue } from 'react-native-reanimated';
 
 import { type ActivityLocation, ActivityType } from '@models/Activity';
 
+import { useActivityCharts } from '../ActivityChartsProvider';
 import useSplitPaceChartData from '../common/SplitPaceChart/hooks/useSplitPaceChartData';
-import type { ChartsProps } from '../types';
 import PaceChart from './PaceChart';
 import SplitPaceChart from './SplitPaceChart';
 
-type Props = Pick<ChartsProps, 'summary' | 'locations' | 'distanceMeasurementSystem'>;
-
-const RunningCharts: FC<Props> = ({ summary, locations, distanceMeasurementSystem }) => {
+const RunningCharts: FC = () => {
+  const { locations, summary, distanceMeasurementSystem } = useActivityCharts();
   const { width: windowWidth } = useWindowDimensions();
 
   const { splits, paceScale } = useSplitPaceChartData({
     activityType: ActivityType.RUNNING,
-    chartWidth: windowWidth,
+    chartWidth: windowWidth * (Platform.OS === 'web' ? 0.6 : 1),
     splitLengthInMeters: 1000,
     locations: locations as ActivityLocation[],
     distanceMeasurementSystem,

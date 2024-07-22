@@ -1,5 +1,5 @@
 import React, { type FC } from 'react';
-import { useWindowDimensions } from 'react-native';
+import { Platform, useWindowDimensions } from 'react-native';
 
 import { Canvas } from '@shopify/react-native-skia';
 import { GestureDetector } from 'react-native-gesture-handler';
@@ -130,7 +130,7 @@ const SplitPaceChart: FC<Props> = ({
               currentHighlightedSplit={currentHighlightedSplit}
               distanceMeasurementSystem={distanceMeasurementSystem}
               paceScale={paceScale}
-              chartWidth={windowWidth}
+              chartWidth={windowWidth * (Platform.OS === 'web' ? 0.6 : 1)}
             />
           ))}
         </StyledCanvas>

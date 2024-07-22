@@ -5,14 +5,13 @@ import { useSharedValue } from 'react-native-reanimated';
 
 import { type ActivityLocation, ActivityType } from '@models/Activity';
 
+import { useActivityCharts } from '../ActivityChartsProvider';
 import useSplitPaceChartData from '../common/SplitPaceChart/hooks/useSplitPaceChartData';
-import type { ChartsProps } from '../types';
 import SpeedChart from './SpeedChart';
 import SplitSpeedChart from './SplitSpeedChart';
 
-type Props = Pick<ChartsProps, 'summary' | 'locations' | 'distanceMeasurementSystem'>;
-
-const CyclingCharts: FC<Props> = ({ summary, locations, distanceMeasurementSystem }) => {
+const CyclingCharts: FC = () => {
+  const { locations, summary, distanceMeasurementSystem } = useActivityCharts();
   const { width: windowWidth } = useWindowDimensions();
 
   const { splits, paceScale } = useSplitPaceChartData({

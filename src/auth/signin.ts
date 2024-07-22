@@ -1,3 +1,5 @@
+import { Platform } from 'react-native';
+
 import { HKDF } from '@stablelib/hkdf';
 import { SHA256 } from '@stablelib/sha256';
 import {
@@ -35,12 +37,12 @@ async function fetchSignIn(
     ephemeral: serverPublicEphemeral,
   } = await fetchPasswordSalt(username, clientEphemeral.public);
 
-  const hashedPassword = argon2idDeriveKey(
+  const hashedPassword = await argon2idDeriveKey(
     decodeUtf8(password),
     decodeBase64(passwordHashSalt),
     32,
     ARGON2ID_ITERATIONS,
-    BigInt(32768 * 1024),
+    Platform.OS === 'web' ? BigInt(32768) : BigInt(32768 * 1024),
   );
 
   const authPasswordTokenBuffer = new HKDF(
@@ -97,7 +99,7 @@ export default async function signIn(
     serverPublicKey,
   } = await fetchSignIn(username, password);
 
-  const profileData = decryptProfileData(
+  const profileData = await decryptProfileData(
     encryptedProfileData,
     password,
     passwordHashSalt,
@@ -112,15 +114,17 @@ export default async function signIn(
 
   const authToken = encodeBase64(authTokenBuffer);
 
-  await saveProfile({
-    userId,
-    username,
-    createdAt,
-    authToken,
-    profileData,
-  });
+  if (Platform.OS !== 'web') {
+    await saveProfile({
+      userId,
+      username,
+      createdAt,
+      authToken,
+      profileData,
+    });
 
-  await Purchases.logIn(userId);
+    await Purchases.logIn(userId);
+  }
 
   return {
     userId,

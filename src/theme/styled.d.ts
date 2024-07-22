@@ -111,8 +111,6 @@ declare module 'styled-components/native' {
     };
 
     sizes: {
-      contentMaxWidth: number;
-      mobileMaxWidth: number;
       outerPadding: number;
       innerPadding: number;
       menuBar: number;
@@ -170,6 +168,16 @@ declare module 'styled-components/native' {
             numberFontSize: number;
           };
         };
+      };
+    };
+
+    web: {
+      menuBarHeight: number;
+      breakpoints: {
+        small: number;
+        medium: number;
+        large: number;
+        xLarge: number;
       };
     };
   }

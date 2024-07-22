@@ -1,29 +1,52 @@
-import React, { type FC, useCallback, useMemo } from 'react';
-import { FlatList, ListRenderItem, RefreshControl } from 'react-native';
+import { type FC, useCallback, useMemo, useState } from 'react';
+import { type ListRenderItem, RefreshControl, useWindowDimensions } from 'react-native';
 
-import { StatusBar } from 'expo-status-bar';
-
-import type { InfiniteData } from '@tanstack/react-query';
+import styled from 'styled-components/native';
 
 import { useAuth } from '@auth';
 import { useTheme } from '@theme';
 
-import type { Activity } from '@models/Activity';
-import type { DistanceMeasurementSystem } from '@models/UnitSystem';
+import ActivityDetailsUI from '@components/activityDetails/ActivityDetailsUI';
 
+import type { Activity } from '@models/Activity';
+
+import ActivityListHeader from './ActivityListHeader';
 import ActivityTile from './ActivityTile';
 import Loading from './Loading';
 import NoActivities from './NoActivities';
+import type { Props } from './types';
 
-type Props = {
-  data: InfiniteData<{ activities: Activity[]; nextCursor: string | undefined }> | undefined;
-  isLoading: boolean;
-  initialLoading: boolean;
-  refreshing: boolean;
-  distanceMeasurementSystem: DistanceMeasurementSystem;
-  onEndReached: () => void;
-  onRefresh: () => void;
-};
+const Wrapper = styled.View<{ windowWidth: number }>`
+  flex: 1;
+
+  display: flex;
+  flex-direction: ${({ theme, windowWidth }) =>
+    windowWidth > theme.web.breakpoints.large ? 'row' : 'column'};
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  overflow-y: scroll;
+
+  background-color: ${({ theme }) => theme.colors.background};
+`;
+
+const StyledFlatList = styled.FlatList`
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  border-right-width: 0.5px;
+  border-color: ${({ theme }) => theme.colors.separatorColor};
+`;
+
+const ActivityDetailsWrapper = styled.View<{ windowWidth: number }>`
+  width: ${({ theme, windowWidth }) =>
+    windowWidth > theme.web.breakpoints.large ? '60%' : '100%'};
+  height: calc(100% - ${({ theme }) => theme.web.menuBarHeight}px);
+  margin-top: ${({ theme }) => theme.web.menuBarHeight}px;
+
+  overflow: scroll;
+  background-color: ${({ theme }) => theme.colors.background};
+`;
 
 const HomeUI: FC<Props> = ({
   data,
@@ -34,6 +57,9 @@ const HomeUI: FC<Props> = ({
   onEndReached,
   onRefresh,
 }) => {
+  const [openedActivity, setOpenedActivity] = useState<Activity>();
+
+  const { width: windowWidth } = useWindowDimensions();
   const {
     state: { username },
   } = useAuth();
@@ -54,17 +80,27 @@ const HomeUI: FC<Props> = ({
         activity={item}
         isFirst={index === 0}
         distanceMeasurementSystem={distanceMeasurementSystem}
+        isOpen={openedActivity?.id === item.id}
+        onPress={() => {
+          setOpenedActivity(item);
+        }}
       />
     ),
-    [distanceMeasurementSystem],
+    [distanceMeasurementSystem, openedActivity?.id],
   );
 
   const keyExtractor = (activity: Activity): string => activity.createdAt;
 
   return (
-    <>
-      <StatusBar translucent />
-      <FlatList
+    <Wrapper windowWidth={windowWidth}>
+      <ActivityListHeader />
+      {/* @ts-ignore */}
+      <StyledFlatList
+        contentContainerStyle={{
+          paddingLeft: theme.sizes.outerPadding,
+          paddingRight: theme.sizes.outerPadding,
+          paddingTop: 120,
+        }}
         data={sortedActivities}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
@@ -85,7 +121,21 @@ const HomeUI: FC<Props> = ({
           />
         }
       />
-    </>
+      {(openedActivity || windowWidth > theme.web.breakpoints.large) && (
+        <ActivityDetailsWrapper windowWidth={windowWidth}>
+          {openedActivity && (
+            <ActivityDetailsUI
+              activity={openedActivity}
+              distanceMeasurementSystem={distanceMeasurementSystem}
+              onDeleteActivity={console.log}
+              onCloseActivityDetails={() => {
+                setOpenedActivity(undefined);
+              }}
+            />
+          )}
+        </ActivityDetailsWrapper>
+      )}
+    </Wrapper>
   );
 };
 

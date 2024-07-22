@@ -18,6 +18,7 @@ const Wrapper = styled.View<{ width: number; height: number }>`
   align-items: center;
 
   width: ${({ width }) => width}px;
+  max-width: ${({ theme }) => theme.sizes.activityMapSnapshot.width}px;
   height: ${({ height }) => height}px;
   background-color: ${({ theme }) => theme.colors.darkComponentBackground};
 
@@ -41,8 +42,9 @@ const ActivityMap: FC<Props> = ({ activity }) => {
 
   const { width: windowWidth } = useWindowDimensions();
   const imageWidth = useMemo(
-    () => windowWidth - 2 * theme.sizes.outerPadding,
-    [theme.sizes.outerPadding, windowWidth],
+    () =>
+      Math.min(theme.sizes.activityMapSnapshot.width, windowWidth - 2 * theme.sizes.outerPadding),
+    [theme.sizes.activityMapSnapshot.width, theme.sizes.outerPadding, windowWidth],
   );
   const imageHeight = useMemo(
     () =>
